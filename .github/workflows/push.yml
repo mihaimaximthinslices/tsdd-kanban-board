@@ -42,15 +42,15 @@ jobs:
         env:
           FE_HOST: ${{ secrets.FE_HOST }}
 
-
       - name: Start the FE server
         run: |
-          yarn build
-          cat $(find ./dist/assets -type f -name "*.js" -print -quit)
           yarn run:actions & sleep 2
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
+      - name: Send curl request to backend
+        run: |
+          curl http://localhost:3001/api/hello
 
       - name: Run cypress e2e tests
         run: | 
