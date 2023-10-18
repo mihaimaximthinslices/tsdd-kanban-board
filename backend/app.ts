@@ -1,6 +1,6 @@
 import express from 'express'
 import 'dotenv/config'
-import {Request, Response} from 'express'
+import { Request, Response } from 'express'
 import bodyParser from 'body-parser'
 const app = express()
 import cors from 'cors'
@@ -17,10 +17,9 @@ app.use(
   }),
 )
 
-
 app.get('/api/hello', (_req: Request, res: Response) => {
   res.status(200).send({
-    message: 'Hello World'
+    message: 'Hello World',
   })
 })
 

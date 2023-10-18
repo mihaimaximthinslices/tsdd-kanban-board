@@ -1,0 +1,34 @@
+name: push-into-dev
+on:
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          npm install -g yarn
+          yarn install
+          cd ./backend
+          yarn install
+          cd ..
+      - name: Check lint and formatting
+        run: |
+          yarn check:lint
+          yarn check:prettier
+
+      - name: Run tests
+        run: | 
+          cd ./backend && yarn run vitest && cd ..
+          npx cypress run
