@@ -33,10 +33,6 @@ jobs:
       - name: Run BE tests
         run: |
           cd ./backend && yarn run vitest && cd ..
-
-      - name: Start the BE server
-        run: |
-          cd ./backend && yarn start:dev & sleep 2 && cd ..
           
 
       - name: Cypress run
@@ -44,5 +40,5 @@ jobs:
         with:
           browser: chrome
           build: yarn build
-          start: yarn dev
+          start: cd ./backend && yarn start:dev & cd .. && yarn dev
           wait-on: "http://localhost:3000"
