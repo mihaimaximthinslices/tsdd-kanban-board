@@ -26,5 +26,5 @@ jobs:
 
       - name: Run tests
         run: | 
-          cd ./backend && vitest && cd ..
+          cd ./backend && yarn run vitest && cd ..
           npx cypress run
