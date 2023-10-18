@@ -47,7 +47,7 @@ jobs:
         run: |
           yarn build
           cat $(find ./dist/assets -type f -name "*.js" -print -quit)
-          yarn run:actions
+          yarn run:actions & sleep 2
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
