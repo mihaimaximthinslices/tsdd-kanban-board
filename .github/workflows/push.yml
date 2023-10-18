@@ -44,5 +44,5 @@ jobs:
         with:
           browser: chrome
           build: yarn build
-          start: yarn start
+          start: yarn dev
           wait-on: "http://localhost:3000"
