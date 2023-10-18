@@ -40,10 +40,10 @@ jobs:
 
       - name: Start the FE server
         run: |
-          yarn run:actions & sleep 2
-          cat $(find ./dist/assets -type f -name "*.js" -print -quit)
-          curl http://localhost:3000
-          curl http://localhost:3001/api/hello
+          yarn run:actions & sleep 10 &&
+          cat $(find ./dist/assets -type f -name "*.js" -print -quit) &&
+          curl http://localhost:3000 && 
+          curl http://localhost:3001/api/hello &&
 
       - name: Run cypress e2e tests
         run: |
