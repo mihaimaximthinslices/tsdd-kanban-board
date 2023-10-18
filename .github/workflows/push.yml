@@ -36,7 +36,7 @@ jobs:
 
       - name: Start the BE server
         run: |
-          cd ./backend && ts-node index.ts && cd ..
+          cd ./backend && yarn start:dev && cd ..
 
       - name: Start the FE server
         run: |
