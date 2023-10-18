@@ -19,7 +19,9 @@ app.use(
 
 
 app.get('/api/hello', (_req: Request, res: Response) => {
-  res.status(200).send('Hello World!')
+  res.status(200).send({
+    message: 'Hello World'
+  })
 })
 
 export default app
