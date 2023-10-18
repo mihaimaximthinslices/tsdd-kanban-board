@@ -17,7 +17,6 @@ function App() {
   return (
     <div className="bg-red-400">
       <p>Change</p>
-      <h2>{import.meta.env.VITE_API_URL} wtf</h2>
       <h1>{message}</h1>
     </div>
   )
