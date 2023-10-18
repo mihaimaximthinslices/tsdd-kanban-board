@@ -11,8 +11,7 @@ function App() {
 
   return (
     <div className="bg-red-400">
-      <p>"Hello world"</p>
-      {message}
+      <h1>{message}</h1>
     </div>
   )
 }
