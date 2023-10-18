@@ -33,12 +33,18 @@ jobs:
       - name: Run BE tests
         run: |
           cd ./backend && yarn run vitest && cd ..
-          
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          browser: chrome
-          build: yarn build
-          start: cd ./backend && yarn start:dev & cd .. && yarn dev
-          wait-on: "http://localhost:3000"
+      - name: Start the BE server
+        run: |
+          cd ./backend && yarn start:dev & sleep 2 && cd ..
+
+      - name: Start the FE server
+        run: |
+          yarn run:actions & sleep 2
+          cat $(find ./dist/assets -type f -name "*.js" -print -quit)
+          curl http://localhost:3000
+          curl http://localhost:3001/api/hello
+
+      - name: Run cypress e2e tests
+        run: |
+          yarn cypress run 
