@@ -23,6 +23,10 @@ jobs:
           cd ./backend
           yarn install
           cd ..
+      - name: Check lint and formatting
+        run: |
+          yarn check:lint
+          yarn check:prettier
 
       - name: Run tests
         run: | 
