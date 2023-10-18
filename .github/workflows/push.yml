@@ -1,8 +1,9 @@
-name: push-into-dev
+name: push-into
 on:
   pull_request:
     branches:
       - dev
+      - main
 
 jobs:
   run-tests:
