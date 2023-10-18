@@ -1,4 +1,3 @@
-
 import request from 'supertest'
 import app from '../app'
 
@@ -10,5 +9,4 @@ describe('API', () => {
     expect(resp.status).toEqual(200)
     expect(resp.body.message).toEqual('Hello World')
   })
-
 })
