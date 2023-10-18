@@ -33,14 +33,20 @@ jobs:
       - name: Run BE tests
         run: |
           cd ./backend && yarn run vitest && cd ..
+          
+
+      - name: Check build
+        run: |
+          yarn build
+          cat $(find ./dist/assets -type f -name "*.js" -print -quit)
 
       - name: Start the BE server
         run: |
-          cd ./backend && yarn start:dev & sleep 10 && cd ..
+          cd ./backend && yarn start:dev & sleep 2 && cd ..
 
       - name: Start the FE server
         run: |
-          yarn dev & sleep 10
+          yarn dev & sleep 2
 
       - name: Run cypress e2e tests
         run: | 
