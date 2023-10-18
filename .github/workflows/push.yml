@@ -53,5 +53,5 @@ jobs:
           curl http://localhost:3001/api/hello
 
       - name: Run cypress e2e tests
-        run: | 
-          npx cypress run
+        run: |
+          yarn cypress run --headed --browser chrome 
