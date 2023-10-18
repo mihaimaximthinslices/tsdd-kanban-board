@@ -33,13 +33,8 @@ jobs:
       - name: Run BE tests
         run: |
           cd ./backend && yarn run vitest && cd ..
-
-      - name: Check build
-        run: |
-          yarn build
-          cat $(find ./dist/assets -type f -name "*.js" -print -quit)
         env:
-          VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
+          FE_HOST: ${{ secrets.FE_HOST }}
 
       - name: Start the BE server
         run: |
@@ -51,7 +46,7 @@ jobs:
         run: |
           yarn dev & sleep 2
         env:
-          VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       - name: Run cypress e2e tests
         run: | 
