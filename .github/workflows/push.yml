@@ -1,7 +1,8 @@
-name: push-into-main
+name: push-into
 on:
   pull_request:
     branches:
+      - dev
       - main
 
 jobs:
@@ -29,7 +30,18 @@ jobs:
           yarn check:lint
           yarn check:prettier
 
-      - name: Run tests
-        run: | 
+      - name: Run BE tests
+        run: |
           cd ./backend && yarn run vitest && cd ..
+
+      - name: Start the BE server
+        run: |
+          ts-node ./backend/index.ts & sleep 10
+
+      - name: Start the FE server
+        run: |
+          yarn dev & sleep 10
+
+      - name: Run cypress e2e tests
+        run: | 
           npx cypress run
