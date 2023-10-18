@@ -46,7 +46,8 @@ jobs:
       - name: Start the FE server
         run: |
           yarn build
-          yarn run:actions & sleep 2
+          cat $(find ./dist/assets -type f -name "*.js" -print -quit)
+          yarn run:actions
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
