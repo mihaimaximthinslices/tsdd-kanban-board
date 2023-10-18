@@ -42,6 +42,19 @@ jobs:
         env:
           FE_HOST: ${{ secrets.FE_HOST }}
 
+
+      - name: Send curl request to backend
+        run: |
+          curl http://localhost:3001/api/hello
+          
+
+      - name: Check build
+        run: |
+          yarn build
+          cat $(find ./dist/assets -type f -name "*.js" -print -quit)
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+
       - name: Start the FE server
         run: |
           yarn dev & sleep 2
