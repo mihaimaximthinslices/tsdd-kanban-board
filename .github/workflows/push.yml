@@ -40,7 +40,7 @@ jobs:
 
       - name: Start the FE server
         run: |
-          yarn run:actions & sleep 20
+          yarn run:actions & sleep 5
           curl http://localhost:3001/api/hello
           curl http://localhost:3000
           curl http://localhost:3001/api/hello
@@ -52,6 +52,6 @@ jobs:
           yarn cypress run 
 
       - name: Log cypress steps
-        if: true
+        if: failure()
         run: |
           cat $(find ./logs -type f -name "*.json" -print -quit)
