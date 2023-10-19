@@ -16,7 +16,7 @@ function App() {
 
   return (
     <div className="bg-red-400">
-      <p>Change</p>
+      <p>Hello from dev</p>
       <h1>{message}</h1>
     </div>
   )
