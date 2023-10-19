@@ -50,4 +50,8 @@ jobs:
       - name: Run cypress e2e tests
         run: |
           yarn cypress run 
+
+      - name: Log cypress steps
+        if: true
+        run: |
           cat $(find ./logs -type f -name "*.json" -print -quit)
