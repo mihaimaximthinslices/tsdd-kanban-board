@@ -1,8 +1,12 @@
 import './App.css'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useThemeSelector } from './useThemeSelector.tsx'
 function App() {
   const [message, setMessage] = useState<string>('')
+
+  const { toggleTheme } = useThemeSelector()
+
   useEffect(() => {
     axios
       .get('/api/hello')
@@ -15,7 +19,7 @@ function App() {
   }, [])
 
   return (
-    <div className="flex flex-col w-full gap-4">
+    <div className="flex flex-col w-full gap-4 dark:bg-black2 dark:text-white p-4">
       <div className="flex w-full justify-center p-4">
         <h1>{message}</h1>
       </div>
@@ -53,6 +57,7 @@ function App() {
           commodo quis, gravida id, est.
         </p>
       </div>
+      <button onClick={toggleTheme}>Change theme</button>
     </div>
   )
 }
