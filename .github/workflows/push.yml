@@ -36,11 +36,18 @@ jobs:
 
       - name: Start the BE server
         run: |
-          cd ./backend && yarn start:dev & sleep 2 && cd ..
+          yarn start:dev:be
+        env:
+          HOST_FE: http://localhost:3000
+          PORT_BE: 3001
 
       - name: Start the FE server
         run: |
-          yarn buildandrun & sleep 5
+          yarn start:dev:fe
+        env:
+          DOMAIN_FE: localhost
+          VITE_HOST_BE: http://localhost:3001
+          PORT_FE: 3000
 
       - name: Run cypress e2e tests
         run: |

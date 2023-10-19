@@ -7,20 +7,36 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "buildandrun": "vite build && http-server dist -p 3000 -a localhost",
-
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "prepare": "husky install",
-    "check:lint:fe": "eslint . --fix",
+
+    "check:lint:fe": "cd ./src && eslint . --fix",
     "check:lint:be": "cd ./backend && eslint . --fix",
     "check:lint": "run-s check:lint:fe check:lint:be",
+
     "check:prettier:fe": "prettier --check \"./src/**/**.{js,ts,tsx}\"",
     "check:prettier:be": "cd ./backend && prettier --check \"./**.{js,ts}\"",
-    "check:prettier": "run-s check:prettier:fe check:prettier:be"
+    "check:prettier": "run-s check:prettier:fe check:prettier:be",
+
+    "test:be": "cd ./backend && yarn test",
+    "test:be:dev": "dotenv -e .env.development.local yarn test:be",
+
+    "test:fe": "npx cypress run",
+    "test:fe:dev": "dotenv -e .env.development.local yarn test:fe",
+
+    "dev:be": "cd ./backend && yarn dev",
+
+    "start:dev:be": "dotenv -e .env.development.local yarn dev:be",
+    "start:dev:fe": "dotenv -e .env.development.local yarn dev",
+
+    "start:prod:be": "dotenv -e .env yarn dev:be",
+    "start:prod:fe": "dotenv -e .env yarn dev"
   },
   "dependencies": {
     "autoprefixer": "^10.4.16",
     "axios": "^1.5.1",
+    "dotenv-cli": "^7.3.0",
     "http-server": "^14.1.1",
     "husky": "^8.0.3",
     "npm-run-all": "^4.1.5",
