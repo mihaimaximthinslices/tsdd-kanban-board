@@ -36,12 +36,17 @@ jobs:
 
       - name: Start the BE server
         run: |
-          ts-node ./backend/index.ts & sleep 10
+          cd ./backend && yarn start:dev & sleep 2 && cd ..
 
       - name: Start the FE server
         run: |
-          yarn dev & sleep 10
+          yarn buildandrun & sleep 5
 
       - name: Run cypress e2e tests
-        run: | 
-          npx cypress run
+        run: |
+          yarn cypress run 
+
+      - name: Log cypress steps
+        if: failure()
+        run: |
+          cat $(find ./logs -type f -name "*.json" -print -quit)
