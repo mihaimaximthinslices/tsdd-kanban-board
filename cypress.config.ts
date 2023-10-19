@@ -6,6 +6,7 @@ import cypress_terminal_report, {
 
 export default defineConfig({
   e2e: {
+    baseUrl: process.env.HOST_FE,
     setupNodeEvents(on, config) {
       const options = {
         outputRoot: config.projectRoot + '/logs/',

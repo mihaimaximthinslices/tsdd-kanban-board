@@ -30,21 +30,30 @@ jobs:
           yarn check:lint
           yarn check:prettier
 
+      - name: Create .env File
+        run: |
+          echo "HOST_FE=http://localhost:3001" > .env.development.local
+          echo "DOMAIN_FE=localhost" >> .env.development.local
+          echo "VITE_HOST_BE=http://localhost:3002" >> .env.development.local
+          echo "PORT_BE=3002" >> .env.development.local
+          echo "PORT_FE=3001" >> .env.development.local
+        shell: bash
+
       - name: Run BE tests
         run: |
-          cd ./backend && yarn run vitest && cd ..
+          yarn test:be:dev
 
       - name: Start the BE server
         run: |
-          cd ./backend && yarn start:dev & sleep 2 && cd ..
+          yarn start:dev:be & sleep 2
 
       - name: Start the FE server
         run: |
-          yarn buildandrun & sleep 5
+          yarn start:dev:fe & sleep 2
 
       - name: Run cypress e2e tests
         run: |
-          yarn cypress run 
+          yarn test:fe:dev 
 
       - name: Log cypress steps
         if: failure()
