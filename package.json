@@ -10,26 +10,19 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "prepare": "husky install",
-
     "check:lint:fe": "cd ./src && eslint . --fix",
     "check:lint:be": "cd ./backend && eslint . --fix",
     "check:lint": "run-s check:lint:fe check:lint:be",
-
     "check:prettier:fe": "prettier --check \"./src/**/**.{js,ts,tsx}\"",
     "check:prettier:be": "cd ./backend && prettier --check \"./**.{js,ts}\"",
     "check:prettier": "run-s check:prettier:fe check:prettier:be",
-
     "test:be": "cd ./backend && yarn test",
     "test:be:dev": "dotenv -e .env.development.local yarn test:be",
-
     "test:fe": "npx cypress run",
     "test:fe:dev": "dotenv -e .env.development.local yarn test:fe",
-
     "dev:be": "cd ./backend && yarn dev",
-
     "start:dev:be": "dotenv -e .env.development.local yarn dev:be",
     "start:dev:fe": "dotenv -e .env.development.local yarn dev",
-
     "start:prod:be": "dotenv -e .env yarn dev:be",
     "start:prod:fe": "dotenv -e .env yarn dev"
   },
