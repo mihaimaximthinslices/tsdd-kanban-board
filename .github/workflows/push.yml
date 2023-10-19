@@ -36,14 +36,14 @@ jobs:
 
       - name: Start the BE server
         run: |
-          yarn start:dev:be
+          yarn start:dev:be & sleep 2
         env:
           HOST_FE: http://localhost:3000
           PORT_BE: 3001
 
       - name: Start the FE server
         run: |
-          yarn start:dev:fe
+          yarn start:dev:fe & sleep 2
         env:
           DOMAIN_FE: localhost
           VITE_HOST_BE: http://localhost:3001
