@@ -12,7 +12,7 @@ app.use(cookies())
 
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: process.env.FE_HOST || 'http://localhost:3000',
     credentials: true,
   }),
 )
