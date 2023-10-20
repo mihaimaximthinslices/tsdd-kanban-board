@@ -1,0 +1,137 @@
+describe('create-account flow', () => {
+  describe('given the user is not logged in', () => {
+    beforeEach(() => {
+      cy.clearCookies()
+    })
+
+    it('should display the create account page on a small screen', () => {
+      cy.visit('/sign-up')
+      cy.viewport(375, 667)
+
+      cy.contains('Create account')
+
+      cy.contains('Let’s get you started sharing your tasks!')
+
+      cy.get('[data-cy="kanban-app-logo"]').should('exist')
+
+      cy.get('[data-cy="create-account-button"]').should('exist')
+
+      cy.get('[data-cy="sign-in-with-google-button"]').should('exist')
+
+      cy.contains('Or sign in with google')
+
+      cy.get('[data-cy="email-address-input-label"]').should('exist')
+      cy.get('[data-cy="email-address-input"]').should('exist')
+      cy.get('[data-cy="password-input-label"]').should('exist')
+      cy.get('[data-cy="password-input"]').should('exist')
+
+      cy.get('[data-cy="confirmPassword-input-label"]').should('exist')
+      cy.get('[data-cy="confirmPassword-input"]').should('exist')
+
+      cy.get('a[href="/login"]').should('exist')
+    })
+
+    it('should display the create account page and image on a big screen', () => {
+      cy.visit('/sign-up')
+      cy.viewport(1440, 900)
+
+      cy.get('[data-cy="app-preview-image"]').should('exist')
+
+      cy.contains('Create account')
+
+      cy.contains('Let’s get you started sharing your tasks!')
+
+      cy.get('[data-cy="kanban-app-logo"]').should('exist')
+
+      cy.get('[data-cy="create-account-button"]').should('exist')
+
+      cy.get('[data-cy="sign-in-with-google-button"]').should('exist')
+
+      cy.contains('Or sign in with google')
+
+      cy.get('[data-cy="email-address-input-label"]').should('exist')
+      cy.get('[data-cy="email-address-input"]').should('exist')
+      cy.get('[data-cy="password-input-label"]').should('exist')
+      cy.get('[data-cy="password-input"]').should('exist')
+
+      cy.get('[data-cy="confirmPassword-input-label"]').should('exist')
+      cy.get('[data-cy="confirmPassword-input"]').should('exist')
+
+      cy.get('a[href="/login"]').should('exist')
+    })
+    describe('given the inputs are not completed', () => {
+      it('should display "Can\'t be empty" text three times', () => {
+        cy.visit('/sign-up')
+        cy.get('[data-cy="create-account-button"]').click()
+
+        cy.contains("Can't be empty")
+          .get("span:contains(Can't be empty)")
+          .should('have.length', 3)
+      })
+    })
+
+    describe('given the passwords do not match', () => {
+      it('should display Please check again', () => {
+        cy.visit('/sign-up')
+        cy.get('[data-cy="email-address-input"]').type(
+          'mihai.maxim@thinslices.com',
+        )
+
+        cy.get('[data-cy="password-input"]').type('test')
+        cy.get('[data-cy="confirmPassword-input"]').type('test2')
+
+        cy.get('[data-cy="create-account-button"]').click()
+
+        cy.contains('Please check again').should('exist')
+      })
+    })
+
+    describe('given the input is correct', () => {
+      describe('given the user already has an account', () => {
+        it('should display User already exists', () => {
+          cy.intercept('POST', '/api/sign-up', {
+            statusCode: 409,
+          }).as('signUpUser')
+
+          cy.visit('/sign-up')
+
+          cy.get('[data-cy="email-address-input"]').type(
+            'mihai.maxim@thinslices.com',
+          )
+          cy.get('[data-cy="password-input"]').type('password1234')
+          cy.get('[data-cy="confirmPassword-input"]').type('password1234')
+
+          cy.get('[data-cy="create-account-button"]').click()
+
+          cy.wait('@signUpUser')
+
+          cy.contains('User already exists')
+            .get('span:contains(User already exists)')
+            .should('have.length', 1)
+        })
+      })
+      describe('given the user does not have an account', () => {
+        it('should redirect me to /', () => {
+          cy.intercept('POST', '/api/sign-up', {
+            statusCode: 201,
+          }).as('signUpUser')
+
+          cy.visit('/sign-up')
+
+          cy.get('[data-cy="email-address-input"]').type(
+            'mihai.maxim@thinslices.com',
+          )
+
+          cy.get('[data-cy="password-input"]').type('password1234')
+          cy.get('[data-cy="confirmPassword-input"]').type('password1234')
+
+          cy.get('[data-cy="create-account-button"]').click()
+
+          cy.wait('@signUpUser')
+
+          cy.url().should('eq', '/')
+        })
+      })
+    })
+  })
+})
