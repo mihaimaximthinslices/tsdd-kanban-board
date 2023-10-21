@@ -106,7 +106,7 @@ export const SignUpPage: React.FC = () => {
           className="max-w-[960px] hidden 1xl:block rounded-l-xl "
           src="../../public/app-preview.jpg"
         ></img>
-        <div className="flex-1 flex justify-center 1xl:max-w-[480px] 1xl:h-[704px] bg-white 1xl:rounded-r-xl md:mt-12 1xl:mt-0">
+        <div className="flex-1 flex justify-center 1xl:max-w-[480px] 1xl:h-[704px] bg-white 1xl:rounded-r-xl md:items-center 1xl:mt-0">
           <div className="w-fit 1xl:mt-10">
             <div className="pb-16 pt-8 md:hidden">
               <div className="md:hidden">
@@ -123,6 +123,7 @@ export const SignUpPage: React.FC = () => {
               </span>
             </div>
             <form
+              data-cy="sign-up-from"
               className="flex w-[311px] md:w-[395px] flex-col gap-4"
               onSubmit={(e) => {
                 setInputTouched({
@@ -289,38 +290,37 @@ export const SignUpPage: React.FC = () => {
                   Create new account
                 </button>
               </div>
-
-              <div className="flex flex-col items-center w-full">
-                <hr className="border-gray2 mb-4 w-full" />
-                <button
-                  data-cy="sign-in-with-google-button"
-                  className="font-plusJSans pt-[10px] pb-[10px] text-white text-headingS rounded-md w-full bg-googleButton hover:bg-blue1 flex items-center justify-center gap-2"
-                >
-                  <div>
-                    <GoogleLogo />
-                  </div>
-                  Or sign in with Google
-                </button>
-                <div className="flex w-full flex-col items-center justify-center gap-1 md:flex-row md:justify-around mt-4">
-                  <p className="font-plusJSans text-headingM text-black1">
-                    Already have an account?
-                    <br className="md:hidden" />
-                    <a
-                      className="font-plusJSans text-headingM text-systemBlue hidden md:inline pl-1"
-                      href="/sign-in"
-                    >
-                      Sign in
-                    </a>
-                  </p>
+            </form>
+            <hr className="border-gray2 mb-4 w-full mt-4" />
+            <div className="flex flex-col items-center w-full">
+              <button
+                data-cy="sign-in-with-google-button"
+                className="font-plusJSans pt-[10px] pb-[10px] text-white text-headingS rounded-md w-full bg-googleButton hover:bg-blue1 flex items-center justify-center gap-2"
+              >
+                <div>
+                  <GoogleLogo />
+                </div>
+                Or sign in with Google
+              </button>
+              <div className="flex w-full flex-col items-center justify-center gap-1 md:flex-row md:justify-around mt-4">
+                <p className="font-plusJSans text-headingM text-black1">
+                  Already have an account?
+                  <br className="md:hidden" />
                   <a
-                    className="font-plusJSans text-headingM text-systemBlue md:hidden"
+                    className="font-plusJSans text-headingM text-systemBlue hidden md:inline pl-1"
                     href="/sign-in"
                   >
                     Sign in
                   </a>
-                </div>
+                </p>
+                <a
+                  className="font-plusJSans text-headingM text-systemBlue md:hidden"
+                  href="/sign-in"
+                >
+                  Sign in
+                </a>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>

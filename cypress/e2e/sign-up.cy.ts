@@ -68,6 +68,53 @@ describe('create-account flow', () => {
           .get("span:contains(Can't be empty)")
           .should('have.length', 3)
       })
+      describe('given I press on sign in with google', () => {
+        it('should not show me any errors', () => {
+          cy.visit('http://localhost:3000/sign-up')
+          cy.get('[data-cy="sign-in-with-google-button"]').click()
+
+          cy.contains("Can't be empty").should('not.exist')
+          cy.contains('Password too short').should('not.exist')
+          cy.contains('Invalid email address').should('not.exist')
+        })
+      })
+    })
+
+    describe('given the user clicks on input and then clicks outside', () => {
+      it('errors should appear on blur', () => {
+        cy.visit('http://localhost:3000/sign-up')
+
+        cy.contains("Can't be empty").should('not.exist')
+        cy.contains('Password too short').should('not.exist')
+        cy.contains('Invalid email address').should('not.exist')
+
+        cy.get('[data-cy="email-address-input"]').click()
+        cy.get('[data-cy="sign-up-from"]').click()
+        cy.contains("Can't be empty").should('exist')
+
+        cy.get('[data-cy="password-input"]').click()
+        cy.get('[data-cy="email-address-input"]').click()
+        cy.contains("Can't be empty")
+          .get("span:contains(Can't be empty)")
+          .should('have.length', 2)
+
+        cy.get('[data-cy="confirmPassword-input"]').click()
+        cy.get('[data-cy="sign-up-from"]').click()
+        cy.contains("Can't be empty")
+          .get("span:contains(Can't be empty)")
+          .should('have.length', 3)
+      })
+    })
+
+    describe('given the email is not valid', () => {
+      it('should display "Invalid email address" text', () => {
+        cy.visit('http://localhost:3000/sign-up')
+        cy.get('[data-cy="email-address-input"]').type('this is invalid')
+
+        cy.get('[data-cy="create-account-button"]').click()
+
+        cy.contains('Invalid email address').should('exist')
+      })
     })
 
     describe('given the passwords do not match', () => {
