@@ -17,7 +17,21 @@ export default {
         white1: '#FFFFFF',
         red2: '#EA5555',
         red1: '#FF9898',
+        systemBlue: '#358ce9',
+        googleButton: '#333333',
+        imageGray: '#f0f0f0',
       },
+    },
+    backgroundImage: {
+      'app-preview': "url('/public/app-preview.jpg')",
+    },
+    screens: {
+      '1xl': '1440px',
+      sm: '450px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
     },
     fontSize: {
       headingXL: '24px',
