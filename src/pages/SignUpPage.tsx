@@ -104,7 +104,7 @@ export const SignUpPage: React.FC = () => {
         <img
           data-cy="app-preview-image"
           className="max-w-[960px] hidden 1xl:block rounded-l-xl "
-          src="../../photos/app-preview.jpg"
+          src="../../public/app-preview.jpg"
         ></img>
         <div className="flex-1 flex justify-center 1xl:max-w-[480px] 1xl:h-[704px] bg-white 1xl:rounded-r-xl md:mt-12 1xl:mt-0">
           <div className="w-fit 1xl:mt-10">

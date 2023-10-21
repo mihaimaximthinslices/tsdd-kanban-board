@@ -16,8 +16,8 @@
       "destination": "/backend"
     },
     {
-      "source": "/photos/app-preview.jpg",
-      "destination": "/photos/app-preview.jpg"
+      "source": "/public/app-preview.jpg",
+      "destination": "/app-preview.jpg"
     },
     {
       "source": "/(.*)",
