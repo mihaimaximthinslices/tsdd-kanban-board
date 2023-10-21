@@ -11,7 +11,7 @@ export const routes = [
   {
     path: '/',
     component: <DashboardPage />,
-    auth: true,
+    auth: false,
   },
   {
     path: '/sign-in',

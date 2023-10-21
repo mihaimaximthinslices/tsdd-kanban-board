@@ -3,24 +3,110 @@ import IconEmail from '../svg/icon-email.tsx'
 import IconPassword from '../svg/icon-password.tsx'
 import GoogleLogo from '../svg/google-logo.tsx'
 import LogoLight from '../svg/logo-light.tsx'
+import { useEffect, useState } from 'react'
+import * as Yup from 'yup'
+import { ValidationError } from 'yup'
+import { clsx } from 'clsx'
+import axios, { AxiosError } from 'axios'
+import { useNavigate } from 'react-router-dom'
 
-export const SignUpPage = () => {
+type SignUpUserFormData = {
+  email: string
+  password: string
+  confirmPassword: string
+}
+
+export const SignUpPage: React.FC = () => {
+  const navigate = useNavigate()
+
+  const [signUpFormData, setSignUpFormData] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+  })
+
+  const [errors, setSignUpFormDataErrors] = useState(
+    {} as Record<string, string>,
+  )
+
+  const [inputTouched, setInputTouched] = useState({
+    email: false,
+    password: false,
+    confirmPassword: false,
+  })
+
+  async function handleSubmit() {
+    try {
+      await axios.post('/api/sign-up', signUpFormData)
+      navigate('/')
+    } catch (err) {
+      const error = err as AxiosError
+      if (error.response!.status === 409) {
+        setSignUpFormDataErrors((old) => ({
+          ...old,
+          email: 'User already exists',
+        }))
+      }
+    }
+  }
+
+  useEffect(() => {
+    const validateSignUpUserForm = async (
+      signUpFormData: SignUpUserFormData,
+    ) => {
+      const localErrors: Record<string, string> = {}
+      const SignUpUserFormValidationSchema = Yup.object().shape({
+        email: Yup.string()
+          .email('Invalid email address')
+          .required("Can't be empty"),
+        password: Yup.string()
+          .min(8, 'Password too short')
+          .required("Can't be empty"),
+        confirmPassword: Yup.string()
+          .min(8, 'Password too short')
+          .required("Can't be empty"),
+      })
+
+      await SignUpUserFormValidationSchema.validate(signUpFormData, {
+        abortEarly: false,
+      }).catch((err) => {
+        err.inner.forEach((error: ValidationError) => {
+          localErrors[error.path!] = error.message
+        })
+      })
+      if (
+        inputTouched.password &&
+        inputTouched.confirmPassword &&
+        signUpFormData.password !== signUpFormData.confirmPassword &&
+        signUpFormData.password.length > 0 &&
+        signUpFormData.confirmPassword.length > 0
+      ) {
+        localErrors.password = 'Passwords do not match'
+        localErrors.confirmPassword = 'Passwords do not match'
+      }
+      setSignUpFormDataErrors(localErrors)
+    }
+
+    validateSignUpUserForm(signUpFormData)
+  }, [signUpFormData])
+
   return (
     <div className="flex w-screen h-screen flex-col 1xl:bg-imageGray">
       <div className="hidden md:block 1xl:hidden w-full p-8 md:bg-googleButton">
-        <div className="md:hidden">
+        <div data-cy="kanban-app-logo" className="md:hidden">
           <LogoDark />
         </div>
-        <div className="hidden md:block">
+        <div data-cy="kanban-app-logo" className="hidden md:block">
           <LogoLight />
         </div>
       </div>
-      <div className="grow flex md:items-center justify-center">
+      <div className="grow flex 1xl:items-center justify-center">
         <img
+          data-cy="app-preview-image"
           className="max-w-[960px] hidden 1xl:block rounded-l-xl "
           src="../../public/app-preview.jpg"
         ></img>
-        <div className="flex-1 flex justify-center 1xl:max-w-[480px] 1xl:h-[704px] bg-white 1xl:rounded-r-xl">
+        <div className="flex-1 flex justify-center 1xl:max-w-[480px] 1xl:h-[704px] bg-white 1xl:rounded-r-xl md:mt-12 1xl:mt-0">
           <div className="w-fit 1xl:mt-10">
             <div className="pb-16 pt-8 md:hidden">
               <div className="md:hidden">
@@ -36,7 +122,18 @@ export const SignUpPage = () => {
                 Let’s get you started organizing your tasks!
               </span>
             </div>
-            <form className="flex w-[311px] md:w-[395px] flex-col gap-4">
+            <form
+              className="flex w-[311px] md:w-[395px] flex-col gap-4"
+              onSubmit={(e) => {
+                setInputTouched({
+                  email: true,
+                  password: true,
+                  confirmPassword: true,
+                })
+                e.preventDefault()
+                handleSubmit()
+              }}
+            >
               <div className="flex flex-col gap-1">
                 <label
                   className="font-plusJSans text-headingM text-black1"
@@ -53,16 +150,34 @@ export const SignUpPage = () => {
                 </div>
 
                 <input
-                  autoComplete="off"
+                  onChange={(e) => {
+                    setSignUpFormData((old) => ({
+                      ...old,
+                      email: e.target.value,
+                    }))
+                  }}
+                  onBlur={() =>
+                    setInputTouched((old) => ({
+                      ...old,
+                      email: true,
+                    }))
+                  }
                   data-cy="email-address-input"
-                  className="pl-9 pt-2 pb-2 border rounded-md text-bodyL"
+                  className={clsx(
+                    'pl-9 pt-2 pb-2 border rounded-md text-bodyL',
+                    errors.email &&
+                      inputTouched.email &&
+                      'focus:outline-redH outline outline-red2 outline-1',
+                  )}
                   type="text"
                   id="email"
                   placeholder="eg. alex@gmail.com"
                 />
-                <div className="font-plusJSans text-headingS text-red2">
-                  Field is required
-                </div>
+                {errors.email && inputTouched.email && (
+                  <div className="font-plusJSans text-headingS text-red2">
+                    <span>{errors.email}</span>
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -80,16 +195,34 @@ export const SignUpPage = () => {
                 </div>
 
                 <input
-                  className="font-plusJSans pl-9 pt-2 pb-2 border rounded-md text-bodyL"
-                  autoComplete="off"
+                  onChange={(e) => {
+                    setSignUpFormData((old) => ({
+                      ...old,
+                      password: e.target.value,
+                    }))
+                  }}
+                  onBlur={() =>
+                    setInputTouched((old) => ({
+                      ...old,
+                      password: true,
+                    }))
+                  }
+                  className={clsx(
+                    'font-plusJSans pl-9 pt-2 pb-2 border rounded-md text-bodyL',
+                    errors.password &&
+                      inputTouched.password &&
+                      'focus:outline-redH outline outline-red2 outline-1',
+                  )}
                   data-cy="password-input"
                   type="password"
                   id="password"
                   placeholder="At least 8 characters"
                 />
-                <div className=" font-plusJSans text-headingS text-red2">
-                  Field is required
-                </div>
+                {errors.password && inputTouched.password && (
+                  <div className=" font-plusJSans text-headingS text-red2">
+                    <span>{errors.password}</span>
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -107,8 +240,24 @@ export const SignUpPage = () => {
                 </div>
 
                 <input
-                  className="font-plusJSans pl-9 pt-2 pb-2 border rounded-md text-bodyL"
-                  autoComplete="off"
+                  onChange={(e) => {
+                    setSignUpFormData((old) => ({
+                      ...old,
+                      confirmPassword: e.target.value,
+                    }))
+                  }}
+                  onBlur={() => {
+                    setInputTouched((old) => ({
+                      ...old,
+                      confirmPassword: true,
+                    }))
+                  }}
+                  className={clsx(
+                    'font-plusJSans pl-9 pt-2 pb-2 border rounded-md text-bodyL',
+                    errors.confirmPassword &&
+                      inputTouched.confirmPassword &&
+                      'focus:outline-redH outline outline-red2 outline-1',
+                  )}
                   data-cy="confirmPassword-input"
                   type="password"
                   id="confirmPassword"
@@ -124,9 +273,11 @@ export const SignUpPage = () => {
                     </a>
                   </div>
                 </div>
-                <div className="font-plusJSans text-headingS text-red2 -mt-1">
-                  Passwords do not match
-                </div>
+                {errors.confirmPassword && inputTouched.confirmPassword && (
+                  <div className="font-plusJSans text-headingS text-red2 -mt-1">
+                    <span>{errors.confirmPassword}</span>
+                  </div>
+                )}
               </div>
 
               <div className="mt-6">
@@ -141,7 +292,10 @@ export const SignUpPage = () => {
 
               <div className="flex flex-col items-center w-full">
                 <hr className="border-gray2 mb-4 w-full" />
-                <button className="font-plusJSans pt-[10px] pb-[10px] text-white text-headingS rounded-md w-full bg-googleButton hover:bg-blue1 flex items-center justify-center gap-2">
+                <button
+                  data-cy="sign-in-with-google-button"
+                  className="font-plusJSans pt-[10px] pb-[10px] text-white text-headingS rounded-md w-full bg-googleButton hover:bg-blue1 flex items-center justify-center gap-2"
+                >
                   <div>
                     <GoogleLogo />
                   </div>

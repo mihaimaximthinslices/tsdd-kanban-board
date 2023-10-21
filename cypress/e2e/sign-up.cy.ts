@@ -5,12 +5,12 @@ describe('create-account flow', () => {
     })
 
     it('should display the create account page on a small screen', () => {
-      cy.visit('/sign-up')
+      cy.visit('http://localhost:3000/sign-up')
       cy.viewport(375, 667)
 
-      cy.contains('Create account')
+      cy.contains('Create Account')
 
-      cy.contains('Let’s get you started sharing your tasks!')
+      cy.contains('Let’s get you started organizing your tasks!')
 
       cy.get('[data-cy="kanban-app-logo"]').should('exist')
 
@@ -18,7 +18,7 @@ describe('create-account flow', () => {
 
       cy.get('[data-cy="sign-in-with-google-button"]').should('exist')
 
-      cy.contains('Or sign in with google')
+      cy.contains('Or sign in with Google')
 
       cy.get('[data-cy="email-address-input-label"]').should('exist')
       cy.get('[data-cy="email-address-input"]').should('exist')
@@ -28,18 +28,18 @@ describe('create-account flow', () => {
       cy.get('[data-cy="confirmPassword-input-label"]').should('exist')
       cy.get('[data-cy="confirmPassword-input"]').should('exist')
 
-      cy.get('a[href="/login"]').should('exist')
+      cy.get('a[href="/sign-in"]').should('exist')
     })
 
     it('should display the create account page and image on a big screen', () => {
-      cy.visit('/sign-up')
+      cy.visit('http://localhost:3000/sign-up')
       cy.viewport(1440, 900)
 
       cy.get('[data-cy="app-preview-image"]').should('exist')
 
-      cy.contains('Create account')
+      cy.contains('Create Account')
 
-      cy.contains('Let’s get you started sharing your tasks!')
+      cy.contains('Let’s get you started organizing your tasks!')
 
       cy.get('[data-cy="kanban-app-logo"]').should('exist')
 
@@ -47,7 +47,7 @@ describe('create-account flow', () => {
 
       cy.get('[data-cy="sign-in-with-google-button"]').should('exist')
 
-      cy.contains('Or sign in with google')
+      cy.contains('Or sign in with Google')
 
       cy.get('[data-cy="email-address-input-label"]').should('exist')
       cy.get('[data-cy="email-address-input"]').should('exist')
@@ -57,11 +57,11 @@ describe('create-account flow', () => {
       cy.get('[data-cy="confirmPassword-input-label"]').should('exist')
       cy.get('[data-cy="confirmPassword-input"]').should('exist')
 
-      cy.get('a[href="/login"]').should('exist')
+      cy.get('a[href="/sign-in"]').should('exist')
     })
     describe('given the inputs are not completed', () => {
       it('should display "Can\'t be empty" text three times', () => {
-        cy.visit('/sign-up')
+        cy.visit('http://localhost:3000/sign-up')
         cy.get('[data-cy="create-account-button"]').click()
 
         cy.contains("Can't be empty")
@@ -71,8 +71,8 @@ describe('create-account flow', () => {
     })
 
     describe('given the passwords do not match', () => {
-      it('should display Please check again', () => {
-        cy.visit('/sign-up')
+      it('should display Password too short', () => {
+        cy.visit('http://localhost:3000/sign-up')
         cy.get('[data-cy="email-address-input"]').type(
           'mihai.maxim@thinslices.com',
         )
@@ -82,7 +82,7 @@ describe('create-account flow', () => {
 
         cy.get('[data-cy="create-account-button"]').click()
 
-        cy.contains('Please check again').should('exist')
+        cy.contains('Password too short').should('exist')
       })
     })
 
@@ -93,7 +93,7 @@ describe('create-account flow', () => {
             statusCode: 409,
           }).as('signUpUser')
 
-          cy.visit('/sign-up')
+          cy.visit('http://localhost:3000/sign-up')
 
           cy.get('[data-cy="email-address-input"]').type(
             'mihai.maxim@thinslices.com',
@@ -116,7 +116,7 @@ describe('create-account flow', () => {
             statusCode: 201,
           }).as('signUpUser')
 
-          cy.visit('/sign-up')
+          cy.visit('http://localhost:3000/sign-up')
 
           cy.get('[data-cy="email-address-input"]').type(
             'mihai.maxim@thinslices.com',
@@ -129,7 +129,7 @@ describe('create-account flow', () => {
 
           cy.wait('@signUpUser')
 
-          cy.url().should('eq', '/')
+          cy.url().should('eq', 'http://localhost:3000/')
         })
       })
     })

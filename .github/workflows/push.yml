@@ -32,11 +32,11 @@ jobs:
 
       - name: Create .env File
         run: |
-          echo "HOST_FE=http://localhost:3001" > .env.development.local
+          echo "HOST_FE=http://localhost:3000" > .env.development.local
           echo "DOMAIN_FE=localhost" >> .env.development.local
-          echo "VITE_HOST_BE=http://localhost:3002" >> .env.development.local
-          echo "PORT_BE=3002" >> .env.development.local
-          echo "PORT_FE=3001" >> .env.development.local
+          echo "VITE_HOST_BE=http://localhost:3001" >> .env.development.local
+          echo "PORT_BE=3001" >> .env.development.local
+          echo "PORT_FE=3000" >> .env.development.local
         shell: bash
 
       - name: Run BE tests
