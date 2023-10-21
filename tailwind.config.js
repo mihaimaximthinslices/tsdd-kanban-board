@@ -23,7 +23,7 @@ export default {
       },
     },
     backgroundImage: {
-      'app-preview': "url('/public/app-preview.jpg')",
+      'app-preview': "url('/public/photos/app-preview.jpg')",
     },
     screens: {
       '1xl': '1440px',

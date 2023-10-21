@@ -16,6 +16,10 @@
       "destination": "/backend"
     },
     {
+      "source": "/public/photos/(.*)",
+      "destination": "/photos"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
