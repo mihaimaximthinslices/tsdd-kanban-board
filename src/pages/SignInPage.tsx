@@ -5,7 +5,6 @@ export const SignInPage = () => {
     <div className="flex flex-col">
       SignInPage
       <Link to="/sign-up">Sign-up</Link>
-      <Link to="/">Dashboard</Link>
     </div>
   )
 }

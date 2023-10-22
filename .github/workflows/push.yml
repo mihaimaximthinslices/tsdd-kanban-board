@@ -39,6 +39,8 @@ jobs:
           echo "PORT_FE=3000" >> .env.development.local
           echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env.development.local
           echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env.development.local
+          echo "SESSION_SECRET=${{ secrets.SESSION_SECRET }}" >> .env.development.local
+          echo "POSTGRES_DB_CONN=${{ secrets.POSTGRES_DB_CONN }}" >> .env.development.local
         shell: bash
 
       - name: Run BE tests
