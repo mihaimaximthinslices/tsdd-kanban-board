@@ -1,6 +1,7 @@
 import { SignUpPage } from '../pages/SignUpPage.tsx'
 import { DashboardPage } from '../pages/DashboardPage.tsx'
 import { SignInPage } from '../pages/SignInPage.tsx'
+import AuthRedirect from '../pages/AuthRedirect.tsx'
 
 export const routes = [
   {
@@ -11,11 +12,16 @@ export const routes = [
   {
     path: '/',
     component: <DashboardPage />,
-    auth: false,
+    auth: true,
   },
   {
     path: '/sign-in',
     component: <SignInPage />,
+    auth: false,
+  },
+  {
+    path: '/auth-redirect/:route',
+    component: <AuthRedirect />,
     auth: false,
   },
 ]

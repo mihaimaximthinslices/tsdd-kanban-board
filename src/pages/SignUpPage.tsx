@@ -9,6 +9,7 @@ import { ValidationError } from 'yup'
 import { clsx } from 'clsx'
 import axios, { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { useUser } from '../hooks/useUser.tsx'
 
 type SignUpUserFormData = {
   email: string
@@ -18,6 +19,8 @@ type SignUpUserFormData = {
 
 export const SignUpPage: React.FC = () => {
   const navigate = useNavigate()
+
+  const { refetch: refetchUser } = useUser()
 
   const [signUpFormData, setSignUpFormData] = useState({
     email: '',
@@ -38,6 +41,7 @@ export const SignUpPage: React.FC = () => {
   async function handleSubmit() {
     try {
       await axios.post('/api/sign-up', signUpFormData)
+      refetchUser()
       navigate('/')
     } catch (err) {
       const error = err as AxiosError
