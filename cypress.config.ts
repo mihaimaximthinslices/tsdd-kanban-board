@@ -5,6 +5,7 @@ import cypress_terminal_report, {
 } from 'cypress-terminal-report/src/installLogsPrinter'
 
 export default defineConfig({
+  chromeWebSecurity: false,
   e2e: {
     baseUrl: process.env.HOST_FE,
     setupNodeEvents(on, config) {

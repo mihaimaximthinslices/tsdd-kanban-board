@@ -37,6 +37,8 @@ jobs:
           echo "VITE_HOST_BE=http://localhost:3001" >> .env.development.local
           echo "PORT_BE=3001" >> .env.development.local
           echo "PORT_FE=3000" >> .env.development.local
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env.development.local
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env.development.local
         shell: bash
 
       - name: Run BE tests

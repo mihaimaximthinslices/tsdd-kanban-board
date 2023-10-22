@@ -69,13 +69,17 @@ describe('create-account flow', () => {
           .should('have.length', 3)
       })
       describe('given I press on sign in with google', () => {
-        it('should not show me any errors', () => {
+        it('should not show me any errors and redirect me to https://accounts.google.com/', () => {
           cy.visit('http://localhost:3000/sign-up')
           cy.get('[data-cy="sign-in-with-google-button"]').click()
 
           cy.contains("Can't be empty").should('not.exist')
           cy.contains('Password too short').should('not.exist')
           cy.contains('Invalid email address').should('not.exist')
+
+          cy.origin('https://accounts.google.com', () => {
+            cy.url().should('contain', 'https://accounts.google.com/')
+          })
         })
       })
     })
