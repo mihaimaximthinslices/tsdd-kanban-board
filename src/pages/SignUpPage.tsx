@@ -293,7 +293,8 @@ export const SignUpPage: React.FC = () => {
             </form>
             <hr className="border-gray2 mb-4 w-full mt-4" />
             <div className="flex flex-col items-center w-full">
-              <button
+              <a
+                href={`${import.meta.env.VITE_HOST_BE}/api/auth/google`}
                 data-cy="sign-in-with-google-button"
                 className="font-plusJSans pt-[10px] pb-[10px] text-white text-headingS rounded-md w-full bg-googleButton hover:bg-blue1 flex items-center justify-center gap-2"
               >
@@ -301,7 +302,7 @@ export const SignUpPage: React.FC = () => {
                   <GoogleLogo />
                 </div>
                 Or sign in with Google
-              </button>
+              </a>
               <div className="flex w-full flex-col items-center justify-center gap-1 md:flex-row md:justify-around mt-4">
                 <p className="font-plusJSans text-headingM text-black1">
                   Already have an account?
