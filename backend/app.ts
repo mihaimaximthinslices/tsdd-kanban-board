@@ -28,9 +28,19 @@ app.use(
 )
 
 const PostgresqlStore = genFunc(session)
-const sessionStore = new PostgresqlStore({
-  conString: process.env.POSTGRES_DB_CONN,
-})
+let sessionStore
+if (process.env.DB_SSL === 'true') {
+  sessionStore = new PostgresqlStore({
+    conObject: {
+      connectionString: process.env.POSTGRES_DB_CONN,
+      ssl: true,
+    },
+  })
+} else {
+  sessionStore = new PostgresqlStore({
+    conString: process.env.POSTGRES_DB_CONN,
+  })
+}
 export type SessionUser = {
   email: string
 }
