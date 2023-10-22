@@ -3,7 +3,7 @@ import app from '../app'
 import request from 'supertest'
 import { prismaUserRepository } from '../src/infrastructure/repositories'
 
-describe.only('POST /api/sign-up', () => {
+describe('POST /api/sign-up', () => {
   beforeAll(async () => {
     //clear any old users
     const oldUser = await prismaUserRepository.getByEmail('mihai.maximfii@gmail.com')
