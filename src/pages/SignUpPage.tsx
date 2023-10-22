@@ -294,7 +294,7 @@ export const SignUpPage: React.FC = () => {
             <hr className="border-gray2 mb-4 w-full mt-4" />
             <div className="flex flex-col items-center w-full">
               <a
-                href="http://localhost:3001/api/auth/google"
+                href={`${import.meta.env.VITE_HOST_BE}/api/auth/google`}
                 data-cy="sign-in-with-google-button"
                 className="font-plusJSans pt-[10px] pb-[10px] text-white text-headingS rounded-md w-full bg-googleButton hover:bg-blue1 flex items-center justify-center gap-2"
               >
