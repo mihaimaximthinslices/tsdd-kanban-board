@@ -10,7 +10,7 @@ import GStrategy from 'passport-google-oauth'
 import session from 'express-session'
 import genFunc from 'connect-pg-simple'
 import { sharedErrorHandler, withErrorHandling } from './src/infrastructure/shared/Errors'
-import { signUpUserController } from './src/infrastructure/controllers'
+import { signUpUserController, signInUserController } from './src/infrastructure/controllers'
 import { createUserUsecase } from './src/domain/usecases/createUserUsecase'
 import { prismaUserRepository } from './src/infrastructure/repositories'
 import { dateGenerator, uuidGenerator } from './src/infrastructure/shared'
@@ -120,7 +120,7 @@ app.get(
 )
 
 app.post('/api/sign-up', withErrorHandling(signUpUserController, sharedErrorHandler))
-
+app.post('/api/sign-in', withErrorHandling(signInUserController, sharedErrorHandler))
 app.get('/api/hello', (_req: Request, res: Response) => {
   res.status(200).send({
     message: 'Hello World',

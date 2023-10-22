@@ -73,10 +73,6 @@ describe('create-account flow', () => {
           cy.visit('http://localhost:3000/sign-up')
           cy.get('[data-cy="sign-in-with-google-button"]').click()
 
-          cy.contains("Can't be empty").should('not.exist')
-          cy.contains('Password too short').should('not.exist')
-          cy.contains('Invalid email address').should('not.exist')
-
           cy.origin('https://accounts.google.com', () => {
             cy.url().should('contain', 'https://accounts.google.com/')
           })
@@ -163,6 +159,14 @@ describe('create-account flow', () => {
       })
       describe('given the user does not have an account', () => {
         it('should redirect me to /', () => {
+          cy.intercept('GET', '/api/auth', {
+            statusCode: 200,
+            body: {
+              user: {
+                email: 'mihai.maxim@thinslices.com',
+              },
+            },
+          }).as('checkAuth')
           cy.intercept('POST', '/api/sign-up', {
             statusCode: 201,
           }).as('signUpUser')

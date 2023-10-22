@@ -24,25 +24,18 @@ export const createUserUsecase: UseCaseConstructor<Params, Request, User> = (par
 
     const user = await userRepository.getByEmail(email)
 
-    if (user && user.password) {
+    if (user) {
       throw new DuplicateEntityError(`User with email ${user.email}`)
     }
 
-    const newUser: Partial<User> = { ...user }
-
     const NOW = dateGenerator.now()
 
-    if (!user) {
-      newUser.id = uuidGenerator.next()
-      newUser.email = email
-      newUser.password = password
-      newUser.createdAt = NOW
-      newUser.updatedAt = NOW
-    }
-
-    if (!user?.password) {
-      newUser.password = password
-      newUser.updatedAt = NOW
+    const newUser = {
+      id: uuidGenerator.next(),
+      email,
+      password,
+      createdAt: NOW,
+      updatedAt: NOW,
     }
 
     await userRepository.save(newUser as User)

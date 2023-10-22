@@ -38,36 +38,13 @@ describe('createUserUsecase', () => {
     const alreadyExistingUser = userBuilder.build({
       email: email,
     })
-    describe('given the user does not have a password set up', () => {
-      beforeEach(() => {
-        userRepository.getByEmail.mockResolvedValue({
-          ...alreadyExistingUser,
-          password: null,
-        })
-        dateGenerator.now.mockReturnValue(now)
-      })
-
-      test('should only update the password', async () => {
-        await runningTheUsecase()
-        expect(userRepository.getByEmail).toHaveBeenCalledWith(email)
-        expect(userRepository.save).toHaveBeenCalledWith({
-          id: alreadyExistingUser.id,
-          email: alreadyExistingUser.email,
-          password: password,
-          createdAt: alreadyExistingUser.createdAt,
-          updatedAt: now,
-        })
-      })
+    beforeEach(() => {
+      userRepository.getByEmail.mockResolvedValue(alreadyExistingUser)
     })
 
-    describe('given the user already has a password set up', () => {
-      beforeEach(() => {
-        userRepository.getByEmail.mockResolvedValue(alreadyExistingUser)
-      })
-      test('should throw DuplicateEntityError', async () => {
-        await expect(runningTheUsecase).rejects.toThrow(DuplicateEntityError)
-        expect(userRepository.getByEmail).toHaveBeenCalledWith(email)
-      })
+    test('should throw DuplicateEntityError', async () => {
+      await expect(runningTheUsecase).rejects.toThrow(DuplicateEntityError)
+      expect(userRepository.getByEmail).toHaveBeenCalledWith(email)
     })
   })
 

@@ -8,7 +8,10 @@ import {
 import { ZodError } from 'zod'
 
 export const withErrorHandling =
-  (handler: (req: Request, res: Response) => Promise<void>, errorHandler: (err: Error, res: Response) => void) =>
+  (
+    handler: (req: Request, res: Response) => Promise<void> | Promise<unknown>,
+    errorHandler: (err: Error, res: Response) => void,
+  ) =>
   async (req: Request, res: Response) => {
     try {
       await handler(req, res)
