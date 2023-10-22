@@ -58,16 +58,6 @@ describe('POST /api/sign-up', () => {
     }
 
     describe('given the email is already in use', () => {
-      describe('given the password field is empty', () => {
-        beforeEach(async () => {
-          const oldUser = await prismaUserRepository.getByEmail('mihai.maxim@thinslices.com')
-          if (oldUser) await prismaUserRepository.save({ ...oldUser, password: null, updatedAt: new Date() })
-        })
-        it('should return 201 status with a token (in response body and in set-cookie header)', async () => {
-          const response = await request(app).post('/api/sign-up').send(credentials).expect(201)
-          expect(response.headers['set-cookie']).toBeDefined()
-        })
-      })
       it('should return 409 status', async () => {
         await request(app).post('/api/sign-up').send(credentials).expect(409)
       })

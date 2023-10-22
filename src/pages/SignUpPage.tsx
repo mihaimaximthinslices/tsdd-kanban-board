@@ -39,6 +39,7 @@ export const SignUpPage: React.FC = () => {
   })
 
   async function handleSubmit() {
+    if (!(Object.values(errors).length === 0)) return
     try {
       await axios.post('/api/sign-up', signUpFormData)
       refetchUser()
