@@ -29,7 +29,10 @@ app.use(
 
 const PostgresqlStore = genFunc(session)
 const sessionStore = new PostgresqlStore({
-  conString: process.env.POSTGRES_DB_CONN,
+  conObject: {
+    connectionString: process.env.DATABASE_URL,
+    ssl: true,
+  },
 })
 export type SessionUser = {
   email: string
