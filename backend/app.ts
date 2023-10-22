@@ -30,7 +30,7 @@ app.use(
 const PostgresqlStore = genFunc(session)
 const sessionStore = new PostgresqlStore({
   conObject: {
-    connectionString: process.env.DATABASE_URL,
+    connectionString: process.env.POSTGRES_DB_CONN,
     ssl: true,
   },
 })
