@@ -2,21 +2,13 @@ let alreadySet = false
 const initTheme = () => {
   return () => {
     if (!alreadySet) {
-      if (
-        localStorage.theme === 'dark' ||
-        (!('theme' in localStorage) &&
-          window.matchMedia('(prefers-color-scheme: dark)').matches)
-      ) {
-        document.documentElement.classList.add('dark')
+      const currentTheme = localStorage.getItem('kanban-theme')
+      if (currentTheme === 'light') {
+        document.documentElement.classList.remove('dark')
       } else {
         document.documentElement.classList.remove('dark')
+        document.documentElement.classList.add('dark')
       }
-
-      localStorage.theme = 'light'
-
-      localStorage.theme = 'dark'
-
-      localStorage.removeItem('theme')
 
       alreadySet = true
     }
@@ -24,14 +16,18 @@ const initTheme = () => {
 }
 export const useThemeSelector = () => {
   initTheme()()
-  const toggleTheme = () => {
+  const toggleTheme = (dark: boolean) => {
+    console.log(dark)
+
+    if (document.documentElement.classList.contains('dark')) {
+      localStorage.setItem('kanban-theme', 'light')
+    } else {
+      localStorage.setItem('kanban-theme', 'dark')
+    }
+
     document.documentElement.classList.toggle('dark')
   }
-  const currentTheme = document.documentElement.classList.contains('dark')
-    ? 'dark'
-    : 'light'
   return {
     toggleTheme,
-    currentTheme,
   }
 }

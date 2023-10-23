@@ -1,5 +1,30 @@
+let authCookie = ''
 describe('dashboard-empty flow', () => {
   describe('given the user is logged in', () => {
+    before('get auth cookie', () => {
+      cy.intercept('/api/sign-in').as('signIn')
+      cy.visit('http://localhost:3000/sign-in')
+
+      cy.get('[data-cy="email-address-input"]').type(
+        'mihai.maxim+dashboard@thinslices.com',
+      )
+      cy.get('[data-cy="password-input"]').type('password1234')
+
+      cy.get('[data-cy="sign-in-account-button"]').click()
+
+      cy.wait('@signIn')
+
+      console.log(
+        cy.getCookie('connect.sid').then((cookie) => {
+          authCookie = cookie!.value
+        }),
+      )
+    })
+
+    beforeEach(() => {
+      cy.setCookie('connect.sid', authCookie)
+    })
+
     describe('given I am on a small screen', () => {
       it('should display the dashboard with all the required options', () => {
         cy.visit('http://localhost:3000')

@@ -3,11 +3,11 @@ import { Route, Routes } from 'react-router-dom'
 import { routes } from './router'
 import { PrivateRoute } from './components/PrivateRoute.tsx'
 import { useUser } from './hooks/useUser.tsx'
-// import { useThemeSelector } from './useThemeSelector.tsx'
+import { useThemeSelector } from './useThemeSelector.tsx'
 
 function App() {
   useUser()
-  // useThemeSelector()
+  useThemeSelector()
   return (
     <Routes>
       {routes.map((route) =>
