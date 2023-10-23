@@ -43,7 +43,7 @@ export default function DashboardNavbar({
           <LogoLight />
         </div>
       </div>
-      <div className="hidden md:block md:min-h-[80px] w-[1px] bg-white3 dark:bg-black1" />
+      <div className="hidden md:block md:min-h-[80px] 1xl:h-[96px] w-[1px] bg-white3 dark:bg-black1" />
       <div className=" h-full grow flex justify-between pl-4 md:pl-6 items-center md:border-b dark:border-b-black1">
         <div
           data-cy="platform-launch-dropdown"
