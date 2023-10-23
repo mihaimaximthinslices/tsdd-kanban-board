@@ -107,7 +107,7 @@ export const SignInPage: React.FC = () => {
           className="max-w-[960px] hidden 1xl:block rounded-l-xl "
           src="../../public/app-preview.jpg"
         ></img>
-        <div className=" mt-5 flex-1 flex justify-center 1xl:max-w-[480px] 1xl:h-[704px]  1xl:rounded-r-xl 1xl:mt-0 bg-white2 dark:bg-black2 md:dark:bg-black3 1xl:bg-white 1xl:dark:bg-black2">
+        <div className="md:mt-5 flex-1 flex justify-center 1xl:max-w-[480px] 1xl:h-[704px]  1xl:rounded-r-xl 1xl:mt-0 bg-white2 dark:bg-black2 md:dark:bg-black3 1xl:bg-white 1xl:dark:bg-black2">
           <div className="w-fit ">
             <div className="pb-16 pt-8 md:hidden">
               <div className="dark:hidden md:hidden">
