@@ -27,7 +27,11 @@ export const useThemeSelector = () => {
   const toggleTheme = () => {
     document.documentElement.classList.toggle('dark')
   }
+  const currentTheme = document.documentElement.classList.contains('dark')
+    ? 'dark'
+    : 'light'
   return {
     toggleTheme,
+    currentTheme,
   }
 }

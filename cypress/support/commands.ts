@@ -35,3 +35,18 @@
 //     }
 //   }
 // }
+// eslint-disable-next-line @typescript-eslint/no-namespace
+declare namespace Cypress {
+  interface Chainable {
+    login: (email: string, password: string) => void
+  }
+}
+
+Cypress.Commands.add('login', (email, password) => {
+  cy.request('POST', 'http://localhost:3001/api/sign-in', {
+    email,
+    password,
+  }).then((r) => {
+    expect(r.status).to.eq(200)
+  })
+})
