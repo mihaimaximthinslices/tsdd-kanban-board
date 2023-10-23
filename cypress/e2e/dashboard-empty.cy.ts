@@ -1,13 +1,9 @@
 describe('dashboard-empty flow', () => {
   describe('given the user is logged in', () => {
-    beforeEach(() => {
-      cy.login('mihai.maxim+dashboard@thinslices.com', 'password1234')
-    })
-
     describe('given I am on a small screen', () => {
       it('should display the dashboard with all the required options', () => {
-        cy.viewport(375, 667)
         cy.visit('http://localhost:3000')
+        cy.viewport(375, 667)
         cy.get('[data-cy="platform-logo"]').should('be.visible')
         cy.contains('Platform Launch')
         cy.get('[data-cy="platform-launch-dropdown"]').should('be.visible')
@@ -21,8 +17,8 @@ describe('dashboard-empty flow', () => {
 
     describe('given I am on a normal screen', () => {
       it('should display the dashboard with all the required options', () => {
-        cy.viewport(768, 1024)
         cy.visit('http://localhost:3000')
+        cy.viewport(768, 1024)
         cy.get('[data-cy="platform-logo-full"]').should('be.visible')
         cy.contains('Platform Launch')
         cy.get('[data-cy="platform-launch-dropdown"]').should('be.visible')
