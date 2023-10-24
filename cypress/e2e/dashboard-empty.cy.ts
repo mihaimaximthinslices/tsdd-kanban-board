@@ -36,7 +36,33 @@ describe('dashboard-empty flow', () => {
         cy.get('[data-cy="add-new-column-button"]').should('be.visible')
         cy.contains('This board is empty. Create a new column to get started.')
         cy.get('[data-cy="edit-board-button"]').should('be.visible')
+        cy.get('[data-cy="sidebar"]').should('not.exist')
+        cy.get('[data-cy="show-sidebar-button"]').should('not.exist')
+
         cy.contains('+ Add New Column')
+
+        cy.get('[data-cy="platform-launch-dropdown"]').click()
+
+        cy.get('[data-cy="modal-background"]').should('be.visible')
+
+        cy.get('[data-cy="sidebar"]').should('be.visible')
+
+        cy.contains('+ Add New Task')
+
+        cy.get('[data-cy="sidebar-all-boards-counter"]').should('be.visible')
+        cy.contains('ALL BOARDS (0)')
+
+        cy.get('[data-cy="sidebar-create-new-board-button"]').should(
+          'be.visible',
+        )
+
+        cy.contains('+ Create New Board')
+
+        cy.get('[data-cy="sidebar-switch-theme-button"]').should('be.visible')
+
+        cy.get('[data-cy="modal-background"]').click('topRight')
+
+        cy.get('[data-cy="sidebar"]').should('not.exist')
       })
     })
 
@@ -46,7 +72,6 @@ describe('dashboard-empty flow', () => {
         cy.viewport(768, 1024)
         cy.get('[data-cy="platform-logo-full"]').should('be.visible')
         cy.contains('Platform Launch')
-        cy.get('[data-cy="platform-launch-dropdown"]').should('be.visible')
         cy.get('[data-cy="add-new-task-button"]').should('be.disabled')
         cy.get('[data-cy="add-new-column-button"]').should('be.visible')
         cy.contains('This board is empty. Create a new column to get started.')
@@ -67,6 +92,16 @@ describe('dashboard-empty flow', () => {
         cy.get('[data-cy="sidebar-switch-theme-button"]').should('be.visible')
 
         cy.get('[data-cy="hide-sidebar-button"]').should('be.visible')
+
+        cy.get('[data-cy="hide-sidebar-button"]').click()
+
+        cy.get('[data-cy="sidebar"]').should('not.exist')
+
+        cy.get('[data-cy="show-sidebar-button"]').should('be.visible')
+
+        cy.get('[data-cy="show-sidebar-button"]').click()
+
+        cy.get('[data-cy="sidebar"]').should('be.visible')
       })
     })
   })

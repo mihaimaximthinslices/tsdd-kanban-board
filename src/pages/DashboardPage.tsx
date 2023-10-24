@@ -3,6 +3,7 @@ import { useThemeSelector } from '../useThemeSelector.tsx'
 import { DashboardSidebar } from '../components/DashboardSidebar.tsx'
 import { useState } from 'react'
 import useWindowDimensions from '../hooks/useWindowDimensions.tsx'
+import { ShowSidebarSticky } from '../components/ShowSidebarSticky.tsx'
 
 export const DashboardPage = () => {
   useThemeSelector()
@@ -25,8 +26,11 @@ export const DashboardPage = () => {
         showSidebar={showSidebar}
       />
       <div className="grow flex bg-white2 dark:bg-black3">
-        {showSidebar && <DashboardSidebar />}
-        <div className="flex w-full flex-col grow justify-center items-center">
+        {showSidebar && <DashboardSidebar setShowSidebar={setShowSidebar} />}
+        <div className="flex w-full flex-col grow justify-center items-center relative">
+          {!showSidebar && canShowSidebar && (
+            <ShowSidebarSticky setShowSidebar={setShowSidebar} />
+          )}
           <div className="grow p-4 flex flex-col items-center justify-center">
             <div className="flex flex-col items-center gap-6">
               <h1 className="font-plusJSans text-headingL text-white4 text-center">
