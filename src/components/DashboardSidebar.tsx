@@ -1,5 +1,5 @@
 import { IconBoardBlue } from '../svg/icon-board.tsx'
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import IconDarkTheme from '../svg/icon-dark-theme.tsx'
 import IconLightTheme from '../svg/icon-light-theme.tsx'
 import { useThemeSelector } from '../useThemeSelector.tsx'
@@ -33,14 +33,18 @@ export function Toggle() {
               setEnabled(!enabled)
               toggleTheme(enabled)
             }}
-            className=" w-11 h-6 bg-blue2 rounded-full peer  peer-focus:ring-blue2  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
+            className="w-11 h-6 bg-blue2 rounded-full peer  peer-focus:ring-blue2  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
           ></div>
         </label>
       </div>
     </div>
   )
 }
-export function DashboardSidebar() {
+export function DashboardSidebar({
+  setShowSidebar,
+}: {
+  setShowSidebar: Dispatch<SetStateAction<boolean>>
+}) {
   const boardsNumber = 0
   return (
     <div data-cy="sidebar" className="flex flex-col grow w-fit ">
@@ -72,8 +76,9 @@ export function DashboardSidebar() {
             <IconDarkTheme />
           </div>
           <div
+            onClick={() => setShowSidebar(false)}
             data-cy="hide-sidebar-button"
-            className="flex gap-[15px] items-center justify-start w-full pl-6 1xl:pl-11 pt-[22px] pb-[11px]"
+            className="flex gap-[15px] items-center justify-start w-full pl-6 1xl:pl-11 pt-[22px] pb-[11px] cursor-pointer"
           >
             <div>
               <IconHideSidebar />

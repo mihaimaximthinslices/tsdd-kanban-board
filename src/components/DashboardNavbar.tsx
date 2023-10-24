@@ -5,7 +5,9 @@ import IconVerticalEllipsis from '../svg/icon-vertical-ellipsis.tsx'
 import LogoDark from '../svg/logo-dark.tsx'
 import LogoLight from '../svg/logo-light.tsx'
 import { clsx } from 'clsx'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { Modal } from '../modal/Modal.tsx'
+import { MobileSidebar } from './MobileSidebar.tsx'
 
 export default function DashboardNavbar({
   setShowSidebar,
@@ -16,8 +18,9 @@ export default function DashboardNavbar({
   showSidebar: boolean
   canShowSidebar: boolean
 }) {
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false)
   return (
-    <div className="w-full min-h-[64px] h-[80px] 1xl:h-[96px] bg-white dark:bg-black2 flex items-center justify-between border-b border-b-white3 dark:border-b-black1 md:border-b-0 pl-4 pr-4 md:pl-0 md:pr-0">
+    <div className="w-full h-[64px] md:h-[80px] 1xl:h-[96px] bg-white dark:bg-black2 flex items-center justify-between border-b border-b-white3 dark:border-b-black1 md:border-b-0 pl-4 pr-4 md:pl-0 md:pr-0">
       <div
         onClick={() => canShowSidebar && setShowSidebar((prev) => !prev)}
         className={clsx(
@@ -43,24 +46,40 @@ export default function DashboardNavbar({
           <LogoLight />
         </div>
       </div>
-      <div className="hidden md:block md:min-h-[80px] 1xl:h-[96px] w-[1px] bg-white3 dark:bg-black1" />
-      <div className=" h-full grow flex justify-between pl-4 md:pl-6 items-center md:border-b dark:border-b-black1">
+      <div className="hidden md:block h-[64px] md:h-[80px] 1xl:h-[96px] w-[1px] bg-white3 dark:bg-black1" />
+      <div className="h-full grow flex justify-between pl-4 md:pl-6 items-center md:border-b dark:border-b-black1">
         <div
+          onClick={() => {
+            !showMobileSidebar && setShowMobileSidebar(true)
+          }}
           data-cy="platform-launch-dropdown"
-          className="flex gap-2 items-center md:hidden"
+          className={clsx(
+            'flex gap-2 items-center md:hidden cursor-pointer',
+            !showMobileSidebar ? 'cursor-pointer' : 'cursor-default',
+          )}
         >
           <button className="font-plusJSans text-headingL text-black dark:text-white">
             Platform Launch
           </button>
           <IconChevronDown />
+
+          {showMobileSidebar && (
+            <Modal
+              mobileTop={true}
+              onClose={() => {
+                setShowMobileSidebar(false)
+              }}
+            >
+              <MobileSidebar
+                closeModalParrent={() => setShowMobileSidebar(false)}
+              />
+            </Modal>
+          )}
         </div>
-        <div
-          data-cy="platform-launch-dropdown"
-          className=" gap-2 items-center hidden md:flex"
-        >
-          <button className="font-plusJSans text-headingL text-black dark:text-white">
+        <div className=" gap-2 items-center hidden md:flex">
+          <span className="font-plusJSans text-headingL text-black dark:text-white">
             Platform Launch
-          </button>
+          </span>
         </div>
         <div className="flex gap-4 md:pr-6">
           <div>
