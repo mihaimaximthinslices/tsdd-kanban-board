@@ -43,6 +43,7 @@ export const DashboardPage = () => {
                 + Add New Column
               </button>
             </div>
+            {/*<KanbanBoard />*/}
           </div>
         </div>
       </div>
