@@ -2,12 +2,15 @@ import { IconBoardBlue } from '../svg/icon-board.tsx'
 import IconLightTheme from '../svg/icon-light-theme.tsx'
 import IconDarkTheme from '../svg/icon-dark-theme.tsx'
 import { Toggle } from './DashboardSidebar.tsx'
+import { useContext } from 'react'
+import { DashboardContext } from '../store/DashboardContext.tsx'
 
 export function MobileSidebar({
   closeModalParrent,
 }: {
   closeModalParrent: () => void
 }) {
+  const { setDashboardState } = useContext(DashboardContext)
   const boardsNumber = 0
   return (
     <div
@@ -29,6 +32,10 @@ export function MobileSidebar({
           <div
             onClick={() => {
               closeModalParrent()
+              setDashboardState!((old) => ({
+                ...old,
+                showAddNewBoardModal: true,
+              }))
             }}
             data-cy="sidebar-create-new-board-button"
             className=" font-plusJSans text-headingM text-blue2"

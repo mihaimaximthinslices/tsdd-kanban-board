@@ -4,6 +4,7 @@ import './index.css'
 import axios from 'axios'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { DashboardContextWrapper } from './store/DashboardContext'
 
 axios.defaults.baseURL = import.meta.env.VITE_HOST_BE || 'http://localhost:3001'
 
@@ -12,8 +13,10 @@ const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <DashboardContextWrapper>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </DashboardContextWrapper>
   </QueryClientProvider>,
 )

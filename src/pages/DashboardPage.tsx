@@ -4,9 +4,14 @@ import { DashboardSidebar } from '../components/DashboardSidebar.tsx'
 import { useState } from 'react'
 import useWindowDimensions from '../hooks/useWindowDimensions.tsx'
 import { ShowSidebarSticky } from '../components/ShowSidebarSticky.tsx'
+import { useContext } from 'react'
+import { DashboardContext } from '../store/DashboardContext.tsx'
+import { AddNewBoardModal } from '../components/AddNewBoardModal.tsx'
 
 export const DashboardPage = () => {
   useThemeSelector()
+
+  const { showAddNewBoardModal } = useContext(DashboardContext)
 
   const [showSidebar, setShowSidebar] = useState(true)
 
@@ -43,7 +48,7 @@ export const DashboardPage = () => {
                 + Add New Column
               </button>
             </div>
-            {/*<KanbanBoard />*/}
+            {showAddNewBoardModal && <AddNewBoardModal />}
           </div>
         </div>
       </div>
