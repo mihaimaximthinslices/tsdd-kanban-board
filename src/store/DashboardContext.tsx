@@ -5,7 +5,7 @@ type DashboardStateType = {
   setDashboardState?: React.Dispatch<React.SetStateAction<DashboardStateType>>
 }
 export const DashboardState = {
-  showAddNewBoardModal: true,
+  showAddNewBoardModal: false,
 }
 export const DashboardContext =
   createContext<DashboardStateType>(DashboardState)
