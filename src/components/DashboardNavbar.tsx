@@ -5,9 +5,11 @@ import IconVerticalEllipsis from '../svg/icon-vertical-ellipsis.tsx'
 import LogoDark from '../svg/logo-dark.tsx'
 import LogoLight from '../svg/logo-light.tsx'
 import { clsx } from 'clsx'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useContext, useState } from 'react'
 import { Modal } from '../modal/Modal.tsx'
 import { MobileSidebar } from './MobileSidebar.tsx'
+import { useBoards } from '../hooks/useBoards.tsx'
+import { DashboardContext } from '../store/DashboardContext.tsx'
 
 export default function DashboardNavbar({
   setShowSidebar,
@@ -18,6 +20,13 @@ export default function DashboardNavbar({
   showSidebar: boolean
   canShowSidebar: boolean
 }) {
+  const { boards } = useBoards()
+
+  const { selectedBoard } = useContext(DashboardContext)
+
+  const foundSelectedBoard =
+    boards && boards.find((board) => board.id === selectedBoard)
+
   const [showMobileSidebar, setShowMobileSidebar] = useState(false)
   return (
     <div className="w-full h-[64px] md:h-[80px] 1xl:h-[96px] bg-white dark:bg-black2 flex items-center justify-between border-b border-b-white3 dark:border-b-black1 md:border-b-0 pl-4 pr-4 md:pl-0 md:pr-0">
@@ -59,7 +68,7 @@ export default function DashboardNavbar({
           )}
         >
           <button className="font-plusJSans text-headingL text-black dark:text-white">
-            Platform Launch
+            {foundSelectedBoard ? foundSelectedBoard.boardName : 'Boards'}
           </button>
           <IconChevronDown />
 
@@ -78,7 +87,7 @@ export default function DashboardNavbar({
         </div>
         <div className=" gap-2 items-center hidden md:flex">
           <span className="font-plusJSans text-headingL text-black dark:text-white">
-            Platform Launch
+            {foundSelectedBoard ? foundSelectedBoard.boardName : ''}
           </span>
         </div>
         <div className="flex gap-4 md:pr-6">

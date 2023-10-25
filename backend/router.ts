@@ -5,6 +5,7 @@ import { prismaUserRepository } from './src/infrastructure/repositories'
 import { dateGenerator, uuidGenerator } from './src/infrastructure/shared'
 import { sharedErrorHandler, withErrorHandling } from './src/infrastructure/shared/Errors'
 import { postBoardController, signInUserController, signUpUserController } from './src/infrastructure/controllers'
+import { getBoardsController } from './src/infrastructure/controllers/getBoardsController'
 
 const router = Router()
 
@@ -63,6 +64,8 @@ router.get('/api/auth', (req, res) => {
     message: 'Unauthorized',
   })
 })
+
+router.get('/api/boards', withErrorHandling(getBoardsController, sharedErrorHandler))
 
 router.get('/api/error', (_req, res) => res.send('error logging in'))
 
