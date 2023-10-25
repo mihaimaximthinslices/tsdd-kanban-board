@@ -203,7 +203,7 @@ export function AddNewBoardModal() {
           </label>
 
           <input
-            data-cy="board-name-input-input"
+            data-cy="board-name-input"
             className={clsx(
               'pl-4 pb-[10px] pt-[10px] border rounded-md text-bodyL dark:bg-black2 dark:text-white dark:border-black1',
             )}
@@ -253,7 +253,7 @@ export function AddNewBoardModal() {
                           })
                         }
                       }}
-                      data-cy="board-name-input-input"
+                      data-cy="column-name-input"
                       className={clsx(
                         'pl-4 pb-[10px] pt-[10px] border rounded-md text-bodyL dark:bg-black2 dark:text-white dark:border-black1 grow',
                       )}
@@ -268,6 +268,7 @@ export function AddNewBoardModal() {
                       }}
                     />
                     <button
+                      data-cy="remove-column-button"
                       onClick={() => {
                         deleteBoardColumn(index)
                       }}
@@ -286,6 +287,7 @@ export function AddNewBoardModal() {
           </div>
           <div className="mt-1">
             <button
+              data-cy="create-new-column-button"
               onClick={() => {
                 addNewColumn()
               }}

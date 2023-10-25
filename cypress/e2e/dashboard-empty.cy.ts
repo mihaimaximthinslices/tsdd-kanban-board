@@ -104,6 +104,7 @@ describe('dashboard-empty flow', () => {
         cy.get('[data-cy="sidebar"]').should('be.visible')
       })
     })
+
     describe('given I click on add new board', () => {
       it('should let me create a new board', () => {
         cy.visit('http://localhost:3000')
