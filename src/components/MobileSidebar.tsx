@@ -14,7 +14,6 @@ export function MobileSidebar({
 }) {
   const { setDashboardState, selectedBoard } = useContext(DashboardContext)
   const { boards } = useBoards()
-  const boardsNumber = 0
 
   function selectBoard(id: string) {
     setDashboardState!((old) => ({
@@ -28,12 +27,12 @@ export function MobileSidebar({
       data-cy="sidebar"
       className="w-[264px] min-h-[322px] bg-white dark:bg-black2 rounded-md pt-4 pb-4 shadow-md flex flex-col justify-between"
     >
-      <div>
+      <div className="max-w-[240px]">
         <p
           data-cy="sidebar-all-boards-counter"
           className=" pl-6 font-plusJSans text-headingS text-white4 tracking-headingS mb-[19px]"
         >
-          ALL BOARDS ({boardsNumber})
+          ALL BOARDS ({boards ? boards.length : 0})
         </p>
         <div className="flex flex-col gap-0">
           {boards &&
