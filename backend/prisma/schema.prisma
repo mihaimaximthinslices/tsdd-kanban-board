@@ -23,3 +23,19 @@ model User {
   createdAt DateTime
   updatedAt DateTime
 }
+
+model Board {
+  id        String   @id @map("id")
+  userId    String
+  boardName String
+  createdAt DateTime
+  updatedAt DateTime
+}
+
+model BoardColumn {
+  id         String   @id @map("id")
+  boardId    String
+  columnName String
+  createdAt  DateTime
+  updatedAt  DateTime
+}

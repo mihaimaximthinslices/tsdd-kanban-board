@@ -32,6 +32,7 @@ export async function signInUserController(req: Request, res: Response) {
 
   req.session.user = {
     email: user.email,
+    id: user.id,
   }
 
   return res.status(200).json({
