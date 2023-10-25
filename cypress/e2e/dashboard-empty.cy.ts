@@ -175,6 +175,10 @@ describe('dashboard-empty flow', () => {
 
         cy.get('[data-cy="column-name-input"]').eq(1).clear().type('Doing')
 
+        cy.intercept('POST', '/api/boards', {
+          statusCode: 409,
+        }).as('createBoard')
+
         cy.get('[data-cy="create-new-board-button"]').click()
 
         cy.contains('Column name should contain at most 25 characters').should(
@@ -186,9 +190,7 @@ describe('dashboard-empty flow', () => {
 
         cy.contains('Column names must be unique').should('not.exist')
 
-        cy.intercept('POST', '/api/boards', {
-          statusCode: 409,
-        }).as('createBoard')
+        cy.wait('@createBoard')
 
         cy.contains('You already created a board with this name').should(
           'exist',
