@@ -20,13 +20,14 @@ export async function signUpUserController(req: Request, res: Response) {
     uuidGenerator: uuidGenerator,
   })
 
-  const { email: sessionEmail } = await usecase({
+  const { email: sessionEmail, id } = await usecase({
     email: email,
     password: hashedPassword,
   })
 
   req.session.user = {
     email: sessionEmail,
+    id,
   }
 
   res.status(201).json({

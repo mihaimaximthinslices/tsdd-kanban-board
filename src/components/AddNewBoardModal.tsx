@@ -6,6 +6,8 @@ import IconCross from '../svg/icon-cross.tsx'
 import * as yup from 'yup'
 import { ValidationError } from 'yup'
 import { v4 as uuidv4 } from 'uuid'
+import axios from 'axios'
+import { AxiosError } from 'axios'
 
 export type BoardStateType = {
   name: string
@@ -301,8 +303,19 @@ export function AddNewBoardModal() {
           <button
             data-cy="create-new-board-button"
             onClick={() =>
-              verifyBoard((data) => {
-                console.log(data)
+              verifyBoard(async (data) => {
+                try {
+                  const response = await axios.post('/api/boards', data)
+                  console.log(response.data)
+                } catch (err) {
+                  const error = err as AxiosError
+                  if (error.response!.status === 409) {
+                    setBoardErrors((old) => ({
+                      ...old,
+                      name: 'You already created a board with this name',
+                    }))
+                  }
+                }
               })
             }
             className="font-plusJSans text-bodyL text-white w-full pt-2 pb-2 rounded-2xl bg-blue2 hover:bg-blue1"

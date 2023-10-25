@@ -1,6 +1,6 @@
 import { afterEach, vi, describe, expect, test, beforeEach } from 'vitest'
 import { mock } from 'vitest-mock-extended'
-import { userBuilder } from '../../../infrastructure/shared/UserBuilder'
+import { userBuilder } from '../../../infrastructure/shared'
 import { createUserUsecase } from './createUserUsecase'
 import { UserRepository } from '../../repositorties'
 import { UuidGenerator } from '../../types/UUIDGenerator'

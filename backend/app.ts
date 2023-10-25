@@ -37,6 +37,7 @@ if (process.env.DB_SSL === 'true') {
   })
 }
 export type SessionUser = {
+  id: string
   email: string
 }
 declare module 'express-session' {

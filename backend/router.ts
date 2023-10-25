@@ -4,7 +4,7 @@ import { createUserUsecase } from './src/domain/usecases/createUserUsecase'
 import { prismaUserRepository } from './src/infrastructure/repositories'
 import { dateGenerator, uuidGenerator } from './src/infrastructure/shared'
 import { sharedErrorHandler, withErrorHandling } from './src/infrastructure/shared/Errors'
-import { signInUserController, signUpUserController } from './src/infrastructure/controllers'
+import { postBoardController, signInUserController, signUpUserController } from './src/infrastructure/controllers'
 
 const router = Router()
 
@@ -26,17 +26,20 @@ router.get(
       uuidGenerator: uuidGenerator,
     })
     try {
-      await usecase({
+      const user = await usecase({
         email: passportEmail,
         password: null,
       })
       req.session.user = {
         email: passportEmail,
+        id: user.id,
       }
       res.redirect(successRedirect)
     } catch (err) {
+      const user = await prismaUserRepository.getByEmail(passportEmail)
       req.session.user = {
         email: passportEmail,
+        id: user!.id,
       }
       res.redirect(successRedirect)
     }
@@ -51,7 +54,9 @@ router.get('/api/hello', (_req: Request, res: Response) => {
 router.get('/api/auth', (req, res) => {
   if (req.session.user) {
     return res.status(200).json({
-      user: req.session.user,
+      user: {
+        email: req.session.user.email,
+      },
     })
   }
   return res.status(401).json({
@@ -63,5 +68,7 @@ router.get('/api/error', (_req, res) => res.send('error logging in'))
 
 router.post('/api/sign-up', withErrorHandling(signUpUserController, sharedErrorHandler))
 router.post('/api/sign-in', withErrorHandling(signInUserController, sharedErrorHandler))
+
+router.post('/api/boards', withErrorHandling(postBoardController, sharedErrorHandler))
 
 export default router

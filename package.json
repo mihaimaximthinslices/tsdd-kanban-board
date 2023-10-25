@@ -25,7 +25,7 @@
     "start:dev:fe": "dotenv -e .env.development.local yarn dev",
     "start:prod:be": "dotenv -e .env yarn dev:be",
     "start:prod:fe": "dotenv -e .env yarn dev",
-    "prisma:migrate": "cd ./backend && npx prisma migrate dev --name remove_username",
+    "prisma:migrate": "cd ./backend && npx prisma migrate dev --name add_board_and_board_column",
     "prisma:generate": "cd ./backend && npx prisma generate",
     "prisma:migrate:dev": "dotenv -e .env.development.local yarn prisma:migrate",
     "prisma:migrate:prod": "dotenv -e .env yarn prisma:migrate"

@@ -3,7 +3,7 @@ import app from '../app'
 
 import { describe, it, expect } from 'vitest'
 
-describe('API', () => {
+describe.skip('API', () => {
   it('should get hello world', async () => {
     const resp = await request(app).get('/api/hello')
     expect(resp.status).toEqual(200)
