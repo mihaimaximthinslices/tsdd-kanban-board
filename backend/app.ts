@@ -1,6 +1,5 @@
 import express from 'express'
 import 'dotenv/config'
-import { Request, Response } from 'express'
 import bodyParser from 'body-parser'
 const app = express()
 import cors from 'cors'
@@ -9,11 +8,7 @@ import passport from 'passport'
 import GStrategy from 'passport-google-oauth'
 import session from 'express-session'
 import genFunc from 'connect-pg-simple'
-import { sharedErrorHandler, withErrorHandling } from './src/infrastructure/shared/Errors'
-import { signUpUserController, signInUserController } from './src/infrastructure/controllers'
-import { createUserUsecase } from './src/domain/usecases/createUserUsecase'
-import { prismaUserRepository } from './src/infrastructure/repositories'
-import { dateGenerator, uuidGenerator } from './src/infrastructure/shared'
+import router from './router'
 
 app.use(bodyParser.json({ limit: '5mb' }))
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -60,8 +55,6 @@ app.use(
 
 app.use(passport.initialize())
 
-app.get('/api/error', (_req, res) => res.send('error logging in'))
-
 const GoogleStrategy = GStrategy.OAuth2Strategy
 
 passport.use(
@@ -84,58 +77,6 @@ passport.deserializeUser(function (obj, cb) {
   cb(null, obj as Express.User)
 })
 
-app.get('/api/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }))
-
-app.get(
-  '/api/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/error' }),
-  async function (req, res) {
-    // Successful authentication, redirect success.
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const passportEmail = req.user?._json.email
-    const successRedirect = (process.env.HOST_FE || 'http://localhost:3000') + '/auth-redirect/dashboard'
-
-    const usecase = createUserUsecase({
-      userRepository: prismaUserRepository,
-      dateGenerator: dateGenerator,
-      uuidGenerator: uuidGenerator,
-    })
-    try {
-      await usecase({
-        email: passportEmail,
-        password: null,
-      })
-      req.session.user = {
-        email: passportEmail,
-      }
-      res.redirect(successRedirect)
-    } catch (err) {
-      req.session.user = {
-        email: passportEmail,
-      }
-      res.redirect(successRedirect)
-    }
-  },
-)
-
-app.post('/api/sign-up', withErrorHandling(signUpUserController, sharedErrorHandler))
-app.post('/api/sign-in', withErrorHandling(signInUserController, sharedErrorHandler))
-app.get('/api/hello', (_req: Request, res: Response) => {
-  res.status(200).send({
-    message: 'Hello World',
-  })
-})
-
-app.get('/api/auth', (req, res) => {
-  if (req.session.user) {
-    return res.status(200).json({
-      user: req.session.user,
-    })
-  }
-  return res.status(401).json({
-    message: 'Unauthorized',
-  })
-})
+app.use(router)
 
 export default app

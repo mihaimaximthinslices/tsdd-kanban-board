@@ -104,5 +104,93 @@ describe('dashboard-empty flow', () => {
         cy.get('[data-cy="sidebar"]').should('be.visible')
       })
     })
+    describe('given I click on add new board', () => {
+      it('should let me create a new board', () => {
+        cy.visit('http://localhost:3000')
+
+        cy.get('[data-cy="sidebar-create-new-board-button"]').click()
+        cy.contains('Add New Board')
+        cy.contains('Board Name')
+        cy.get('[data-cy="board-name-input-label"]')
+        cy.get('[data-cy="board-columns-input-label"]')
+        cy.get('[data-cy="column-name-input"]').should('have.length', 2)
+        cy.get('[data-cy="remove-column-button"]').should('have.length', 2)
+
+        cy.get('[data-cy="remove-column-button"]').eq(0).click()
+
+        cy.get('[data-cy="remove-column-button"]').eq(0).click()
+
+        cy.get('[data-cy="board-columns-input-label"]').should('not.exist')
+        cy.get('[data-cy="column-name-input"]').should('not.exist')
+        cy.get('[data-cy="remove-column-button"]').should('not.exist')
+
+        cy.get('[data-cy="create-new-column-button"]').click()
+        cy.get('[data-cy="column-name-input"]').type('Name')
+
+        cy.get('[data-cy="create-new-column-button"]').click()
+        cy.get('[data-cy="column-name-input"]').eq(1).type('Name')
+
+        cy.get('[data-cy="create-new-board-button"]').click()
+        cy.contains('Name should contain at least 1 character')
+
+        cy.get('span:contains("Column names must be unique")')
+          .its('length')
+          .should('eq', 2)
+
+        cy.get('[data-cy="board-name-input"]').type('Test Board Name 23')
+
+        cy.get('[data-cy="create-new-board-button"]').click()
+
+        cy.contains('Name can only contain letters and spaces')
+
+        cy.get('[data-cy="column-name-input"]')
+          .clear()
+          .eq(1)
+          .type('column 12312')
+        cy.get('[data-cy="column-name-input"]')
+          .clear()
+          .eq(0)
+          .type(
+            'column name with sadasdsadasdasdasdasdasdsajwqeqwejkqweqwejwqkewqjeq',
+          )
+
+        cy.get('[data-cy="create-new-board-button"]').click()
+
+        cy.get(
+          'span:contains("Column name can only contain letters and spaces")',
+        )
+          .its('length')
+          .should('eq', 1)
+
+        cy.get(
+          'span:contains("Column name should contain at most 25 characters")',
+        )
+          .its('length')
+          .should('eq', 1)
+
+        cy.get('[data-cy="board-name-input"]').clear().type('Test Board')
+
+        cy.get('[data-cy="column-name-input"]').eq(0).clear().type('Todo')
+
+        cy.get('[data-cy="column-name-input"]').eq(1).clear().type('Doing')
+
+        cy.get('[data-cy="create-new-board-button"]').click()
+
+        cy.contains('Column name should contain at most 25 characters').should(
+          'not.exist',
+        )
+        cy.contains('Column name can only contain letters and spaces').should(
+          'not.exist',
+        )
+
+        cy.contains('Column names must be unique').should('not.exist')
+
+        cy.intercept('POST', '/api/boards', {
+          statusCode: 201,
+        }).as('createBoard')
+
+        cy.wait('@createBoard')
+      })
+    })
   })
 })

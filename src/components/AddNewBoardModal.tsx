@@ -297,7 +297,12 @@ export function AddNewBoardModal() {
         </div>
         <div className="w-full">
           <button
-            onClick={() => verifyBoard()}
+            data-cy="create-new-board-button"
+            onClick={() =>
+              verifyBoard((data) => {
+                console.log(data)
+              })
+            }
             className="font-plusJSans text-bodyL text-white w-full pt-2 pb-2 rounded-2xl bg-blue2 hover:bg-blue1"
           >
             Create New Board
