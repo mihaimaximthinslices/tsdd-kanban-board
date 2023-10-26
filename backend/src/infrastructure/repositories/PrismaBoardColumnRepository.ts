@@ -20,7 +20,7 @@ export const prismaBoardColumnRepository: BoardColumnRepository = {
     return rowToEntity(boardColumn)
   },
 
-  async getByBoardId(id: string): Promise<BoardColumn[] | null> {
+  async getByBoardId(id: string): Promise<BoardColumn[]> {
     const boardColumns = await prisma.boardColumn.findMany({
       where: { boardId: id },
     })

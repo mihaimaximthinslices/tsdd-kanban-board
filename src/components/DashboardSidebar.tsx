@@ -100,7 +100,7 @@ export function DashboardSidebar({
                         )}
                       </div>
                       <div
-                        data-cy="sidebar-create-new-board-button"
+                        data-cy="sidebar-board-option"
                         className={clsx(
                           'font-plusJSans text-headingM',
                           id === selectedBoard ? 'text-white' : 'text-white4',
