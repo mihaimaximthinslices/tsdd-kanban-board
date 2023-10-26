@@ -5,7 +5,7 @@ describe('dashboard-empty flow', () => {
       cy.intercept('/api/sign-in').as('signIn')
       cy.visit('http://localhost:3000/sign-in')
       cy.get('[data-cy="email-address-input"]').type(
-        'mihai.maxim+createBoard@thinslices.com',
+        'mihai.maxim+createBoardFE@thinslices.com',
       )
       cy.get('[data-cy="password-input"]').type('password1234')
 
