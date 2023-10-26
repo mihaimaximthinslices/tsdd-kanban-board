@@ -12,6 +12,7 @@ import KanbanBoard, { KanbanTaskBoard } from '../components/KanbanBoard.tsx'
 import { EditBoardModal } from '../components/EditBoardModal.tsx'
 import { clsx } from 'clsx'
 import { useBoards } from '../hooks/useBoards.tsx'
+import { BoardMenuModal } from '../components/BoardMenuModal.tsx'
 
 export const DashboardPage = () => {
   useThemeSelector()
@@ -21,6 +22,7 @@ export const DashboardPage = () => {
     selectedBoard,
     showEditBoardModal,
     setDashboardState,
+    showBoardMenuModal,
   } = useContext(DashboardContext)
 
   const { boards } = useBoards()
@@ -106,6 +108,7 @@ export const DashboardPage = () => {
             )}
             {showAddNewBoardModal && <AddNewBoardModal />}
             {showEditBoardModal && <EditBoardModal />}
+            {showBoardMenuModal && <BoardMenuModal />}
           </div>
         </div>
       </div>
