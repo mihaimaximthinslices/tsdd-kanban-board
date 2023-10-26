@@ -4,9 +4,8 @@ describe('dashboard-empty flow', () => {
     before('get auth cookie', () => {
       cy.intercept('/api/sign-in').as('signIn')
       cy.visit('http://localhost:3000/sign-in')
-
       cy.get('[data-cy="email-address-input"]').type(
-        'mihai.maxim+createBoard@thinslices.com',
+        'mihai.maxim+createBoardFE@thinslices.com',
       )
       cy.get('[data-cy="password-input"]').type('password1234')
 
@@ -28,6 +27,8 @@ describe('dashboard-empty flow', () => {
     describe('given I am on a small screen', () => {
       it('should display the dashboard with all the required options', () => {
         cy.visit('http://localhost:3000')
+        cy.get('[data-cy="sidebar-board-option"]').click()
+
         cy.viewport(375, 667)
         cy.get('[data-cy="platform-logo"]').should('be.visible')
         cy.contains('Boards')
@@ -50,7 +51,7 @@ describe('dashboard-empty flow', () => {
         cy.contains('+ Add New Task')
 
         cy.get('[data-cy="sidebar-all-boards-counter"]').should('be.visible')
-        cy.contains('ALL BOARDS (0)')
+        cy.contains('ALL BOARDS (1)')
 
         cy.get('[data-cy="sidebar-create-new-board-button"]').should(
           'be.visible',
@@ -69,6 +70,8 @@ describe('dashboard-empty flow', () => {
     describe('given I am on a normal screen', () => {
       it('should display the dashboard with all the required options', () => {
         cy.visit('http://localhost:3000')
+        cy.get('[data-cy="sidebar-board-option"]').click()
+
         cy.viewport(768, 1024)
         cy.get('[data-cy="platform-logo-full"]').should('be.visible')
         cy.contains('Boards')
@@ -81,7 +84,7 @@ describe('dashboard-empty flow', () => {
         cy.contains('+ Add New Task')
 
         cy.get('[data-cy="sidebar-all-boards-counter"]').should('be.visible')
-        cy.contains('ALL BOARDS (0)')
+        cy.contains('ALL BOARDS (1)')
 
         cy.get('[data-cy="sidebar-create-new-board-button"]').should(
           'be.visible',
@@ -105,14 +108,18 @@ describe('dashboard-empty flow', () => {
       })
     })
 
-    describe('given I click on add new board', () => {
+    describe('given I click on add new column button', () => {
       it('should let me create a new board', () => {
         cy.visit('http://localhost:3000')
+        cy.get('[data-cy="sidebar-board-option"]').click()
 
-        cy.get('[data-cy="sidebar-create-new-board-button"]').click()
-        cy.contains('Add New Board')
+        cy.get('[data-cy="add-new-column-button"]').click()
+        cy.contains('Edit Board')
         cy.contains('Board Name')
         cy.get('[data-cy="board-name-input-label"]')
+        cy.get('[data-cy="create-new-column-button"]').click()
+        cy.get('[data-cy="create-new-column-button"]').click()
+
         cy.get('[data-cy="board-columns-input-label"]')
         cy.get('[data-cy="column-name-input"]').should('have.length', 2)
         cy.get('[data-cy="remove-column-button"]').should('have.length', 2)
@@ -120,10 +127,14 @@ describe('dashboard-empty flow', () => {
         cy.get('[data-cy="remove-column-button"]').eq(0).click()
 
         cy.get('[data-cy="remove-column-button"]').eq(0).click()
-
         cy.get('[data-cy="board-columns-input-label"]').should('not.exist')
         cy.get('[data-cy="column-name-input"]').should('not.exist')
         cy.get('[data-cy="remove-column-button"]').should('not.exist')
+
+        cy.get('[data-cy="board-name-input"]').clear()
+
+        cy.get('[data-cy="update-board-button"]').click()
+        cy.contains('Name should contain at least 1 character')
 
         cy.get('[data-cy="create-new-column-button"]').click()
         cy.get('[data-cy="column-name-input"]').type('Name')
@@ -131,8 +142,7 @@ describe('dashboard-empty flow', () => {
         cy.get('[data-cy="create-new-column-button"]').click()
         cy.get('[data-cy="column-name-input"]').eq(1).type('Name')
 
-        cy.get('[data-cy="create-new-board-button"]').click()
-        cy.contains('Name should contain at least 1 character')
+        cy.get('[data-cy="update-board-button"]').click()
 
         cy.get('span:contains("Column names must be unique")')
           .its('length')
@@ -140,7 +150,7 @@ describe('dashboard-empty flow', () => {
 
         cy.get('[data-cy="board-name-input"]').type('Test Board Name 23')
 
-        cy.get('[data-cy="create-new-board-button"]').click()
+        cy.get('[data-cy="update-board-button"]').click()
 
         cy.contains('Name can only contain letters and spaces')
 
@@ -155,7 +165,7 @@ describe('dashboard-empty flow', () => {
             'column name with sadasdsadasdasdasdasdasdsajwqeqwejkqweqwejwqkewqjeq',
           )
 
-        cy.get('[data-cy="create-new-board-button"]').click()
+        cy.get('[data-cy="update-board-button"]').click()
 
         cy.get(
           'span:contains("Column name can only contain letters and spaces")',
@@ -175,11 +185,11 @@ describe('dashboard-empty flow', () => {
 
         cy.get('[data-cy="column-name-input"]').eq(1).clear().type('Doing')
 
-        cy.intercept('POST', '/api/boards', {
+        cy.intercept('PUT', '/api/boards/*', {
           statusCode: 409,
-        }).as('createBoard')
+        }).as('updateBoard')
 
-        cy.get('[data-cy="create-new-board-button"]').click()
+        cy.get('[data-cy="update-board-button"]').click()
 
         cy.contains('Column name should contain at most 25 characters').should(
           'not.exist',
@@ -190,7 +200,7 @@ describe('dashboard-empty flow', () => {
 
         cy.contains('Column names must be unique').should('not.exist')
 
-        cy.wait('@createBoard')
+        cy.wait('@updateBoard')
 
         cy.contains('You already created a board with this name').should(
           'exist',

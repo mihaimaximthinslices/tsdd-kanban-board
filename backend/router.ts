@@ -4,8 +4,14 @@ import { createUserUsecase } from './src/domain/usecases/createUserUsecase'
 import { prismaUserRepository } from './src/infrastructure/repositories'
 import { dateGenerator, uuidGenerator } from './src/infrastructure/shared'
 import { sharedErrorHandler, withErrorHandling } from './src/infrastructure/shared/Errors'
-import { postBoardController, signInUserController, signUpUserController } from './src/infrastructure/controllers'
+import {
+  getBoardCollumnsController,
+  postBoardController,
+  signInUserController,
+  signUpUserController,
+} from './src/infrastructure/controllers'
 import { getBoardsController } from './src/infrastructure/controllers/getBoardsController'
+import { putBoardController } from './src/infrastructure/controllers/putBoardController'
 
 const router = Router()
 
@@ -67,6 +73,9 @@ router.get('/api/auth', (req, res) => {
 
 router.get('/api/boards', withErrorHandling(getBoardsController, sharedErrorHandler))
 
+router.get('/api/boards/:boardId/columns', withErrorHandling(getBoardCollumnsController, sharedErrorHandler))
+
+router.put('/api/boards/:boardId', withErrorHandling(putBoardController, sharedErrorHandler))
 router.get('/api/error', (_req, res) => res.send('error logging in'))
 
 router.post('/api/sign-up', withErrorHandling(signUpUserController, sharedErrorHandler))

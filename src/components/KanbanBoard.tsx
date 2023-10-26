@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import KanbanTaskColumnCard from './KanbanTaskColumnCard.tsx'
 
@@ -7,33 +7,6 @@ export type KanbanTask = { id: string; content: string }
 export type KanbanTaskColumn = { name: string; items: KanbanTask[] }
 
 export type KanbanTaskBoard = Record<string, KanbanTaskColumn>
-
-const tasks: KanbanTask[] = [
-  { id: '1', content: 'First task' },
-  { id: '2', content: 'Second task' },
-  { id: '3', content: 'Third task' },
-  { id: '4', content: 'Fourth task' },
-  { id: '5', content: 'Fifth task' },
-]
-
-const taskStatus = {
-  requested: {
-    name: 'Requested',
-    items: tasks,
-  },
-  toDo: {
-    name: 'To do',
-    items: [],
-  },
-  inProgress: {
-    name: 'In Progress',
-    items: [],
-  },
-  done: {
-    name: 'Done',
-    items: [],
-  },
-}
 
 const onDragEnd = (
   result: DropResult,
@@ -76,11 +49,13 @@ const onDragEnd = (
   }
 }
 
-function KanbanBoard() {
+function KanbanBoard({ taskStatus }: { taskStatus: KanbanTaskBoard }) {
+  useEffect(() => {
+    setColumns(taskStatus)
+  }, [taskStatus])
   const [columns, setColumns] = useState(taskStatus as KanbanTaskBoard)
   return (
     <div>
-      <h1 style={{ textAlign: 'center' }}>Jira Board</h1>
       <div
         style={{ display: 'flex', justifyContent: 'center', height: '100%' }}
       >
@@ -90,6 +65,7 @@ function KanbanBoard() {
           {Object.entries(columns).map(([columnId, column]) => {
             return (
               <KanbanTaskColumnCard
+                key={columnId}
                 columnId={columnId}
                 column={column}
               ></KanbanTaskColumnCard>

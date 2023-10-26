@@ -32,10 +32,14 @@ describe('POST /api/boards', () => {
 
       const boards = await prismaBoardRepository.getByUserId(user!.id)
 
-      if (boards)
-        for (let i = 0; i < boards!.length; i++) {
-          await prismaBoardRepository.delete(boards![i]!.id)
-        }
+      try {
+        if (boards)
+          for (let i = 0; i < boards!.length; i++) {
+            await prismaBoardRepository.delete(boards![i]!.id)
+          }
+      } catch (err) {
+        //empty
+      }
     })
 
     describe('given the request body does not have the right format', () => {
