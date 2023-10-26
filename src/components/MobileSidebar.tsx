@@ -46,8 +46,8 @@ export function MobileSidebar({
                   className={clsx(
                     'w-full pl-4 pt-[13px] pb-[13px] flex items-start justify-start cursor-pointer',
                     id === selectedBoard
-                      ? 'bg-blue2 rounded-r-3xl '
-                      : ' bg-white dark:bg-black2',
+                      ? 'bg-blue2 rounded-r-3xl'
+                      : 'bg-white dark:bg-black2',
                   )}
                 >
                   <div className="flex gap-[16px] pl-2 items-center cursor-pointer">

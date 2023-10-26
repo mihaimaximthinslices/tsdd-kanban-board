@@ -22,7 +22,7 @@ export default function DashboardNavbar({
 }) {
   const { boards } = useBoards()
 
-  const { selectedBoard } = useContext(DashboardContext)
+  const { selectedBoard, setDashboardState } = useContext(DashboardContext)
 
   const foundSelectedBoard =
     boards && boards.find((board) => board.id === selectedBoard)
@@ -106,7 +106,15 @@ export default function DashboardNavbar({
               + Add New Task
             </button>
           </div>
-          <div className="flex items-center justify-center md:pl-2 md:pr-2">
+          <div
+            onClick={() => {
+              setDashboardState!((prev) => ({
+                ...prev,
+                showBoardMenuModal: true,
+              }))
+            }}
+            className="flex items-center justify-center md:pl-2 md:pr-2"
+          >
             <button data-cy="edit-board-button">
               <IconVerticalEllipsis />
             </button>
