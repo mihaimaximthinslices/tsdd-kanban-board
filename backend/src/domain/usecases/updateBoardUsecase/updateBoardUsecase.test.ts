@@ -10,7 +10,7 @@ import { boardBuilder, userBuilder } from '../../../infrastructure/shared'
 import { boardColumnBuilder } from '../../../infrastructure/shared/BoardColumnBuilder'
 import { Board, BoardColumn } from '../../entities'
 
-describe.only('updateBoardUsecase', () => {
+describe('updateBoardUsecase', () => {
   const userId = 'userId'
 
   const boardName = 'boardName'
