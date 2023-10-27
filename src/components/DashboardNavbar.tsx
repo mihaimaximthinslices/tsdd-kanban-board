@@ -10,6 +10,7 @@ import { Modal } from '../modal/Modal.tsx'
 import { MobileSidebar } from './MobileSidebar.tsx'
 import { useBoards } from '../hooks/useBoards.tsx'
 import { DashboardContext } from '../store/DashboardContext.tsx'
+import { useBoardColumns } from '../hooks/useBoardColumns.tsx'
 
 export default function DashboardNavbar({
   setShowSidebar,
@@ -26,6 +27,8 @@ export default function DashboardNavbar({
 
   const foundSelectedBoard =
     boards && boards.find((board) => board.id === selectedBoard)
+
+  const { boardColumns } = useBoardColumns(selectedBoard)
 
   const [showMobileSidebar, setShowMobileSidebar] = useState(false)
   return (
@@ -67,7 +70,12 @@ export default function DashboardNavbar({
             !showMobileSidebar ? 'cursor-pointer' : 'cursor-default',
           )}
         >
-          <button className="font-plusJSans text-headingL text-black dark:text-white">
+          <button
+            className={clsx(
+              'font-plusJSans text-headingL text-black dark:text-white',
+              !foundSelectedBoard ? 'text-blue2 dark:text-blue2' : 'underline ',
+            )}
+          >
             {foundSelectedBoard ? foundSelectedBoard.boardName : 'Boards'}
           </button>
           <IconChevronDown />
@@ -101,8 +109,8 @@ export default function DashboardNavbar({
                 <IconAddTaskMobile />
               </button>
               <button
-                disabled={true}
-                className="hidden md:block font-plusJSans text-headingM text-white bg-blue2 disabled:opacity-30 pl-[18px] pr-[18px] pt-[10px] pb-[10px] rounded-2xl"
+                disabled={boardColumns!.length === 0}
+                className="hidden md:block font-plusJSans text-headingM text-white bg-blue2 hover:bg-blue1 pl-[18px] pr-[18px] pt-[10px] pb-[10px] rounded-2xl disabled:bg-blue1"
               >
                 + Add New Task
               </button>

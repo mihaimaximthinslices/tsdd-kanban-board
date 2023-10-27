@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import KanbanTaskColumnCard from './KanbanTaskColumnCard.tsx'
+import { DashboardContext } from '../store/DashboardContext.tsx'
 
 export type KanbanTask = { id: string; content: string }
 
@@ -50,15 +51,26 @@ const onDragEnd = (
 }
 
 function KanbanBoard({ taskStatus }: { taskStatus: KanbanTaskBoard }) {
+  const { setDashboardState } = useContext(DashboardContext)
+
   useEffect(() => {
     setColumns(taskStatus)
   }, [taskStatus])
+
   const [columns, setColumns] = useState(taskStatus as KanbanTaskBoard)
+
+  useEffect(() => {
+    setDashboardState!((old) => ({
+      ...old,
+      kanbanBoardItemsHeight:
+        Math.max(...Object.values(columns).map((col) => col.items.length)) *
+        112,
+    }))
+  }, [columns])
+
   return (
-    <div>
-      <div
-        style={{ display: 'flex', justifyContent: 'center', height: '100%' }}
-      >
+    <div className="h-full">
+      <div className="w-full flex gap-4 h-full">
         <DragDropContext
           onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
         >
