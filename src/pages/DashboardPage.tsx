@@ -13,6 +13,7 @@ import { EditBoardModal } from '../components/EditBoardModal.tsx'
 import { clsx } from 'clsx'
 import { useBoards } from '../hooks/useBoards.tsx'
 import { BoardMenuModal } from '../components/BoardMenuModal.tsx'
+import { DeleteBoardModal } from '../components/DeleteBoardModal.tsx'
 
 export const DashboardPage = () => {
   useThemeSelector()
@@ -22,6 +23,7 @@ export const DashboardPage = () => {
     selectedBoard,
     showEditBoardModal,
     setDashboardState,
+    showDeleteBoardModal,
     showBoardMenuModal,
   } = useContext(DashboardContext)
 
@@ -109,6 +111,7 @@ export const DashboardPage = () => {
             {showAddNewBoardModal && <AddNewBoardModal />}
             {showEditBoardModal && <EditBoardModal />}
             {showBoardMenuModal && <BoardMenuModal />}
+            {showDeleteBoardModal && <DeleteBoardModal />}
           </div>
         </div>
       </div>

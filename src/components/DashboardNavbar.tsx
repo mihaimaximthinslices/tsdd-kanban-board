@@ -91,34 +91,38 @@ export default function DashboardNavbar({
           </span>
         </div>
         <div className="flex gap-4 md:pr-6">
-          <div>
-            <button
-              data-cy="add-new-task-button"
-              disabled={true}
-              className="md:hidden bg-blue2 disabled:opacity-30 pl-[18px] pr-[18px] pt-[10px] pb-[10px] rounded-2xl"
+          {foundSelectedBoard && (
+            <div>
+              <button
+                data-cy="add-new-task-button"
+                disabled={true}
+                className="md:hidden bg-blue2 disabled:opacity-30 pl-[18px] pr-[18px] pt-[10px] pb-[10px] rounded-2xl"
+              >
+                <IconAddTaskMobile />
+              </button>
+              <button
+                disabled={true}
+                className="hidden md:block font-plusJSans text-headingM text-white bg-blue2 disabled:opacity-30 pl-[18px] pr-[18px] pt-[10px] pb-[10px] rounded-2xl"
+              >
+                + Add New Task
+              </button>
+            </div>
+          )}
+          {foundSelectedBoard && (
+            <div
+              onClick={() => {
+                setDashboardState!((prev) => ({
+                  ...prev,
+                  showBoardMenuModal: true,
+                }))
+              }}
+              className="flex items-center justify-center md:pl-2 md:pr-2"
             >
-              <IconAddTaskMobile />
-            </button>
-            <button
-              disabled={true}
-              className="hidden md:block font-plusJSans text-headingM text-white bg-blue2 disabled:opacity-30 pl-[18px] pr-[18px] pt-[10px] pb-[10px] rounded-2xl"
-            >
-              + Add New Task
-            </button>
-          </div>
-          <div
-            onClick={() => {
-              setDashboardState!((prev) => ({
-                ...prev,
-                showBoardMenuModal: true,
-              }))
-            }}
-            className="flex items-center justify-center md:pl-2 md:pr-2"
-          >
-            <button data-cy="edit-board-button">
-              <IconVerticalEllipsis />
-            </button>
-          </div>
+              <button data-cy="edit-board-button">
+                <IconVerticalEllipsis />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
