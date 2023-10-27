@@ -14,6 +14,7 @@ import { clsx } from 'clsx'
 import { useBoards } from '../hooks/useBoards.tsx'
 import { BoardMenuModal } from '../components/BoardMenuModal.tsx'
 import { DeleteBoardModal } from '../components/DeleteBoardModal.tsx'
+import { DeleteColumnModal } from '../components/DeleteColumnModal.tsx'
 
 export const DashboardPage = () => {
   useThemeSelector()
@@ -25,6 +26,7 @@ export const DashboardPage = () => {
     setDashboardState,
     showDeleteBoardModal,
     showBoardMenuModal,
+    showDeleteColumnModal,
   } = useContext(DashboardContext)
 
   const { boards } = useBoards()
@@ -109,7 +111,7 @@ export const DashboardPage = () => {
             {boardColumns && boardColumns.length ? (
               <div
                 className={clsx(
-                  'absolute left-6 pr-6 top-6 flex items-start gap-6',
+                  'absolute left-6 pr-6 top-6 flex items-start gap-4',
                 )}
               >
                 <KanbanBoard taskStatus={kanbanTaskBoard} />
@@ -158,6 +160,7 @@ export const DashboardPage = () => {
             {showEditBoardModal && <EditBoardModal />}
             {showBoardMenuModal && <BoardMenuModal />}
             {showDeleteBoardModal && <DeleteBoardModal />}
+            {showDeleteColumnModal && <DeleteColumnModal />}
           </div>
         </div>
       </div>

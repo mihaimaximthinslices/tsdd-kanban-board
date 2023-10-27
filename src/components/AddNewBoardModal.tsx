@@ -355,7 +355,7 @@ export function AddNewBoardModal() {
               onClick={() => {
                 addNewColumn()
               }}
-              className="font-plusJSans text-bodyL text-blue2 w-full pt-2 pb-2 rounded-2xl bg-white2 dark:bg-white"
+              className="font-plusJSans text-bodyL text-blue2 w-full pt-2 pb-2 rounded-2xl bg-white2 dark:bg-white hover:bg-white3"
             >
               + Add New Column
             </button>

@@ -1,9 +1,13 @@
 import { PortalModal } from '../modal/PortalModal.tsx'
 import { useContext } from 'react'
 import { DashboardContext } from '../store/DashboardContext.tsx'
+import { useBoardColumns } from '../hooks/useBoardColumns.tsx'
 
 export function BoardMenuModal() {
-  const { setDashboardState } = useContext(DashboardContext)
+  const { setDashboardState, selectedBoard } = useContext(DashboardContext)
+
+  const { boardColumns } = useBoardColumns(selectedBoard)
+
   return (
     <PortalModal
       position={'flex justify-end items-start pt-14 bg-opacity-0'}
@@ -31,6 +35,21 @@ export function BoardMenuModal() {
         >
           Edit Board
         </button>
+        {boardColumns && boardColumns.length > 0 && (
+          <button
+            data-cy="board-menu-column-delete-button"
+            onClick={() => {
+              setDashboardState!((old) => ({
+                ...old,
+                showBoardMenuModal: false,
+                showDeleteColumnModal: true,
+              }))
+            }}
+            className="font-plusJSans text-bodyL text-white4 hover:underline"
+          >
+            Delete Column
+          </button>
+        )}
         <button
           data-cy="board-menu-delete-button"
           onClick={() => {

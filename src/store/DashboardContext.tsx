@@ -5,6 +5,7 @@ type DashboardStateType = {
   showEditBoardModal: boolean
   showBoardMenuModal: boolean
   showDeleteBoardModal: boolean
+  showDeleteColumnModal: boolean
   selectedBoard: string | null
   kanbanBoardItemsHeight: number | null
   setDashboardState?: React.Dispatch<React.SetStateAction<DashboardStateType>>
@@ -14,6 +15,7 @@ export const DashboardState = {
   showEditBoardModal: false,
   showBoardMenuModal: false,
   showDeleteBoardModal: false,
+  showDeleteColumnModal: false,
   kanbanBoardItemsHeight: null,
   selectedBoard: null,
 }
@@ -40,6 +42,7 @@ export const DashboardContextWrapper = ({
         showEditBoardModal: dashboardState.showEditBoardModal,
         showBoardMenuModal: dashboardState.showBoardMenuModal,
         showDeleteBoardModal: dashboardState.showDeleteBoardModal,
+        showDeleteColumnModal: dashboardState.showDeleteColumnModal,
         kanbanBoardItemsHeight: dashboardState.kanbanBoardItemsHeight,
         selectedBoard: dashboardState.selectedBoard,
         setDashboardState,
