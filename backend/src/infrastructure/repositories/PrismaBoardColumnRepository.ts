@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 
 export const prismaBoardColumnRepository: BoardColumnRepository = {
   async delete(id: string): Promise<void> {
-    await prisma.board.delete({
+    await prisma.boardColumn.delete({
       where: { id },
     })
   },
