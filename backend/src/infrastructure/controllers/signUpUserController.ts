@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import z from 'zod'
 import { prismaUserRepository } from '../repositories'
-import { createUserUsecase } from '../../domain/usecases/createUserUsecase'
+import { createUserUsecase } from '../../domain/usecases'
 import { hashMethods, dateGenerator, uuidGenerator } from '../shared/'
 
 const userSchema = z.object({

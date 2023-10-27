@@ -1,10 +1,9 @@
 import { Request, Response } from 'express'
 import { UnauthorizedError } from '../../domain/types/Errors'
 import z from 'zod'
-import { createBoardUsecase } from '../../domain/usecases/createBoardUsecase/createBoardUsecase'
+import { createBoardUsecase, createBoardColumnUsecase } from '../../domain/usecases'
 import { prismaBoardColumnRepository, prismaBoardRepository, prismaUserRepository } from '../repositories'
 import { dateGenerator, uuidGenerator } from '../shared'
-import { createBoardColumnUsecase } from '../../domain/usecases/createBoardColumnUsecase/createBoardColumn'
 
 const isUnique = (array: string[]) => new Set(array).size === array.length
 

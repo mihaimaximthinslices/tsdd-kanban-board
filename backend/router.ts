@@ -1,10 +1,11 @@
 import { Request, Response, Router } from 'express'
 import passport from 'passport'
-import { createUserUsecase } from './src/domain/usecases/createUserUsecase'
+import { createUserUsecase } from './src/domain/usecases'
 import { prismaUserRepository } from './src/infrastructure/repositories'
 import { dateGenerator, uuidGenerator } from './src/infrastructure/shared'
 import { sharedErrorHandler, withErrorHandling } from './src/infrastructure/shared/Errors'
 import {
+  deleteBoardController,
   getBoardCollumnsController,
   postBoardController,
   signInUserController,
@@ -76,6 +77,8 @@ router.get('/api/boards', withErrorHandling(getBoardsController, sharedErrorHand
 router.get('/api/boards/:boardId/columns', withErrorHandling(getBoardCollumnsController, sharedErrorHandler))
 
 router.put('/api/boards/:boardId', withErrorHandling(putBoardController, sharedErrorHandler))
+
+router.delete('/api/boards/:boardId', withErrorHandling(deleteBoardController, sharedErrorHandler))
 router.get('/api/error', (_req, res) => res.send('error logging in'))
 
 router.post('/api/sign-up', withErrorHandling(signUpUserController, sharedErrorHandler))

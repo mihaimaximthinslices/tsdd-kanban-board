@@ -3,7 +3,7 @@ import { UnauthorizedError } from '../../domain/types/Errors'
 import z from 'zod'
 import { prismaBoardColumnRepository, prismaBoardRepository, prismaUserRepository } from '../repositories'
 import { dateGenerator, uuidGenerator } from '../shared'
-import { updateBoardUsecase } from '../../domain/usecases/updateBoardUsecase/updateBoardUsecase'
+import { updateBoardUsecase } from '../../domain/usecases'
 
 const isUnique = (array: string[]) => new Set(array).size === array.length
 
