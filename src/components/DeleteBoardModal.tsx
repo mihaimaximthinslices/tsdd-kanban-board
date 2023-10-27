@@ -1,12 +1,43 @@
 import { PortalModal } from '../modal/PortalModal.tsx'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { DashboardContext } from '../store/DashboardContext.tsx'
 import { useBoards } from '../hooks/useBoards.tsx'
+import axios from 'axios'
+import { useBoardColumns } from '../hooks/useBoardColumns.tsx'
+import { LoadingSpinner } from './LoadingSpinner.tsx'
 
 export function DeleteBoardModal() {
   const { setDashboardState, selectedBoard } = useContext(DashboardContext)
-  const { boards } = useBoards()
+  const { boards, refetch: boardsRefetch } = useBoards()
+  const { refetch: boardColumnsRefetch } = useBoardColumns(selectedBoard)
+
   const activeBoard = boards && boards.find((b) => b.id === selectedBoard)
+
+  const [requestState, setRequestState] = useState({
+    error: false,
+    loading: false,
+  })
+
+  async function deleteBoard() {
+    try {
+      setRequestState((prev) => ({ ...prev, loading: true }))
+
+      await axios.delete(`/api/boards/${selectedBoard}`)
+
+      boardColumnsRefetch().then(() => {
+        setDashboardState!((old) => ({
+          ...old,
+          showDeleteBoardModal: false,
+          selectedBoard: null,
+        }))
+        boardsRefetch().then(() => {
+          setRequestState((prev) => ({ ...prev, loading: false }))
+        })
+      })
+    } catch (err) {
+      setRequestState({ loading: false, error: true })
+    }
+  }
 
   return (
     <PortalModal
@@ -27,14 +58,19 @@ export function DeleteBoardModal() {
             reversed.
           </p>
         </div>
-        <div
-          data-cy="delete-board-confirmation-button"
-          className="flex flex-col gap-4 items-center justify-center md:flex-row"
-        >
-          <button className="font-plusJSans text-bodyL bg-red2 w-full rounded-2xl pt-2 pb-2 text-white hover:bg-red1">
-            Delete
+        <div className="flex flex-col gap-4 items-center justify-center md:flex-row">
+          <button
+            data-cy="delete-board-confirmation-button"
+            disabled={requestState.loading || requestState.error}
+            onClick={() => {
+              deleteBoard()
+            }}
+            className="font-plusJSans text-bodyL bg-red2 w-full rounded-2xl pt-2 pb-2 text-white hover:bg-red1"
+          >
+            {requestState.loading ? <LoadingSpinner /> : <span>Delete</span>}
           </button>
           <button
+            disabled={requestState.loading || requestState.error}
             data-cy="delete-board-cancel-button"
             onClick={() => {
               setDashboardState!((old) => ({
