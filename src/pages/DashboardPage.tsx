@@ -102,7 +102,7 @@ export const DashboardPage = () => {
       )}
       <div className="grow flex bg-white2 dark:bg-black3">
         {showSidebar && <DashboardSidebar setShowSidebar={setShowSidebar} />}
-        <div className="flex w-full flex-col grow justify-center items-center relative overflow-x-scroll ">
+        <div className="flex w-full flex-col grow justify-center items-center relative overflow-auto ">
           <div
             className={clsx(
               'grow p-4 flex flex-col items-center justify-center',

@@ -5,3 +5,30 @@
 @tailwind components;
 @tailwind utilities;
 
+*::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+/* background of the scrollbar except button or resizer */
+*::-webkit-scrollbar-track {
+
+}
+
+/* scrollbar itself */
+*::-webkit-scrollbar-thumb {
+    background-color: #635fc7;
+    border-radius: 1px;
+}
+
+/* set button(top and bottom of the scrollbar) */
+*::-webkit-scrollbar-button {
+    display:none;
+}
+
+*::-webkit-scrollbar-corner {
+    /*
+    background-image: url(resources/corner.png);
+    background-repeat: no-repeat;
+    */
+}
