@@ -5,6 +5,7 @@ import { prismaUserRepository } from './src/infrastructure/repositories'
 import { dateGenerator, uuidGenerator } from './src/infrastructure/shared'
 import { sharedErrorHandler, withErrorHandling } from './src/infrastructure/shared/Errors'
 import {
+  deleteBoardColumnController,
   deleteBoardController,
   getBoardCollumnsController,
   postBoardController,
@@ -75,10 +76,15 @@ router.get('/api/auth', (req, res) => {
 router.get('/api/boards', withErrorHandling(getBoardsController, sharedErrorHandler))
 
 router.get('/api/boards/:boardId/columns', withErrorHandling(getBoardCollumnsController, sharedErrorHandler))
+router.delete(
+  '/api/boards/:boardId/columns/:columnId',
+  withErrorHandling(deleteBoardColumnController, sharedErrorHandler),
+)
 
 router.put('/api/boards/:boardId', withErrorHandling(putBoardController, sharedErrorHandler))
 
 router.delete('/api/boards/:boardId', withErrorHandling(deleteBoardController, sharedErrorHandler))
+
 router.get('/api/error', (_req, res) => res.send('error logging in'))
 
 router.post('/api/sign-up', withErrorHandling(signUpUserController, sharedErrorHandler))

@@ -73,7 +73,7 @@ export default function DashboardNavbar({
           <button
             className={clsx(
               'font-plusJSans text-headingL text-black dark:text-white',
-              !foundSelectedBoard ? 'text-blue2 dark:text-blue2' : 'underline ',
+              !foundSelectedBoard ? 'text-blue2 dark:text-blue2' : '',
             )}
           >
             {foundSelectedBoard ? foundSelectedBoard.boardName : 'Boards'}
@@ -103,7 +103,7 @@ export default function DashboardNavbar({
             <div>
               <button
                 data-cy="add-new-task-button"
-                disabled={true}
+                disabled={boardColumns!.length === 0}
                 className="md:hidden bg-blue2 disabled:opacity-30 pl-[18px] pr-[18px] pt-[10px] pb-[10px] rounded-2xl"
               >
                 <IconAddTaskMobile />

@@ -16,9 +16,7 @@ const initTheme = () => {
 }
 export const useThemeSelector = () => {
   initTheme()()
-  const toggleTheme = (dark: boolean) => {
-    console.log(dark)
-
+  const toggleTheme = () => {
     if (document.documentElement.classList.contains('dark')) {
       localStorage.setItem('kanban-theme', 'light')
     } else {
