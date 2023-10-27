@@ -33,22 +33,44 @@ export const DashboardPage = () => {
 
   const [showSidebar, setShowSidebar] = useState(true)
 
-  const { width } = useWindowDimensions()
+  const { width, height } = useWindowDimensions()
 
   const canShowSidebar = width! >= 768
 
   const { boardColumns, refetch: refetchColumns } =
     useBoardColumns(selectedBoard)
 
+  const mockItems = [
+    {
+      id: '1',
+      content: 'Do work',
+    },
+    {
+      id: '2',
+      content: 'Eat',
+    },
+    {
+      id: '3',
+      content: 'Sleep',
+    },
+    {
+      id: '4',
+      content: 'Test',
+    },
+  ]
+
   useEffect(() => {
     refetchColumns().then((data) => {
       const columns = data!.data!
       if (columns) {
         const kanbanTaskBoard: KanbanTaskBoard = {}
-        columns.forEach((column) => {
+        columns.forEach((column, index) => {
           kanbanTaskBoard[column.id] = {
             name: column.columnName,
-            items: [],
+            items:
+              index === 0
+                ? mockItems.map((m) => ({ ...m, id: m.id + column.id }))
+                : [],
           }
         })
 
@@ -59,6 +81,9 @@ export const DashboardPage = () => {
 
   const [kanbanTaskBoard, setKanbanTaskBoard] = useState<KanbanTaskBoard>({})
 
+  useEffect(() => {
+    console.log('here')
+  }, [kanbanTaskBoard])
   if (width! < 768 && showSidebar) {
     setShowSidebar(false)
   }
@@ -82,8 +107,29 @@ export const DashboardPage = () => {
             )}
           >
             {boardColumns && boardColumns.length ? (
-              <div className="absolute left-6 pr-6 flex items-center justify-center pt-4">
+              <div
+                className={clsx(
+                  'absolute left-6 pr-6 top-6 flex items-start gap-6',
+                )}
+              >
                 <KanbanBoard taskStatus={kanbanTaskBoard} />
+                <div
+                  style={{
+                    height: height! - 175,
+                  }}
+                  onClick={() => {
+                    setDashboardState!((old) => ({
+                      ...old,
+
+                      showEditBoardModal: true,
+                    }))
+                  }}
+                  className={clsx(
+                    'grow flex flex-col h-full w-[280px] bg-white3 mt-[34px] rounded-md items-center justify-center text-headingXL text-white4 cursor-pointer font-plusJSans dark:bg-black2 dark:text-blue2 dark:bg-opacity-30 bg-opacity-50 mb-6',
+                  )}
+                >
+                  + New Column
+                </div>
               </div>
             ) : (
               activeBoard &&
@@ -101,7 +147,7 @@ export const DashboardPage = () => {
                       }))
                     }}
                     data-cy="add-new-column-button"
-                    className="font-plusJSans text-headingM text-white bg-blue2 pl-[18px] pr-[18px] pt-[10px] pb-[10px] rounded-2xl w-fit text-center"
+                    className="font-plusJSans text-headingM text-white bg-blue2 pl-[18px] pr-[18px] pt-[10px] pb-[10px] rounded-2xl w-fit text-center hover:bg-blue1"
                   >
                     + Add New Column
                   </button>

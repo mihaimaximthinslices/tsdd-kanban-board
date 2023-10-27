@@ -1,13 +1,14 @@
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import { KanbanTask } from './KanbanBoard.tsx'
+import { clsx } from 'clsx'
 
 export function KanbanTaskCard({
   provided,
-  snapshot,
+
   task,
 }: {
   provided: DraggableProvided
-  snapshot: DraggableStateSnapshot
+  snapshot?: DraggableStateSnapshot
   task: KanbanTask
 }) {
   return (
@@ -15,17 +16,16 @@ export function KanbanTaskCard({
       ref={provided.innerRef}
       {...provided.draggableProps}
       {...provided.dragHandleProps}
+      className={clsx(
+        'p-4 min-h-[88px] bg-white black:bg-black2 rounded-md shadow-sm flex flex-col justify-start pt-6 mb-5 dark:bg-black2 dark:text-white',
+        // snapshot.isDragging && 'bg-blue1',
+      )}
       style={{
         userSelect: 'none',
-        padding: 16,
-        margin: '0 0 8px 0',
-        minHeight: '50px',
-        backgroundColor: snapshot.isDragging ? '#263B4A' : '#456C86',
-        color: 'white',
         ...provided.draggableProps.style,
       }}
     >
-      {task.content}
+      <span className="text-headingM font-plusJSans">{task.content}</span>
     </div>
   )
 }
