@@ -318,10 +318,19 @@ describe('dashboard-empty flow', () => {
         cy.contains(
           `Are you sure you want to delete the ‘Non Empty Board’ board? This action will remove all columns and tasks and cannot be reversed.`,
         )
+        cy.intercept('DELETE', '/api/boards/*', {
+          statusCode: 204,
+        }).as('deleteBoard')
+
+        cy.get('[data-cy="delete-board-cancel-button"]')
 
         cy.get('[data-cy="delete-board-confirmation-button"]').click()
 
-        cy.get('[data-cy="delete-board-cancel-button"]')
+        cy.wait('@deleteBoard')
+
+        cy.get('[data-cy="delete-board-confirmation-button"]').should(
+          'not.exist',
+        )
       })
     })
   })

@@ -322,6 +322,7 @@ export function EditBoardModal() {
                     />
                     {!boardColumnIds.includes(boardState.columnIds[index]) && (
                       <button
+                        disabled={requestState.loading || requestState.error}
                         data-cy="remove-column-button"
                         onClick={() => {
                           deleteBoardColumn(index)
@@ -342,6 +343,7 @@ export function EditBoardModal() {
           </div>
           <div className="mt-1">
             <button
+              disabled={requestState.loading || requestState.error}
               data-cy="create-new-column-button"
               onClick={() => {
                 addNewColumn()

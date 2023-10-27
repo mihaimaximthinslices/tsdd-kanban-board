@@ -330,6 +330,7 @@ export function AddNewBoardModal() {
                       }}
                     />
                     <button
+                      disabled={requestState.loading || requestState.error}
                       data-cy="remove-column-button"
                       onClick={() => {
                         deleteBoardColumn(index)
@@ -350,6 +351,7 @@ export function AddNewBoardModal() {
           <div className="mt-1">
             <button
               data-cy="create-new-column-button"
+              disabled={requestState.loading || requestState.error}
               onClick={() => {
                 addNewColumn()
               }}
