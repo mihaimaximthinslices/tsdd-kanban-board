@@ -106,18 +106,27 @@ describe('getColumnTasksUsecase', () => {
             })
           })
           describe('given the column is assigned to the board specified by the user', () => {
-            const tasks = taskBuilder.buildMany(2, {
+            const task1 = taskBuilder.build({
               columnId,
+              taskBeforeId: null,
             })
+
+            const task2 = taskBuilder.build({
+              columnId,
+              taskBeforeId: task1.id,
+              taskAfterId: null,
+            })
+
+            task1.taskAfterId = task2.id
+
             beforeEach(() => {
               column.boardId = boardId
-              taskRepository.getByColumnId.mockResolvedValue(tasks)
+              taskRepository.getByColumnId.mockResolvedValue([task2, task1])
             })
 
-            it('should return the tasks of the column', async () => {
+            it('should return the tasks of the column ordered', async () => {
               const response = await runningTheUsecase()
-
-              expect(response).toEqual(tasks)
+              expect(response).toEqual([task1, task2])
             })
           })
         })
