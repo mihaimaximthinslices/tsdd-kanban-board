@@ -1,9 +1,9 @@
 import { UserRepository } from '../../repositorties'
 import { UseCaseConstructor } from '../../types/UseCase'
-import { User } from '../../entities'
 import { UuidGenerator } from '../../types/UUIDGenerator'
 import { DateGenerator } from '../../types/DateGenerator'
 import { DuplicateEntityError } from '../../types/Errors'
+import { User } from '../../entities'
 
 type Params = {
   userRepository: UserRepository
@@ -38,8 +38,8 @@ export const createUserUsecase: UseCaseConstructor<Params, Request, User> = (par
       updatedAt: NOW,
     }
 
-    await userRepository.save(newUser as User)
+    await userRepository.save(newUser)
 
-    return newUser as User
+    return newUser
   }
 }

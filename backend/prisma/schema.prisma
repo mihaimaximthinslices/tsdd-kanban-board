@@ -39,3 +39,23 @@ model BoardColumn {
   createdAt  DateTime
   updatedAt  DateTime
 }
+
+model Task {
+  id           String   @id @map("id")
+  columnId     String
+  taskBeforeId String?
+  taskAfterId  String?
+  title        String
+  description  String
+  createdAt    DateTime
+  updatedAt    DateTime
+}
+
+model Subtask {
+  id          String   @id @map("id")
+  taskId      String
+  description String
+  status      String
+  createdAt   DateTime
+  updatedAt   DateTime
+}

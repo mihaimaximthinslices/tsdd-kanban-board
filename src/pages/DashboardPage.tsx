@@ -83,9 +83,6 @@ export const DashboardPage = () => {
 
   const [kanbanTaskBoard, setKanbanTaskBoard] = useState<KanbanTaskBoard>({})
 
-  useEffect(() => {
-    console.log('here')
-  }, [kanbanTaskBoard])
   if (width! < 768 && showSidebar) {
     setShowSidebar(false)
   }

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { User } from '../../domain/entities/User'
+import { User } from '../../domain/entities'
 export const userBuilder = {
   build: (partialUser?: Partial<User>) => {
     let newUser: User = {
