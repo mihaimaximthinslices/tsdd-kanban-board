@@ -15,6 +15,7 @@ import { useBoards } from '../hooks/useBoards.tsx'
 import { BoardMenuModal } from '../components/BoardMenuModal.tsx'
 import { DeleteBoardModal } from '../components/DeleteBoardModal.tsx'
 import { DeleteColumnModal } from '../components/DeleteColumnModal.tsx'
+import { AddNewTaskModal } from '../components/AddNewTaskModal.tsx'
 
 export const DashboardPage = () => {
   useThemeSelector()
@@ -27,6 +28,7 @@ export const DashboardPage = () => {
     showDeleteBoardModal,
     showBoardMenuModal,
     showDeleteColumnModal,
+    showAddNewTaskModal,
   } = useContext(DashboardContext)
 
   const { boards } = useBoards()
@@ -38,50 +40,22 @@ export const DashboardPage = () => {
   const { width } = useWindowDimensions()
 
   const canShowSidebar = width! >= 768
+  const [kanbanTaskBoard, setKanbanTaskBoard] = useState<KanbanTaskBoard>({})
 
-  const { boardColumns, refetch: refetchColumns } =
-    useBoardColumns(selectedBoard)
-
-  const mockItems = [
-    {
-      id: '1',
-      content: 'Do work',
-    },
-    {
-      id: '2',
-      content: 'Eat',
-    },
-    {
-      id: '3',
-      content: 'Sleep',
-    },
-    {
-      id: '4',
-      content: 'Test',
-    },
-  ]
+  const { boardColumns } = useBoardColumns(selectedBoard!)
 
   useEffect(() => {
-    refetchColumns().then((data) => {
-      const columns = data!.data!
-      if (columns) {
-        const kanbanTaskBoard: KanbanTaskBoard = {}
-        columns.forEach((column, index) => {
-          kanbanTaskBoard[column.id] = {
-            name: column.columnName,
-            items:
-              index === 0
-                ? mockItems.map((m) => ({ ...m, id: m.id + column.id }))
-                : [],
-          }
-        })
-
-        setKanbanTaskBoard(kanbanTaskBoard)
-      }
-    })
-  }, [boardColumns, selectedBoard])
-
-  const [kanbanTaskBoard, setKanbanTaskBoard] = useState<KanbanTaskBoard>({})
+    if (boardColumns) {
+      const kanbanTaskBoard: KanbanTaskBoard = {}
+      boardColumns.forEach((column) => {
+        kanbanTaskBoard[column.id] = {
+          name: column.columnName,
+          items: [],
+        }
+      })
+      setKanbanTaskBoard(kanbanTaskBoard)
+    }
+  }, [boardColumns])
 
   if (width! < 768 && showSidebar) {
     setShowSidebar(false)
@@ -111,7 +85,10 @@ export const DashboardPage = () => {
                   'absolute left-6 pr-6 top-6 flex items-start gap-4',
                 )}
               >
-                <KanbanBoard taskStatus={kanbanTaskBoard} />
+                <KanbanBoard
+                  taskStatus={kanbanTaskBoard}
+                  setTaskStatus={setKanbanTaskBoard}
+                />
               </div>
             ) : (
               activeBoard &&
@@ -141,6 +118,7 @@ export const DashboardPage = () => {
             {showBoardMenuModal && <BoardMenuModal />}
             {showDeleteBoardModal && <DeleteBoardModal />}
             {showDeleteColumnModal && <DeleteColumnModal />}
+            {showAddNewTaskModal && <AddNewTaskModal />}
           </div>
         </div>
       </div>

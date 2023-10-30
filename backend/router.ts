@@ -8,6 +8,7 @@ import {
   deleteBoardColumnController,
   deleteBoardController,
   getBoardCollumnsController,
+  getColumnTasksController,
   postBoardController,
   signInUserController,
   signUpUserController,
@@ -79,6 +80,11 @@ router.get('/api/boards', withErrorHandling(getBoardsController, sharedErrorHand
 router.get('/api/boards/:boardId/columns', withErrorHandling(getBoardCollumnsController, sharedErrorHandler))
 
 router.post('/api/boards/:boardId/columns/:columnId/tasks', withErrorHandling(postTaskController, sharedErrorHandler))
+
+router.get(
+  '/api/boards/:boardId/columns/:columnId/tasks',
+  withErrorHandling(getColumnTasksController, sharedErrorHandler),
+)
 
 router.delete(
   '/api/boards/:boardId/columns/:columnId',

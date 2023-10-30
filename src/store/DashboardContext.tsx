@@ -1,11 +1,13 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { useBoards } from '../hooks/useBoards.tsx'
+import { useBoardColumns } from '../hooks/useBoardColumns.tsx'
 type DashboardStateType = {
   showAddNewBoardModal: boolean
   showEditBoardModal: boolean
   showBoardMenuModal: boolean
   showDeleteBoardModal: boolean
   showDeleteColumnModal: boolean
+  showAddNewTaskModal: boolean
   selectedBoard: string | null
   kanbanBoardItemsHeight: number | null
   setDashboardState?: React.Dispatch<React.SetStateAction<DashboardStateType>>
@@ -16,6 +18,7 @@ export const DashboardState = {
   showBoardMenuModal: false,
   showDeleteBoardModal: false,
   showDeleteColumnModal: false,
+  showAddNewTaskModal: false,
   kanbanBoardItemsHeight: null,
   selectedBoard: null,
 }
@@ -27,12 +30,16 @@ export const DashboardContextWrapper = ({
 }: {
   children: React.ReactNode
 }) => {
-  const { refetch } = useBoards()
+  const { refetch: boardsRefetch } = useBoards()
+
   const [dashboardState, setDashboardState] =
     useState<DashboardStateType>(DashboardState)
 
+  const { refetch: boardColumnsRefetch } = useBoardColumns(
+    dashboardState.selectedBoard,
+  )
   useEffect(() => {
-    refetch()
+    boardsRefetch().then(() => boardColumnsRefetch())
   }, [dashboardState.selectedBoard])
 
   return (
@@ -43,6 +50,7 @@ export const DashboardContextWrapper = ({
         showBoardMenuModal: dashboardState.showBoardMenuModal,
         showDeleteBoardModal: dashboardState.showDeleteBoardModal,
         showDeleteColumnModal: dashboardState.showDeleteColumnModal,
+        showAddNewTaskModal: dashboardState.showAddNewTaskModal,
         kanbanBoardItemsHeight: dashboardState.kanbanBoardItemsHeight,
         selectedBoard: dashboardState.selectedBoard,
         setDashboardState,
