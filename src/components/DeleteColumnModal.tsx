@@ -31,10 +31,12 @@ export function DeleteColumnModal() {
       )
 
       boardColumnsRefetch().then(() => {
-        setDashboardState!((old) => ({
-          ...old,
-          showDeleteColumnModal: false,
-        }))
+        if (boardColumns && boardColumns.length === 1) {
+          setDashboardState!((old) => ({
+            ...old,
+            showDeleteColumnModal: false,
+          }))
+        }
         setRequestState((prev) => ({ ...prev, loading: false }))
       })
     } catch (err) {
@@ -104,7 +106,6 @@ export function DeleteColumnModal() {
         <div className="flex flex-col gap-4 items-center justify-center md:flex-row">
           <button
             onClick={() => {
-              setShowColumnOptions(false)
               deleteBoardColumn()
             }}
             data-cy="delete-board-confirmation-button"

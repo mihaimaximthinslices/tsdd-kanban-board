@@ -1,15 +1,14 @@
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
-import { KanbanTask } from './KanbanBoard.tsx'
 import { clsx } from 'clsx'
+import { Task } from '../../backend/src/domain/entities'
 
 export function KanbanTaskCard({
   provided,
-
   task,
 }: {
   provided: DraggableProvided
   snapshot?: DraggableStateSnapshot
-  task: KanbanTask
+  task: Task
 }) {
   return (
     <div
@@ -25,7 +24,7 @@ export function KanbanTaskCard({
         ...provided.draggableProps.style,
       }}
     >
-      <span className="text-headingM font-plusJSans">{task.content}</span>
+      <span className="text-headingM font-plusJSans">{task.title}</span>
     </div>
   )
 }

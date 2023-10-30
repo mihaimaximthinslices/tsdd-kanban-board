@@ -103,12 +103,25 @@ export default function DashboardNavbar({
             <div>
               <button
                 data-cy="add-new-task-button"
+                onClick={() => {
+                  setDashboardState!((old) => ({
+                    ...old,
+                    showAddNewTaskModal: true,
+                  }))
+                }}
                 disabled={boardColumns!.length === 0}
                 className="md:hidden bg-blue2 disabled:opacity-30 pl-[18px] pr-[18px] pt-[10px] pb-[10px] rounded-2xl"
               >
                 <IconAddTaskMobile />
               </button>
               <button
+                data-cy="add-new-task-button"
+                onClick={() => {
+                  setDashboardState!((old) => ({
+                    ...old,
+                    showAddNewTaskModal: true,
+                  }))
+                }}
                 disabled={boardColumns!.length === 0}
                 className="hidden md:block font-plusJSans text-headingM text-white bg-blue2 hover:bg-blue1 pl-[18px] pr-[18px] pt-[10px] pb-[10px] rounded-2xl disabled:bg-blue1"
               >

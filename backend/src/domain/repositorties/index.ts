@@ -1,3 +1,5 @@
 export * from './UserRepository'
 export * from './BoardRepository'
 export * from './BoardColumnRepository'
+export * from './TaskRepository'
+export * from './SubtaskRepository'

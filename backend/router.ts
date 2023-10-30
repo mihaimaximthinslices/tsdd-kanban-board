@@ -8,12 +8,14 @@ import {
   deleteBoardColumnController,
   deleteBoardController,
   getBoardCollumnsController,
+  getColumnTasksController,
   postBoardController,
   signInUserController,
   signUpUserController,
 } from './src/infrastructure/controllers'
 import { getBoardsController } from './src/infrastructure/controllers/getBoardsController'
 import { putBoardController } from './src/infrastructure/controllers/putBoardController'
+import { postTaskController } from './src/infrastructure/controllers/postTaskController'
 
 const router = Router()
 
@@ -76,6 +78,14 @@ router.get('/api/auth', (req, res) => {
 router.get('/api/boards', withErrorHandling(getBoardsController, sharedErrorHandler))
 
 router.get('/api/boards/:boardId/columns', withErrorHandling(getBoardCollumnsController, sharedErrorHandler))
+
+router.post('/api/boards/:boardId/columns/:columnId/tasks', withErrorHandling(postTaskController, sharedErrorHandler))
+
+router.get(
+  '/api/boards/:boardId/columns/:columnId/tasks',
+  withErrorHandling(getColumnTasksController, sharedErrorHandler),
+)
+
 router.delete(
   '/api/boards/:boardId/columns/:columnId',
   withErrorHandling(deleteBoardColumnController, sharedErrorHandler),

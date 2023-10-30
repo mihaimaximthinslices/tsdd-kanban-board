@@ -1,3 +1,5 @@
 export * from './User'
 export * from './Board'
 export * from './BoardColumn'
+export * from './Task'
+export * from './Subtask'

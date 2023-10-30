@@ -1,16 +1,51 @@
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import { KanbanTaskCard } from './KanbanTaskCard.tsx'
-import { KanbanTask, KanbanTaskColumn } from './KanbanBoard.tsx'
+import { KanbanTaskBoard, KanbanTaskColumn } from './KanbanBoard.tsx'
 import useWindowDimensions from '../hooks/useWindowDimensions.tsx'
 import { clsx } from 'clsx'
+import { Task } from '../../backend/src/domain/entities'
+import { useColumnTasks } from '../hooks/useColumnTasks.tsx'
+import { useContext, useEffect } from 'react'
+import { DashboardContext } from '../store/DashboardContext.tsx'
+import { useBoardColumns } from '../hooks/useBoardColumns.tsx'
+
 export default function KanbanTaskColumnCard({
+  setTaskStatus,
   column,
   columnId,
 }: {
+  taskStatus: KanbanTaskBoard
+  setTaskStatus: React.Dispatch<React.SetStateAction<KanbanTaskBoard>>
   columnId: string
   column: KanbanTaskColumn
 }) {
   const { height } = useWindowDimensions()
+
+  const { selectedBoard } = useContext(DashboardContext)
+
+  const { isRefetching } = useBoardColumns(selectedBoard!)
+
+  const { columnTasks, refetch: columnTasksRefetch } = useColumnTasks(
+    selectedBoard!,
+    columnId,
+  )
+
+  useEffect(() => {
+    columnTasksRefetch()
+  }, [isRefetching])
+
+  useEffect(() => {
+    if (columnTasks) {
+      setTaskStatus((prev) => ({
+        ...prev,
+        [columnId]: {
+          name: column.name,
+          items: columnTasks!,
+        },
+      }))
+    }
+  }, [columnTasks])
+
   return (
     <div
       style={{
@@ -36,7 +71,7 @@ export default function KanbanTaskColumnCard({
                   snapshot.isDraggingOver && '',
                 )}
               >
-                {column.items.map((item: KanbanTask, index: number) => {
+                {column.items.map((item: Task, index: number) => {
                   return (
                     <Draggable
                       key={item.id}
