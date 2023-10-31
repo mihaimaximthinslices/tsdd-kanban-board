@@ -1,6 +1,19 @@
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import KanbanTaskColumnCard from './KanbanTaskColumnCard.tsx'
 import { Task } from '../../backend/src/domain/entities'
+import axios from 'axios'
+
+class PromiseQueue {
+  queue: Promise<void | boolean> = Promise.resolve(true)
+
+  add(operation: () => Promise<void>) {
+    return new Promise((resolve, reject) => {
+      this.queue = this.queue.then(operation).then(resolve).catch(reject)
+    })
+  }
+}
+
+const promiseQueue = new PromiseQueue()
 
 export type KanbanTaskColumn = { name: string; items: Task[] }
 
@@ -16,7 +29,34 @@ const onDragEnd = (
 
   if (source.droppableId !== destination.droppableId) {
     const sourceColumn = columns[source.droppableId]
+    const sourceItem = sourceColumn.items[source.index]
+
     const destColumn = columns[destination.droppableId]
+    let destPreviousItem: string | null = null
+    if (destination?.index && destination.index > 0) {
+      destPreviousItem = destColumn.items[destination.index - 1].id
+    }
+
+    promiseQueue.add(
+      () =>
+        new Promise((resolve, reject) => {
+          setTimeout(
+            () =>
+              axios
+                .patch('/api/boards/grouping', {
+                  taskId: sourceItem.id,
+                  to: {
+                    columnId: destination.droppableId,
+                    afterTaskId: destPreviousItem,
+                  },
+                })
+                .then(() => resolve())
+                .catch((err) => reject(err)),
+            500,
+          )
+        }),
+    )
+
     const sourceItems = [...sourceColumn.items]
     const destItems = [...destColumn.items]
     const [removed] = sourceItems.splice(source.index, 1)

@@ -68,8 +68,8 @@ export function AddNewTaskModal() {
   const [taskState, setTaskState] = useState<TaskStateType>({
     title: '',
     description: '',
-    subtasks: ['', ''],
-    subtasksIds: [uuidv4(), uuidv4()],
+    subtasks: [],
+    subtasksIds: [],
   })
 
   const [taskErrors, setTaskErrors] = useState<TaskStateTypeErrors>({
@@ -402,7 +402,13 @@ export function AddNewTaskModal() {
             </div>
           )}
         </div>
-        <div onClick={createNewTask} className="w-full">
+        <div
+          onClick={() => {
+            setShowColumnOptions(false)
+            createNewTask()
+          }}
+          className="w-full"
+        >
           <button
             disabled={requestState.loading || requestState.error}
             data-cy="create-new-board-button"

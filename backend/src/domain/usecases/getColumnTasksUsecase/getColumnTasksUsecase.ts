@@ -26,7 +26,8 @@ export const getColumnTasksUsecase: UseCaseConstructor<Params, Request, Task[]> 
     await validateBoard(userId, boardId)
     await validateColumn(boardId, columnId)
 
-    return orderTasksByLinks(await taskRepository.getByColumnId(columnId))
+    const tasks = await taskRepository.getByColumnId(columnId)
+    return orderTasksByLinks(tasks, taskRepository)
   }
 
   async function validateUser(userId: string) {

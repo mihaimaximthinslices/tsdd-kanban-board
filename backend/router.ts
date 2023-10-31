@@ -9,6 +9,7 @@ import {
   deleteBoardController,
   getBoardCollumnsController,
   getColumnTasksController,
+  patchTaskGroupingController,
   postBoardController,
   signInUserController,
   signUpUserController,
@@ -76,6 +77,8 @@ router.get('/api/auth', (req, res) => {
 })
 
 router.get('/api/boards', withErrorHandling(getBoardsController, sharedErrorHandler))
+
+router.patch('/api/boards/grouping', withErrorHandling(patchTaskGroupingController, sharedErrorHandler))
 
 router.get('/api/boards/:boardId/columns', withErrorHandling(getBoardCollumnsController, sharedErrorHandler))
 

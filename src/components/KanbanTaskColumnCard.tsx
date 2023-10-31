@@ -19,6 +19,7 @@ export default function KanbanTaskColumnCard({
   columnId: string
   column: KanbanTaskColumn
 }) {
+  // const { isMakingRequest } = useAxiosIntercept('/api/boards/grouping')
   const { height } = useWindowDimensions()
 
   const { selectedBoard } = useContext(DashboardContext)
@@ -74,6 +75,7 @@ export default function KanbanTaskColumnCard({
                 {column.items.map((item: Task, index: number) => {
                   return (
                     <Draggable
+                      // isDragDisabled={isMakingRequest}
                       key={item.id}
                       draggableId={item.id}
                       index={index}
