@@ -13,10 +13,11 @@ import {
   postBoardController,
   signInUserController,
   signUpUserController,
+  getSubtasksController,
+  getBoardsController,
+  putBoardController,
+  postTaskController,
 } from './src/infrastructure/controllers'
-import { getBoardsController } from './src/infrastructure/controllers/getBoardsController'
-import { putBoardController } from './src/infrastructure/controllers/putBoardController'
-import { postTaskController } from './src/infrastructure/controllers/postTaskController'
 
 const router = Router()
 
@@ -83,6 +84,8 @@ router.patch('/api/boards/grouping', withErrorHandling(patchTaskGroupingControll
 router.get('/api/boards/:boardId/columns', withErrorHandling(getBoardCollumnsController, sharedErrorHandler))
 
 router.post('/api/boards/:boardId/columns/:columnId/tasks', withErrorHandling(postTaskController, sharedErrorHandler))
+
+router.get('/api/tasks/:taskId/subtasks', withErrorHandling(getSubtasksController, sharedErrorHandler))
 
 router.get(
   '/api/boards/:boardId/columns/:columnId/tasks',

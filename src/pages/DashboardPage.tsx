@@ -46,14 +46,17 @@ export const DashboardPage = () => {
 
   useEffect(() => {
     if (boardColumns) {
-      const kanbanTaskBoard: KanbanTaskBoard = {}
-      boardColumns.forEach((column) => {
-        kanbanTaskBoard[column.id] = {
+      const newKanbanTaskBoard: KanbanTaskBoard = {}
+      for (let i = 0; i < boardColumns.length; i++) {
+        const column = boardColumns[i]
+        newKanbanTaskBoard[column.id] = {
+          id: column.id,
           name: column.columnName,
-          items: [],
+          items: kanbanTaskBoard[column.id]?.items ?? [],
         }
-      })
-      setKanbanTaskBoard(kanbanTaskBoard)
+      }
+
+      setKanbanTaskBoard(newKanbanTaskBoard)
     }
   }, [boardColumns])
 

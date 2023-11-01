@@ -19,7 +19,6 @@ export default function KanbanTaskColumnCard({
   columnId: string
   column: KanbanTaskColumn
 }) {
-  // const { isMakingRequest } = useAxiosIntercept('/api/boards/grouping')
   const { height } = useWindowDimensions()
 
   const { selectedBoard } = useContext(DashboardContext)
@@ -40,6 +39,7 @@ export default function KanbanTaskColumnCard({
       setTaskStatus((prev) => ({
         ...prev,
         [columnId]: {
+          id: column.id,
           name: column.name,
           items: columnTasks!,
         },
@@ -83,6 +83,7 @@ export default function KanbanTaskColumnCard({
                       {(provided, snapshot) => {
                         return (
                           <KanbanTaskCard
+                            columnId={columnId}
                             provided={provided}
                             snapshot={snapshot}
                             task={item}
