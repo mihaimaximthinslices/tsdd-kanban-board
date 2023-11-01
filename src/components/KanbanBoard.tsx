@@ -15,7 +15,7 @@ class PromiseQueue {
 
 const promiseQueue = new PromiseQueue()
 
-export type KanbanTaskColumn = { name: string; items: Task[] }
+export type KanbanTaskColumn = { id: string; name: string; items: Task[] }
 
 export type KanbanTaskBoard = Record<string, KanbanTaskColumn>
 
