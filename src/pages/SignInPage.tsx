@@ -16,7 +16,7 @@ type SignInUserFormData = {
   password: string
 }
 
-export const SignInPage: React.FC = () => {
+export default function SignInPage() {
   const navigate = useNavigate()
 
   const { refetch: refetchUser } = useUser()

@@ -4,6 +4,7 @@ import { routes } from './router'
 import { PrivateRoute } from './components/PrivateRoute.tsx'
 import { useUser } from './hooks/useUser.tsx'
 import { useThemeSelector } from './useThemeSelector.tsx'
+import React from 'react'
 
 function App() {
   useUser()
@@ -15,10 +16,22 @@ function App() {
           <Route
             path={route.path}
             key={route.path}
-            element={<PrivateRoute>{route.component}</PrivateRoute>}
+            element={
+              <React.Suspense fallback={<>Page not found</>}>
+                <PrivateRoute>{route.component}</PrivateRoute>
+              </React.Suspense>
+            }
           />
         ) : (
-          <Route path={route.path} key={route.path} element={route.component} />
+          <Route
+            path={route.path}
+            key={route.path}
+            element={
+              <React.Suspense fallback={<>Page not found</>}>
+                {route.component}
+              </React.Suspense>
+            }
+          />
         ),
       )}
     </Routes>

@@ -1,6 +1,8 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { useBoards } from '../hooks/useBoards.tsx'
 import { useBoardColumns } from '../hooks/useBoardColumns.tsx'
+import usePromiseQueue from '../hooks/usePromiseQueue.tsx'
+
 type DashboardStateType = {
   showAddNewBoardModal: boolean
   showEditBoardModal: boolean
@@ -13,6 +15,8 @@ type DashboardStateType = {
   selectedTask: string | null
   kanbanBoardItemsHeight: number | null
   setDashboardState?: React.Dispatch<React.SetStateAction<DashboardStateType>>
+  addToPromiseQueue: (operation: () => Promise<void>) => Promise<void | unknown>
+  promiseCounter: number
 }
 export const DashboardState = {
   showAddNewBoardModal: false,
@@ -25,6 +29,11 @@ export const DashboardState = {
   kanbanBoardItemsHeight: null,
   selectedBoard: null,
   selectedTask: null,
+  addToPromiseQueue: () =>
+    new Promise((resolve) => {
+      resolve(undefined)
+    }),
+  promiseCounter: 0,
 }
 export const DashboardContext =
   createContext<DashboardStateType>(DashboardState)
@@ -34,6 +43,7 @@ export const DashboardContextWrapper = ({
 }: {
   children: React.ReactNode
 }) => {
+  const { promiseCounter, addPromise } = usePromiseQueue()
   const { refetch: boardsRefetch } = useBoards()
 
   const [dashboardState, setDashboardState] =
@@ -59,6 +69,8 @@ export const DashboardContextWrapper = ({
         kanbanBoardItemsHeight: dashboardState.kanbanBoardItemsHeight,
         selectedBoard: dashboardState.selectedBoard,
         selectedTask: dashboardState.selectedTask,
+        addToPromiseQueue: addPromise,
+        promiseCounter: promiseCounter,
         setDashboardState,
       }}
     >

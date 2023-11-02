@@ -10,6 +10,7 @@ import { DashboardContext } from '../store/DashboardContext.tsx'
 import { useBoardColumns } from '../hooks/useBoardColumns.tsx'
 
 export default function KanbanTaskColumnCard({
+  taskStatus,
   setTaskStatus,
   column,
   columnId,
@@ -24,7 +25,6 @@ export default function KanbanTaskColumnCard({
   const { selectedBoard } = useContext(DashboardContext)
 
   const { isRefetching } = useBoardColumns(selectedBoard!)
-
   const { columnTasks, refetch: columnTasksRefetch } = useColumnTasks(
     selectedBoard!,
     columnId,
@@ -57,7 +57,7 @@ export default function KanbanTaskColumnCard({
     >
       <div className="flex justify-between w-full">
         <h2 className="font-plusJSans text-white4 tracking-headingS text-headingS w-full text-left cursor-default">
-          {`${column.name} (${3})`}
+          {`${column.name} (${taskStatus[columnId].items.length})`}
         </h2>
       </div>
       <div className="w-[280px] grow pb-6">

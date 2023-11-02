@@ -22,6 +22,7 @@ export default function DashboardNavbar({
   canShowSidebar: boolean
 }) {
   const { boards } = useBoards()
+  const { promiseCounter } = useContext(DashboardContext)
 
   const { selectedBoard, setDashboardState } = useContext(DashboardContext)
 
@@ -79,6 +80,15 @@ export default function DashboardNavbar({
             {foundSelectedBoard ? foundSelectedBoard.boardName : 'Boards'}
           </button>
           <IconChevronDown />
+          {promiseCounter > 0 && (
+            <div className="flex items-center">
+              <div className="flex items-center justify-center space-x-1 animate-pulse">
+                <span className="font-plusJSans text-bodyM text-blue2">
+                  Syncing...
+                </span>
+              </div>
+            </div>
+          )}
 
           {showMobileSidebar && (
             <Modal
@@ -93,10 +103,19 @@ export default function DashboardNavbar({
             </Modal>
           )}
         </div>
-        <div className=" gap-2 items-center hidden md:flex">
+        <div className=" gap-2 hidden md:flex items-center">
           <span className="font-plusJSans text-headingL text-black dark:text-white">
             {foundSelectedBoard ? foundSelectedBoard.boardName : ''}
           </span>
+          {promiseCounter > 0 && (
+            <div className="flex items-center">
+              <div className="flex items-center justify-center space-x-1 animate-pulse">
+                <span className="font-plusJSans text-headinM text-blue2">
+                  Syncing...
+                </span>
+              </div>
+            </div>
+          )}
         </div>
         <div className="flex gap-4 md:pr-6">
           {foundSelectedBoard && (

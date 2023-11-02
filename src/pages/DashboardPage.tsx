@@ -17,7 +17,7 @@ import { DeleteBoardModal } from '../components/DeleteBoardModal.tsx'
 import { DeleteColumnModal } from '../components/DeleteColumnModal.tsx'
 import { AddNewTaskModal } from '../components/AddNewTaskModal.tsx'
 
-export const DashboardPage = () => {
+export default function DashboardPage() {
   useThemeSelector()
 
   const {

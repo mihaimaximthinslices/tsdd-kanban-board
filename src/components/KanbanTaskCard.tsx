@@ -15,9 +15,10 @@ export function KanbanTaskCard({
   task: Task
   columnId: string
 }) {
+  const { promiseCounter } = useContext(DashboardContext)
   const { subtasks } = useSubtasks(task.id)
-
-  const { setDashboardState, showViewTaskModal } = useContext(DashboardContext)
+  const { setDashboardState, showViewTaskModal, selectedTask } =
+    useContext(DashboardContext)
 
   const doneSubtasks =
     subtasks &&
@@ -27,7 +28,7 @@ export function KanbanTaskCard({
   return (
     <div
       onClick={() => {
-        if (!showViewTaskModal)
+        if (!showViewTaskModal && !promiseCounter)
           setDashboardState!((old) => ({
             ...old,
             showViewTaskModal: true,
@@ -46,15 +47,15 @@ export function KanbanTaskCard({
         ...provided.draggableProps.style,
       }}
     >
-      <div className="flex flex-col gap-2">
-        <span className="text-headingM font-plusJSans">{task.title}</span>
+      <div className="flex flex-col gap-2 w-full">
+        <p className="text-headingM font-plusJSans">{task.title}</p>
         {subtasks && subtasks.length > 0 && (
-          <span className="text-bodyM text-white4">
+          <span className="font-plusJSans text-bodyM text-white4">
             {doneSubtasks} of {subtasks.length} subtasks
           </span>
         )}
       </div>
-      {showViewTaskModal && <ViewTaskModal />}
+      {showViewTaskModal && task.id === selectedTask && <ViewTaskModal />}
     </div>
   )
 }
