@@ -17,7 +17,7 @@ type SignUpUserFormData = {
   confirmPassword: string
 }
 
-export const SignUpPage: React.FC = () => {
+export default function SignUpPage() {
   const navigate = useNavigate()
 
   const { refetch: refetchUser } = useUser()

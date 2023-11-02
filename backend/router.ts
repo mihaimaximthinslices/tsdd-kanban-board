@@ -17,6 +17,7 @@ import {
   getBoardsController,
   putBoardController,
   postTaskController,
+  getTaskController,
 } from './src/infrastructure/controllers'
 
 const router = Router()
@@ -87,6 +88,7 @@ router.post('/api/boards/:boardId/columns/:columnId/tasks', withErrorHandling(po
 
 router.get('/api/tasks/:taskId/subtasks', withErrorHandling(getSubtasksController, sharedErrorHandler))
 
+router.get('/api/tasks/:taskId', withErrorHandling(getTaskController, sharedErrorHandler))
 router.get(
   '/api/boards/:boardId/columns/:columnId/tasks',
   withErrorHandling(getColumnTasksController, sharedErrorHandler),
