@@ -1,8 +1,11 @@
 import { useQuery } from 'react-query'
 import axios from 'axios'
 import { BoardColumn } from '../../backend/src/domain/entities'
+import { useContext } from 'react'
+import { DashboardContext } from '../store/DashboardContext.tsx'
 
 export const useBoardColumns = (boardId: string | null) => {
+  const { promiseCounter } = useContext(DashboardContext)
   const { data: boardColumns, ...options } = useQuery<BoardColumn[], Error>(
     'boardColumns',
     async () => {
@@ -18,6 +21,7 @@ export const useBoardColumns = (boardId: string | null) => {
     },
     {
       retry: false,
+      enabled: promiseCounter === 0,
     },
   )
 

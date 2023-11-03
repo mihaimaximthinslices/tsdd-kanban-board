@@ -1,8 +1,12 @@
 import { useQuery } from 'react-query'
 import axios from 'axios'
 import { Subtask } from '../../backend/src/domain/entities'
+import { useContext } from 'react'
+import { DashboardContext } from '../store/DashboardContext.tsx'
 
 export const useSubtasks = (taskId: string) => {
+  const { promiseCounter } = useContext(DashboardContext)
+
   const { data: subtasks, ...options } = useQuery<Subtask[], Error>(
     `subtasks` + taskId,
     async () => {
@@ -15,6 +19,7 @@ export const useSubtasks = (taskId: string) => {
     },
     {
       retry: false,
+      enabled: promiseCounter === 0,
     },
   )
 

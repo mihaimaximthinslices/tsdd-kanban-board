@@ -49,6 +49,8 @@ export function AddNewTaskModal() {
     error: false,
   })
 
+  const { promiseCounter, addToPromiseQueue } = useContext(DashboardContext)
+
   const { setDashboardState, selectedBoard } = useContext(DashboardContext)
 
   const { boardColumns, refetch: boardColumnsRefetch } =
@@ -183,22 +185,24 @@ export function AddNewTaskModal() {
 
   function createNewTask() {
     verifyTask(async (data) => {
-      try {
-        setRequestState((prev) => ({ ...prev, loading: true }))
-        await axios.post(
-          `/api/boards/${selectedBoard}/columns/${selectedColumnOption.id}/tasks`,
-          data,
-        )
-        boardColumnsRefetch().then(() => {
-          setDashboardState!((old) => ({
-            ...old,
-            showAddNewTaskModal: false,
-          }))
-          setRequestState((prev) => ({ ...prev, loading: false }))
-        })
-      } catch (err) {
-        setRequestState({ loading: false, error: true })
-      }
+      addToPromiseQueue(async () => {
+        try {
+          setRequestState((prev) => ({ ...prev, loading: true }))
+          await axios.post(
+            `/api/boards/${selectedBoard}/columns/${selectedColumnOption.id}/tasks`,
+            data,
+          )
+          boardColumnsRefetch().then(() => {
+            setDashboardState!((old) => ({
+              ...old,
+              showAddNewTaskModal: false,
+            }))
+            setRequestState((prev) => ({ ...prev, loading: false }))
+          })
+        } catch (err) {
+          setRequestState({ loading: false, error: true })
+        }
+      })
     })
   }
 
@@ -410,9 +414,11 @@ export function AddNewTaskModal() {
           className="w-full"
         >
           <button
-            disabled={requestState.loading || requestState.error}
+            disabled={
+              requestState.loading || requestState.error || promiseCounter > 0
+            }
             data-cy="create-new-board-button"
-            className="font-plusJSans text-bodyL text-white w-full pt-2 pb-2 rounded-2xl bg-blue2 hover:bg-blue1 disabled:cursor-not-allowed"
+            className="font-plusJSans text-bodyL text-white w-full pt-2 pb-2 rounded-2xl bg-blue2 hover:bg-blue1 disabled:cursor-not-allowed disabled:bg-blue1"
           >
             {requestState.loading ? (
               <LoadingSpinner />

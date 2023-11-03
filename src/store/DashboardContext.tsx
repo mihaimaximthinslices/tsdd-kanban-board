@@ -15,7 +15,7 @@ type DashboardStateType = {
   selectedTask: string | null
   kanbanBoardItemsHeight: number | null
   setDashboardState?: React.Dispatch<React.SetStateAction<DashboardStateType>>
-  addToPromiseQueue: (operation: () => Promise<void>) => Promise<void | unknown>
+  addToPromiseQueue: (operation: () => Promise<void>) => Promise<void>
   promiseCounter: number
 }
 export const DashboardState = {
@@ -29,10 +29,7 @@ export const DashboardState = {
   kanbanBoardItemsHeight: null,
   selectedBoard: null,
   selectedTask: null,
-  addToPromiseQueue: () =>
-    new Promise((resolve) => {
-      resolve(undefined)
-    }),
+  addToPromiseQueue: () => Promise.resolve(),
   promiseCounter: 0,
 }
 export const DashboardContext =

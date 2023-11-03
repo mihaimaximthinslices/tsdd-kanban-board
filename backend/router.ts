@@ -18,6 +18,7 @@ import {
   putBoardController,
   postTaskController,
   getTaskController,
+  patchSubtaskController,
 } from './src/infrastructure/controllers'
 
 const router = Router()
@@ -87,6 +88,8 @@ router.get('/api/boards/:boardId/columns', withErrorHandling(getBoardCollumnsCon
 router.post('/api/boards/:boardId/columns/:columnId/tasks', withErrorHandling(postTaskController, sharedErrorHandler))
 
 router.get('/api/tasks/:taskId/subtasks', withErrorHandling(getSubtasksController, sharedErrorHandler))
+
+router.patch('/api/tasks/:taskId/subtasks/:subtaskId', withErrorHandling(patchSubtaskController, sharedErrorHandler))
 
 router.get('/api/tasks/:taskId', withErrorHandling(getTaskController, sharedErrorHandler))
 router.get(

@@ -3,10 +3,13 @@ import axios from 'axios'
 import { Task } from '../../backend/src/domain/entities'
 import { useBoards } from './useBoards.tsx'
 import { useBoardColumns } from './useBoardColumns.tsx'
+import { useContext } from 'react'
+import { DashboardContext } from '../store/DashboardContext.tsx'
 
 export const useColumnTasks = (boardId: string, columnId: string) => {
   const { boards } = useBoards()
   const { boardColumns } = useBoardColumns(columnId)
+  const { promiseCounter } = useContext(DashboardContext)
 
   const match =
     boards &&
@@ -33,6 +36,7 @@ export const useColumnTasks = (boardId: string, columnId: string) => {
     },
     {
       retry: false,
+      enabled: promiseCounter === 0,
     },
   )
 

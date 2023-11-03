@@ -17,7 +17,11 @@ export default function usePromiseQueue() {
             setPromiseCounter((old) => old - 1)
             resolve()
           })
-          .catch(reject)
+          .catch(() => {
+            setPromiseQueue(Promise.resolve(true))
+            setPromiseCounter(0)
+            reject()
+          })
       })
     })
   }

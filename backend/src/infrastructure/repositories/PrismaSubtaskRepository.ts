@@ -20,6 +20,7 @@ export const prismaSubtaskRepository: SubtaskRepository = {
   async getByTaskId(taskId: string): Promise<Subtask[]> {
     const subtasks = await prisma.subtask.findMany({
       where: { taskId },
+      orderBy: { createdAt: 'asc' },
     })
 
     return subtasks.map((subtask) => rowToEntity(subtask))
@@ -28,7 +29,6 @@ export const prismaSubtaskRepository: SubtaskRepository = {
   async save(subtask: Subtask): Promise<void> {
     const { id, ...subtaskData } = entityToRow(subtask)
 
-    // Use upsert to insert or update the user based on their ID
     await prisma.subtask.upsert({
       where: { id },
       update: subtaskData,
