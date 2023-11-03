@@ -7,7 +7,12 @@ import { useBoardColumns } from '../hooks/useBoardColumns.tsx'
 import { LoadingSpinner } from './LoadingSpinner.tsx'
 
 export function DeleteBoardModal() {
-  const { setDashboardState, selectedBoard } = useContext(DashboardContext)
+  const {
+    setDashboardState,
+    selectedBoard,
+    promiseCounter,
+    addToPromiseQueue,
+  } = useContext(DashboardContext)
   const { boards, refetch: boardsRefetch } = useBoards()
   const { refetch: boardColumnsRefetch } = useBoardColumns(selectedBoard)
 
@@ -19,24 +24,26 @@ export function DeleteBoardModal() {
   })
 
   async function deleteBoard() {
-    try {
-      setRequestState((prev) => ({ ...prev, loading: true }))
+    addToPromiseQueue(async () => {
+      try {
+        setRequestState((prev) => ({ ...prev, loading: true }))
 
-      await axios.delete(`/api/boards/${selectedBoard}`)
+        await axios.delete(`/api/boards/${selectedBoard}`)
 
-      boardColumnsRefetch().then(() => {
-        setDashboardState!((old) => ({
-          ...old,
-          showDeleteBoardModal: false,
-          selectedBoard: null,
-        }))
-        boardsRefetch().then(() => {
-          setRequestState((prev) => ({ ...prev, loading: false }))
+        boardColumnsRefetch().then(() => {
+          setDashboardState!((old) => ({
+            ...old,
+            showDeleteBoardModal: false,
+            selectedBoard: null,
+          }))
+          boardsRefetch().then(() => {
+            setRequestState((prev) => ({ ...prev, loading: false }))
+          })
         })
-      })
-    } catch (err) {
-      setRequestState({ loading: false, error: true })
-    }
+      } catch (err) {
+        setRequestState({ loading: false, error: true })
+      }
+    })
   }
 
   return (
@@ -61,16 +68,22 @@ export function DeleteBoardModal() {
         <div className="flex flex-col gap-4 items-center justify-center md:flex-row">
           <button
             data-cy="delete-board-confirmation-button"
-            disabled={requestState.loading || requestState.error}
+            disabled={
+              requestState.loading || requestState.error || promiseCounter > 0
+            }
             onClick={() => {
               deleteBoard()
             }}
-            className="font-plusJSans text-bodyL bg-red2 w-full rounded-2xl pt-2 pb-2 text-white hover:bg-red1"
+            className="font-plusJSans text-bodyL bg-red2 w-full rounded-2xl pt-2 pb-2 text-white hover:bg-red1 disabled:bg-red1"
           >
             {requestState.loading ? <LoadingSpinner /> : <span>Delete</span>}
           </button>
           <button
-            disabled={requestState.loading || requestState.error}
+            disabled={
+              requestState.loading ||
+              requestState.error ||
+              (requestState.loading && promiseCounter > 0)
+            }
             data-cy="delete-board-cancel-button"
             onClick={() => {
               setDashboardState!((old) => ({
@@ -78,7 +91,7 @@ export function DeleteBoardModal() {
                 showDeleteBoardModal: false,
               }))
             }}
-            className="font-plusJSans text-bodyL bg-white2 w-full rounded-2xl pt-2 pb-2 text-blue2 hover:bg-white3"
+            className="font-plusJSans text-bodyL bg-white2 w-full rounded-2xl pt-2 pb-2 text-blue2 hover:bg-white3 disabled:cursor-not-allowed"
           >
             Cancel
           </button>

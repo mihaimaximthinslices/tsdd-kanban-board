@@ -128,8 +128,8 @@ export default function DashboardNavbar({
                     showAddNewTaskModal: true,
                   }))
                 }}
-                disabled={boardColumns!.length === 0}
-                className="md:hidden bg-blue2 disabled:opacity-30 pl-[18px] pr-[18px] pt-[10px] pb-[10px] rounded-2xl"
+                disabled={boardColumns!.length === 0 || promiseCounter > 0}
+                className="md:hidden bg-blue2 disabled:opacity-30 pl-[18px] pr-[18px] pt-[10px] pb-[10px] rounded-2xl disabled:cursor-not-allowed"
               >
                 <IconAddTaskMobile />
               </button>
@@ -141,8 +141,8 @@ export default function DashboardNavbar({
                     showAddNewTaskModal: true,
                   }))
                 }}
-                disabled={boardColumns!.length === 0}
-                className="hidden md:block font-plusJSans text-headingM text-white bg-blue2 hover:bg-blue1 pl-[18px] pr-[18px] pt-[10px] pb-[10px] rounded-2xl disabled:bg-blue1"
+                disabled={boardColumns!.length === 0 || promiseCounter > 0}
+                className="hidden md:block font-plusJSans text-headingM text-white bg-blue2 hover:bg-blue1 pl-[18px] pr-[18px] pt-[10px] pb-[10px] rounded-2xl disabled:bg-blue1 disabled:cursor-not-allowed"
               >
                 + Add New Task
               </button>
@@ -151,14 +151,19 @@ export default function DashboardNavbar({
           {foundSelectedBoard && (
             <div
               onClick={() => {
-                setDashboardState!((prev) => ({
-                  ...prev,
-                  showBoardMenuModal: true,
-                }))
+                promiseCounter === 0 &&
+                  setDashboardState!((prev) => ({
+                    ...prev,
+                    showBoardMenuModal: true,
+                  }))
               }}
               className="flex items-center justify-center md:pl-2 md:pr-2"
             >
-              <button data-cy="edit-board-button">
+              <button
+                disabled={promiseCounter > 0}
+                data-cy="edit-board-button"
+                className="disabled:cursor-not-allowed"
+              >
                 <IconVerticalEllipsis />
               </button>
             </div>

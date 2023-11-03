@@ -57,7 +57,12 @@ export function EditBoardModal() {
     loading: false,
     error: false,
   })
-  const { setDashboardState, selectedBoard } = useContext(DashboardContext)
+  const {
+    setDashboardState,
+    selectedBoard,
+    promiseCounter,
+    addToPromiseQueue,
+  } = useContext(DashboardContext)
 
   const { boardColumns } = useBoardColumns(selectedBoard)
 
@@ -202,34 +207,36 @@ export function EditBoardModal() {
 
   function updateBoard() {
     verifyBoard(async (data) => {
-      try {
-        setRequestState((prev) => ({ ...prev, loading: true }))
+      addToPromiseQueue(async () => {
+        try {
+          setRequestState((prev) => ({ ...prev, loading: true }))
 
-        await axios.put(`/api/boards/${selectedBoard}`, {
-          ...data,
-          columnIds: boardColumnIds,
-        })
-        boardsRefetch().then(() =>
-          boardColumnsRefetch().then(() => {
-            setDashboardState!((old) => ({
+          await axios.put(`/api/boards/${selectedBoard}`, {
+            ...data,
+            columnIds: boardColumnIds,
+          })
+          boardsRefetch().then(() =>
+            boardColumnsRefetch().then(() => {
+              setDashboardState!((old) => ({
+                ...old,
+                showEditBoardModal: false,
+              }))
+              setRequestState((prev) => ({ ...prev, loading: false }))
+            }),
+          )
+        } catch (err) {
+          const error = err as AxiosError
+          if (error.response!.status === 409) {
+            setBoardErrors((old) => ({
               ...old,
-              showEditBoardModal: false,
+              name: 'You already created a board with this name',
             }))
-            setRequestState((prev) => ({ ...prev, loading: false }))
-          }),
-        )
-      } catch (err) {
-        const error = err as AxiosError
-        if (error.response!.status === 409) {
-          setBoardErrors((old) => ({
-            ...old,
-            name: 'You already created a board with this name',
-          }))
-          setRequestState({ loading: false, error: false })
-        } else {
-          setRequestState({ loading: false, error: true })
+            setRequestState({ loading: false, error: false })
+          } else {
+            setRequestState({ loading: false, error: true })
+          }
         }
-      }
+      })
     })
   }
 
@@ -356,9 +363,11 @@ export function EditBoardModal() {
         </div>
         <div onClick={updateBoard} className="w-full">
           <button
-            disabled={requestState.loading || requestState.error}
+            disabled={
+              requestState.loading || requestState.error || promiseCounter > 0
+            }
             data-cy="update-board-button"
-            className="font-plusJSans text-bodyL text-white w-full pt-2 pb-2 rounded-2xl bg-blue2 hover:bg-blue1 disabled:cursor-not-allowed"
+            className="font-plusJSans text-bodyL text-white w-full pt-2 pb-2 rounded-2xl bg-blue2 hover:bg-blue1 disabled:cursor-not-allowed disabled:bg-blue1"
           >
             {requestState.loading ? (
               <LoadingSpinner />

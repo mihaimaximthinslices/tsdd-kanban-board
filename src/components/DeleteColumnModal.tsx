@@ -8,7 +8,12 @@ import { useBoardColumns } from '../hooks/useBoardColumns.tsx'
 import axios from 'axios'
 
 export function DeleteColumnModal() {
-  const { setDashboardState, selectedBoard } = useContext(DashboardContext)
+  const {
+    setDashboardState,
+    selectedBoard,
+    promiseCounter,
+    addToPromiseQueue,
+  } = useContext(DashboardContext)
 
   const { boardColumns, refetch: boardColumnsRefetch } =
     useBoardColumns(selectedBoard)
@@ -23,25 +28,27 @@ export function DeleteColumnModal() {
   })
 
   async function deleteBoardColumn() {
-    try {
-      setRequestState((prev) => ({ ...prev, loading: true }))
+    addToPromiseQueue(async () => {
+      try {
+        setRequestState((prev) => ({ ...prev, loading: true }))
 
-      await axios.delete(
-        `/api/boards/${selectedBoard}/columns/${selectedOption.id}`,
-      )
+        await axios.delete(
+          `/api/boards/${selectedBoard}/columns/${selectedOption.id}`,
+        )
 
-      boardColumnsRefetch().then(() => {
-        if (boardColumns && boardColumns.length === 1) {
-          setDashboardState!((old) => ({
-            ...old,
-            showDeleteColumnModal: false,
-          }))
-        }
-        setRequestState((prev) => ({ ...prev, loading: false }))
-      })
-    } catch (err) {
-      setRequestState({ loading: false, error: true })
-    }
+        boardColumnsRefetch().then(() => {
+          if (boardColumns && boardColumns.length === 1) {
+            setDashboardState!((old) => ({
+              ...old,
+              showDeleteColumnModal: false,
+            }))
+          }
+          setRequestState((prev) => ({ ...prev, loading: false }))
+        })
+      } catch (err) {
+        setRequestState({ loading: false, error: true })
+      }
+    })
   }
 
   return (
@@ -109,20 +116,25 @@ export function DeleteColumnModal() {
               deleteBoardColumn()
             }}
             data-cy="delete-board-confirmation-button"
-            disabled={requestState.loading || requestState.error}
-            className="font-plusJSans text-bodyL bg-red2 w-full rounded-2xl pt-2 pb-2 text-white hover:bg-red1"
+            disabled={
+              requestState.loading || requestState.error || promiseCounter > 0
+            }
+            className="font-plusJSans text-bodyL bg-red2 w-full rounded-2xl pt-2 pb-2 text-white hover:bg-red1 disabled:bg-red1 disabled:cursor-not-allowed"
           >
             {requestState.loading ? <LoadingSpinner /> : <span>Delete</span>}
           </button>
           <button
             data-cy="delete-board-cancel-button"
+            disabled={
+              requestState.loading || requestState.error || promiseCounter > 0
+            }
             onClick={() => {
               setDashboardState!((old) => ({
                 ...old,
                 showDeleteColumnModal: false,
               }))
             }}
-            className="font-plusJSans text-bodyL bg-white2 w-full rounded-2xl pt-2 pb-2 text-blue2 hover:bg-white3"
+            className="font-plusJSans text-bodyL bg-white2 w-full rounded-2xl pt-2 pb-2 text-blue2 hover:bg-white3 disabled:cursor-not-allowed"
           >
             Cancel
           </button>

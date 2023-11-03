@@ -17,7 +17,7 @@ function App() {
             path={route.path}
             key={route.path}
             element={
-              <React.Suspense fallback={<>Page not found</>}>
+              <React.Suspense fallback={<></>}>
                 <PrivateRoute>{route.component}</PrivateRoute>
               </React.Suspense>
             }
@@ -27,7 +27,7 @@ function App() {
             path={route.path}
             key={route.path}
             element={
-              <React.Suspense fallback={<>Page not found</>}>
+              <React.Suspense fallback={<></>}>
                 {route.component}
               </React.Suspense>
             }

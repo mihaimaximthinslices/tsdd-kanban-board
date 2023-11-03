@@ -37,7 +37,7 @@ function KanbanBoard({
 
       addToPromiseQueue(
         () =>
-          new Promise((resolve, reject) => {
+          new Promise<void>((resolve, reject) => {
             axios
               .patch('/api/boards/grouping', {
                 taskId: sourceItem.id,
@@ -69,6 +69,36 @@ function KanbanBoard({
     } else {
       const column = columns[source.droppableId]
       const copiedItems = [...column.items]
+
+      const sourceColumn = columns[source.droppableId]
+      const sourceItem = sourceColumn.items[source.index]
+
+      const destColumn = columns[destination.droppableId]
+      let destPreviousItem: string | null = null
+      if (destination?.index && destination.index > 0) {
+        destPreviousItem = destColumn.items[destination.index - 1].id
+      }
+
+      if (sourceItem.id === destPreviousItem) {
+        destPreviousItem = destColumn.items[destination.index].id
+      }
+
+      addToPromiseQueue(
+        () =>
+          new Promise<void>((resolve, reject) => {
+            axios
+              .patch('/api/boards/grouping', {
+                taskId: sourceItem.id,
+                to: {
+                  columnId: destination.droppableId,
+                  afterTaskId: destPreviousItem,
+                },
+              })
+              .then(() => resolve())
+              .catch((err) => reject(err))
+          }),
+      )
+
       const [removed] = copiedItems.splice(source.index, 1)
       copiedItems.splice(destination.index, 0, removed)
       setColumns({

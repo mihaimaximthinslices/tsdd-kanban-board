@@ -3,6 +3,7 @@ import { UseCaseConstructor } from '../../types/UseCase'
 import { EntityNotFoundError, InvalidInputError, UnauthorizedError } from '../../types/Errors'
 import { Task } from '../../entities'
 import { DateGenerator } from '../../types/DateGenerator'
+import { uuidGenerator } from '../../../infrastructure/shared'
 
 type Params = {
   userRepository: UserRepository
@@ -35,8 +36,11 @@ export const moveTaskUsecase: UseCaseConstructor<Params, Request, void> = (param
 
     const afterTask = await validateTargetTask(columnId, afterTaskId, userId)
 
-    await modifySourceColumn(task)
+    if (task.taskBeforeId === (afterTask ? afterTask?.id : null) && task.columnId === columnId) {
+      return
+    }
 
+    await modifySourceColumn(task)
     await modifyTargetColumn(task, columnId, afterTask ?? null)
   }
 
@@ -128,6 +132,15 @@ export const moveTaskUsecase: UseCaseConstructor<Params, Request, void> = (param
         updatedAt: NOW,
       })
     }
+
+    const intermediateColumn = uuidGenerator.next()
+    await taskRepository.save({
+      ...task,
+      columnId: intermediateColumn,
+      taskBeforeId: null,
+      taskAfterId: null,
+      updatedAt: NOW,
+    })
   }
 
   async function modifyTargetColumn(task: Task, columnId: string, afterTask: Task | null) {

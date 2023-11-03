@@ -16,8 +16,6 @@ export async function getColumnTasksController(req: Request, res: Response) {
 
   const { boardId, columnId } = req.params
 
-  console.log(boardId, columnId)
-
   const getColumnTasks = getColumnTasksUsecase({
     boardRepository: prismaBoardRepository,
     boardColumnRepository: prismaBoardColumnRepository,
