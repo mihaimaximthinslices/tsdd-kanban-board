@@ -1,7 +1,7 @@
 import { BoardRepository } from '../../domain/repositorties'
-import { PrismaClient, Board as PrismaBoard } from '@prisma/client'
+import { Board as PrismaBoard } from '@prisma/client'
 import { Board } from '../../domain/entities'
-const prisma = new PrismaClient()
+import prisma from './prismaConnection'
 
 export const prismaBoardRepository: BoardRepository = {
   async delete(id: string): Promise<void> {

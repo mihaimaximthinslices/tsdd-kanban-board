@@ -1,8 +1,9 @@
 import { UserRepository } from '../../domain/repositorties'
 import { User } from '../../domain/entities'
 
-import { PrismaClient, User as PrismaUser } from '@prisma/client'
-const prisma = new PrismaClient()
+import { User as PrismaUser } from '@prisma/client'
+
+import prisma from './prismaConnection'
 
 export const prismaUserRepository: UserRepository = {
   async getByEmail(email: string): Promise<User | null> {

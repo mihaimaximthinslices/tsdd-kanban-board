@@ -1,8 +1,9 @@
 import { SubtaskRepository } from '../../domain/repositorties'
 import { Subtask, SubtaskStatus } from '../../domain/entities'
 
-import { PrismaClient, Subtask as PrismaSubtask } from '@prisma/client'
-const prisma = new PrismaClient()
+import { Subtask as PrismaSubtask } from '@prisma/client'
+
+import prisma from './prismaConnection'
 
 export const prismaSubtaskRepository: SubtaskRepository = {
   async getById(id: string): Promise<Subtask | null> {

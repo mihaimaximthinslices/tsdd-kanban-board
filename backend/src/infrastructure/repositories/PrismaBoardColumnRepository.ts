@@ -1,6 +1,6 @@
 import { BoardColumnRepository } from '../../domain/repositorties'
-import { PrismaClient, BoardColumn as PrismaBoardColumn, BoardColumn } from '@prisma/client'
-const prisma = new PrismaClient()
+import prisma from './prismaConnection'
+import { BoardColumn as PrismaBoardColumn, BoardColumn } from '@prisma/client'
 
 export const prismaBoardColumnRepository: BoardColumnRepository = {
   async delete(id: string): Promise<void> {

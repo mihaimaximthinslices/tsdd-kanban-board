@@ -1,8 +1,8 @@
 import { TaskRepository } from '../../domain/repositorties'
 import { Task } from '../../domain/entities'
 
-import { PrismaClient, Task as PrismaTask } from '@prisma/client'
-const prisma = new PrismaClient()
+import { Task as PrismaTask } from '@prisma/client'
+import prisma from './prismaConnection'
 
 export const prismaTaskRepository: TaskRepository = {
   async getById(id: string): Promise<Task | null> {
