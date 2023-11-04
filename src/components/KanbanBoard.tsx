@@ -74,14 +74,8 @@ function KanbanBoard({
       const sourceItem = sourceColumn.items[source.index]
 
       const destColumn = columns[destination.droppableId]
-      let destPreviousItem: string | null = null
-      if (destination?.index && destination.index > 0) {
-        destPreviousItem = destColumn.items[destination.index - 1].id
-      }
-
-      if (sourceItem.id === destPreviousItem) {
-        destPreviousItem = destColumn.items[destination.index].id
-      }
+      const destPreviousItem =
+        destination.index === 0 ? null : destColumn.items[destination.index].id
 
       addToPromiseQueue(
         () =>
@@ -90,7 +84,7 @@ function KanbanBoard({
               .patch('/api/boards/grouping', {
                 taskId: sourceItem.id,
                 to: {
-                  columnId: destination.droppableId,
+                  columnId: column.id,
                   afterTaskId: destPreviousItem,
                 },
               })
