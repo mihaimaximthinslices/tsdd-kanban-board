@@ -96,7 +96,7 @@ function TaskView() {
         <span className="font-plusJSans text-white4 dark:text-white text-bodyM">
           Current Status
         </span>
-        <ColumnDropdown currentColumnId={task!.columnId} taskId={task!.id} />
+        <ColumnDropdown currentColumnId={task!.columnId} />
       </div>
       <div>
         {promiseCounter > 0 && (
