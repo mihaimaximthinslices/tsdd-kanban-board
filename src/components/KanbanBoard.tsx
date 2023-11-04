@@ -77,22 +77,31 @@ function KanbanBoard({
       const destPreviousItem =
         destination.index === 0 ? null : destColumn.items[destination.index].id
 
-      addToPromiseQueue(
-        () =>
-          new Promise<void>((resolve, reject) => {
-            axios
-              .patch('/api/boards/grouping', {
-                taskId: sourceItem.id,
-                to: {
-                  columnId: column.id,
-                  afterTaskId: destPreviousItem,
-                },
-              })
-              .then(() => resolve())
-              .catch((err) => reject(err))
-          }),
-      )
+      console.log({
+        taskId: sourceItem.id,
+        to: {
+          columnId: column.id,
+          afterTaskId: destPreviousItem,
+        },
+      })
 
+      if (sourceItem.id !== destPreviousItem) {
+        addToPromiseQueue(
+          () =>
+            new Promise<void>((resolve, reject) => {
+              axios
+                .patch('/api/boards/grouping', {
+                  taskId: sourceItem.id,
+                  to: {
+                    columnId: column.id,
+                    afterTaskId: destPreviousItem,
+                  },
+                })
+                .then(() => resolve())
+                .catch((err) => reject(err))
+            }),
+        )
+      }
       const [removed] = copiedItems.splice(source.index, 1)
       copiedItems.splice(destination.index, 0, removed)
       setColumns({
