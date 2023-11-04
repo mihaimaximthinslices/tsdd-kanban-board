@@ -18,7 +18,7 @@ export default function ColumnDropdown({
 
   const { refetch: taskRefetch } = useTask(selectedTask!)
 
-  const { refetch: subtaskRefetch } = useSubtasks(selectedTask)
+  const { refetch: subtaskRefetch } = useSubtasks(selectedTask!)
 
   const { boardColumns, refetch: boarColumnsRefetch } =
     useBoardColumns(selectedBoard)
