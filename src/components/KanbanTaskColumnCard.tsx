@@ -22,7 +22,7 @@ export default function KanbanTaskColumnCard({
 }) {
   const { height } = useWindowDimensions()
 
-  const { selectedBoard, promiseCounter } = useContext(DashboardContext)
+  const { selectedBoard } = useContext(DashboardContext)
 
   const { isRefetching } = useBoardColumns(selectedBoard!)
   const { columnTasks, refetch: columnTasksRefetch } = useColumnTasks(
@@ -75,7 +75,7 @@ export default function KanbanTaskColumnCard({
                 {column.items.map((item: Task, index: number) => {
                   return (
                     <Draggable
-                      isDragDisabled={promiseCounter !== 0}
+                      // isDragDisabled={promiseCounter !== 0}
                       key={item.id}
                       draggableId={item.id}
                       index={index}
