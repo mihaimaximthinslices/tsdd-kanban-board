@@ -5,6 +5,7 @@ import { useBoardColumns } from '../hooks/useBoardColumns.tsx'
 import { DashboardContext } from '../store/DashboardContext.tsx'
 import axios from 'axios'
 import { useTask } from '../hooks/useTask.tsx'
+import { useSubtasks } from '../hooks/useSubtasks.tsx'
 
 export default function ColumnDropdown({
   currentColumnId,
@@ -16,6 +17,8 @@ export default function ColumnDropdown({
   const { addToPromiseQueue, selectedTask } = useContext(DashboardContext)
 
   const { refetch: taskRefetch } = useTask(selectedTask!)
+
+  const { refetch: subtaskRefetch } = useSubtasks(selectedTask)
 
   const { boardColumns, refetch: boarColumnsRefetch } =
     useBoardColumns(selectedBoard)
@@ -77,7 +80,9 @@ export default function ColumnDropdown({
                           })
                           .then(() => {
                             taskRefetch().then(() => {
-                              boarColumnsRefetch().then(() => resolve())
+                              boarColumnsRefetch().then(() =>
+                                subtaskRefetch().then(() => resolve()),
+                              )
                             })
                           })
                           .catch((err: unknown) => reject(err))
