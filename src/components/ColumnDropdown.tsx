@@ -4,7 +4,7 @@ import { useContext, useState } from 'react'
 import { useBoardColumns } from '../hooks/useBoardColumns.tsx'
 import { DashboardContext } from '../store/DashboardContext.tsx'
 import axios from 'axios'
-import { useQueryClient } from 'react-query'
+import { useTask } from '../hooks/useTask.tsx'
 
 export default function ColumnDropdown({
   currentColumnId,
@@ -13,11 +13,12 @@ export default function ColumnDropdown({
 }) {
   const { selectedBoard } = useContext(DashboardContext)
 
-  const queryClient = useQueryClient()
-
   const { addToPromiseQueue, selectedTask } = useContext(DashboardContext)
 
-  const { boardColumns } = useBoardColumns(selectedBoard)
+  const { refetch: taskRefetch } = useTask(selectedTask!)
+
+  const { boardColumns, refetch: boarColumnsRefetch } =
+    useBoardColumns(selectedBoard)
 
   const initialSelectedColumn =
     (currentColumnId !== undefined &&
@@ -75,8 +76,8 @@ export default function ColumnDropdown({
                             },
                           })
                           .then(() => {
-                            queryClient.invalidateQueries({
-                              queryKey: [`task${selectedTask}`],
+                            taskRefetch().then(() => {
+                              boarColumnsRefetch()
                             })
                           })
                           .then(() => resolve())

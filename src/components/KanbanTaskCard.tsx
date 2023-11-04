@@ -3,7 +3,7 @@ import { clsx } from 'clsx'
 import { SubtaskStatus, Task } from '../../backend/src/domain/entities'
 import { useSubtasks } from '../hooks/useSubtasks.tsx'
 import { ViewTaskModal } from './ViewTaskModal.tsx'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { DashboardContext } from '../store/DashboardContext.tsx'
 
 export function KanbanTaskCard({
@@ -16,7 +16,11 @@ export function KanbanTaskCard({
   columnId: string
 }) {
   const { promiseCounter } = useContext(DashboardContext)
-  const { subtasks } = useSubtasks(task.id)
+  const { subtasks, refetch } = useSubtasks(task.id)
+
+  useEffect(() => {
+    refetch()
+  }, [])
   const { setDashboardState, showViewTaskModal, selectedTask } =
     useContext(DashboardContext)
 
