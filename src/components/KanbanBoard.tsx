@@ -77,14 +77,6 @@ function KanbanBoard({
       const destPreviousItem =
         destination.index === 0 ? null : destColumn.items[destination.index].id
 
-      console.log({
-        taskId: sourceItem.id,
-        to: {
-          columnId: column.id,
-          afterTaskId: destPreviousItem,
-        },
-      })
-
       if (sourceItem.id !== destPreviousItem) {
         addToPromiseQueue(
           () =>
