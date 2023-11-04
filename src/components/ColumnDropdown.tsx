@@ -77,10 +77,9 @@ export default function ColumnDropdown({
                           })
                           .then(() => {
                             taskRefetch().then(() => {
-                              boarColumnsRefetch()
+                              boarColumnsRefetch().then(() => resolve())
                             })
                           })
-                          .then(() => resolve())
                           .catch((err: unknown) => reject(err))
                       }),
                   )
