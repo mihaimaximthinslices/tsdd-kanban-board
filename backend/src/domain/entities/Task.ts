@@ -33,6 +33,14 @@ export async function resetOrdering(tasks: Task[], taskRepository: TaskRepositor
   }
 }
 export async function orderTasksByLinks(tasks: Task[], taskRepository: TaskRepository) {
+  let currentTask = tasks.find((task) => task.taskBeforeId === null)
+
+  if (!currentTask && tasks.length > 0) {
+    await resetOrdering(tasks, taskRepository)
+    tasks = await taskRepository.getByColumnId(tasks[0]!.columnId)
+    currentTask = tasks.find((task) => task.taskBeforeId === null)
+  }
+
   const map: Record<string, Task> = tasks.reduce((acc: Record<string, Task>, task) => {
     acc[task.id] = task
     return acc
@@ -41,16 +49,11 @@ export async function orderTasksByLinks(tasks: Task[], taskRepository: TaskRepos
   const orderedTasks: Task[] = []
   const visited: Record<string, boolean> = {}
 
-  let currentTask = tasks.find((task) => task.taskBeforeId === null)
-
-  if (!currentTask && tasks.length > 0) {
-    await resetOrdering(tasks, taskRepository)
-    currentTask = tasks.find((task) => task.taskBeforeId === null)
-  }
-
   while (currentTask) {
     if (visited[currentTask.id]) {
-      return []
+      await resetOrdering(tasks, taskRepository)
+      tasks = await taskRepository.getByColumnId(tasks[0]!.columnId)
+      return orderTasksByLinks(tasks, taskRepository)
     }
 
     visited[currentTask.id] = true
@@ -59,6 +62,14 @@ export async function orderTasksByLinks(tasks: Task[], taskRepository: TaskRepos
     if (!currentTask.taskAfterId) break
 
     currentTask = map[currentTask.taskAfterId]
+  }
+
+  if (orderedTasks.length !== tasks.length && tasks.length > 0) {
+    await resetOrdering(tasks, taskRepository)
+
+    const newTasks = await taskRepository.getByColumnId(tasks[0]!.columnId)
+
+    return orderTasksByLinks(newTasks, taskRepository)
   }
 
   return orderedTasks
