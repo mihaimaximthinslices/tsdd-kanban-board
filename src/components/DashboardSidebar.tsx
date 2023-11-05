@@ -59,10 +59,12 @@ export function DashboardSidebar({
   const { boards, isLoading: isLoadingBoards } = useBoards()
 
   function selectBoard(id: string) {
-    setDashboardState!((old) => ({
-      ...old,
-      selectedBoard: id,
-    }))
+    if (id !== selectedBoard)
+      setDashboardState!((old) => ({
+        ...old,
+        isChangingBoard: true,
+        selectedBoard: id,
+      }))
   }
 
   return (

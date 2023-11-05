@@ -31,6 +31,7 @@ export default function DashboardPage() {
     showDeleteColumnModal,
     showAddNewTaskModal,
     showDeleteTaskModal,
+    isChangingBoard,
   } = useContext(DashboardContext)
 
   const { boards } = useBoards()
@@ -98,7 +99,8 @@ export default function DashboardPage() {
             ) : (
               activeBoard &&
               boardColumns &&
-              boardColumns.length === 0 && (
+              boardColumns.length === 0 &&
+              !isChangingBoard && (
                 <div className="flex flex-col items-center gap-6">
                   <h1 className="font-plusJSans text-headingL text-white4 text-center">
                     This board is empty. Create a new column to get started.

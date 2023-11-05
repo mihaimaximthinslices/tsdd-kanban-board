@@ -16,10 +16,11 @@ export function MobileSidebar({
   const { boards, isLoading: isBoardsLoading } = useBoards()
 
   function selectBoard(id: string) {
-    setDashboardState!((old) => ({
-      ...old,
-      selectedBoard: id,
-    }))
+    if (id !== selectedBoard)
+      setDashboardState!((old) => ({
+        ...old,
+        selectedBoard: id,
+      }))
   }
 
   return (

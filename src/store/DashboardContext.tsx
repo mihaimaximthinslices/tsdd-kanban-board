@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react'
-import { useBoards } from '../hooks/useBoards.tsx'
 import { useBoardColumns } from '../hooks/useBoardColumns.tsx'
 import usePromiseQueue from '../hooks/usePromiseQueue.tsx'
+import { useQueryClient } from 'react-query'
 
 type DashboardStateType = {
   showAddNewBoardModal: boolean
@@ -18,6 +18,7 @@ type DashboardStateType = {
   setDashboardState?: React.Dispatch<React.SetStateAction<DashboardStateType>>
   addToPromiseQueue: (operation: () => Promise<void>) => Promise<void>
   promiseCounter: number
+  isChangingBoard: boolean
 }
 export const DashboardState = {
   showAddNewBoardModal: false,
@@ -31,6 +32,7 @@ export const DashboardState = {
   kanbanBoardItemsHeight: null,
   selectedBoard: null,
   selectedTask: null,
+  isChangingBoard: false,
   addToPromiseQueue: () => Promise.resolve(),
   promiseCounter: 0,
 }
@@ -43,16 +45,26 @@ export const DashboardContextWrapper = ({
   children: React.ReactNode
 }) => {
   const { promiseCounter, addPromise } = usePromiseQueue()
-  const { refetch: boardsRefetch } = useBoards()
 
   const [dashboardState, setDashboardState] =
     useState<DashboardStateType>(DashboardState)
+  const queryClient = useQueryClient()
 
   const { refetch: boardColumnsRefetch } = useBoardColumns(
     dashboardState.selectedBoard,
   )
   useEffect(() => {
-    boardsRefetch().then(() => boardColumnsRefetch())
+    queryClient.setQueryData('boardColumns', [])
+    setDashboardState((old) => ({
+      ...old,
+      isChangingBoard: true,
+    }))
+    boardColumnsRefetch().then(() => {
+      setDashboardState((old) => ({
+        ...old,
+        isChangingBoard: false,
+      }))
+    })
   }, [dashboardState.selectedBoard])
 
   return (
@@ -69,6 +81,7 @@ export const DashboardContextWrapper = ({
         kanbanBoardItemsHeight: dashboardState.kanbanBoardItemsHeight,
         selectedBoard: dashboardState.selectedBoard,
         selectedTask: dashboardState.selectedTask,
+        isChangingBoard: dashboardState.isChangingBoard,
         addToPromiseQueue: addPromise,
         promiseCounter: promiseCounter,
         setDashboardState,

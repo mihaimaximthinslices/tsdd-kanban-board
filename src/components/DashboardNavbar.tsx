@@ -128,7 +128,10 @@ export default function DashboardNavbar({
                     showAddNewTaskModal: true,
                   }))
                 }}
-                disabled={boardColumns!.length === 0 || promiseCounter > 0}
+                disabled={
+                  (boardColumns && boardColumns!.length === 0) ||
+                  promiseCounter > 0
+                }
                 className="md:hidden bg-blue2 disabled:opacity-30 pl-[18px] pr-[18px] pt-[10px] pb-[10px] rounded-2xl disabled:cursor-not-allowed"
               >
                 <IconAddTaskMobile />
@@ -141,7 +144,10 @@ export default function DashboardNavbar({
                     showAddNewTaskModal: true,
                   }))
                 }}
-                disabled={boardColumns!.length === 0 || promiseCounter > 0}
+                disabled={
+                  (boardColumns && boardColumns!.length === 0) ||
+                  promiseCounter > 0
+                }
                 className="hidden md:block font-plusJSans text-headingM text-white bg-blue2 hover:bg-blue1 pl-[18px] pr-[18px] pt-[10px] pb-[10px] rounded-2xl disabled:bg-blue1 disabled:cursor-not-allowed"
               >
                 + Add New Task
