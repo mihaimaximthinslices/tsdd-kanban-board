@@ -19,6 +19,7 @@ import {
   postTaskController,
   getTaskController,
   patchSubtaskController,
+  deleteTaskController,
 } from './src/infrastructure/controllers'
 
 const router = Router()
@@ -92,6 +93,8 @@ router.get('/api/tasks/:taskId/subtasks', withErrorHandling(getSubtasksControlle
 router.patch('/api/tasks/:taskId/subtasks/:subtaskId', withErrorHandling(patchSubtaskController, sharedErrorHandler))
 
 router.get('/api/tasks/:taskId', withErrorHandling(getTaskController, sharedErrorHandler))
+router.delete('/api/tasks/:taskId', withErrorHandling(deleteTaskController, sharedErrorHandler))
+
 router.get(
   '/api/boards/:boardId/columns/:columnId/tasks',
   withErrorHandling(getColumnTasksController, sharedErrorHandler),

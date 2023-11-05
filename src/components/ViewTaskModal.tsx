@@ -11,6 +11,7 @@ import axios from 'axios'
 import { TaskViewSkeleton } from './TaskViewSkeleton.tsx'
 
 function TaskView() {
+  const { setDashboardState } = useContext(DashboardContext)
   const { addToPromiseQueue, promiseCounter } = useContext(DashboardContext)
   const { selectedTask } = useContext(DashboardContext)
   const { task } = useTask(selectedTask!)
@@ -101,6 +102,14 @@ function TaskView() {
                       Edit Task
                     </button>
                     <button
+                      onClick={() => {
+                        setShowTaskOptions(false)
+                        setDashboardState!((old) => ({
+                          ...old,
+                          showViewTaskModal: false,
+                          showDeleteTaskModal: true,
+                        }))
+                      }}
                       id="delete-task-button"
                       className="w-full text-start font-plusJSans text-red2 text-bodyL hover:underline"
                     >

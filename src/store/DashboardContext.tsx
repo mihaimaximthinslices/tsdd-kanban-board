@@ -11,6 +11,7 @@ type DashboardStateType = {
   showDeleteColumnModal: boolean
   showAddNewTaskModal: boolean
   showViewTaskModal: boolean
+  showDeleteTaskModal: boolean
   selectedBoard: string | null
   selectedTask: string | null
   kanbanBoardItemsHeight: number | null
@@ -26,6 +27,7 @@ export const DashboardState = {
   showDeleteColumnModal: false,
   showAddNewTaskModal: false,
   showViewTaskModal: false,
+  showDeleteTaskModal: false,
   kanbanBoardItemsHeight: null,
   selectedBoard: null,
   selectedTask: null,
@@ -63,6 +65,7 @@ export const DashboardContextWrapper = ({
         showDeleteColumnModal: dashboardState.showDeleteColumnModal,
         showAddNewTaskModal: dashboardState.showAddNewTaskModal,
         showViewTaskModal: dashboardState.showViewTaskModal,
+        showDeleteTaskModal: dashboardState.showDeleteTaskModal,
         kanbanBoardItemsHeight: dashboardState.kanbanBoardItemsHeight,
         selectedBoard: dashboardState.selectedBoard,
         selectedTask: dashboardState.selectedTask,
