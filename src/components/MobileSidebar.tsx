@@ -80,7 +80,7 @@ export function MobileSidebar({
                     <div
                       data-cy="sidebar-create-new-board-button"
                       className={clsx(
-                        'font-plusJSans text-headingM',
+                        'font-plusJSans text-headingM break-words max-w-[160px]',
                         id === selectedBoard ? 'text-white' : 'text-white4',
                       )}
                     >

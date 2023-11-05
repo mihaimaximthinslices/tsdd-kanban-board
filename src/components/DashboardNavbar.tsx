@@ -71,14 +71,14 @@ export default function DashboardNavbar({
             !showMobileSidebar ? 'cursor-pointer' : 'cursor-default',
           )}
         >
-          <button
+          <p
             className={clsx(
-              'font-plusJSans text-headingL text-black dark:text-white',
+              'font-plusJSans text-headingL text-black dark:text-white break-words max-w-[140px] overflow-x-auto max-h-[22px] mb-[10px] overflow-y-hidden ',
               !foundSelectedBoard ? 'text-blue2 dark:text-blue2' : '',
             )}
           >
             {foundSelectedBoard ? foundSelectedBoard.boardName : 'Boards'}
-          </button>
+          </p>
           <IconChevronDown />
           {promiseCounter > 0 && (
             <div className="flex items-center">

@@ -39,7 +39,7 @@ export default function CheckboxSubtask({
         value=""
         className="!outline-none !border-none !border-0 !outline-0 w-4 h-4 bg-blue2 text-red2 accent-blue2 pointer-events-none"
       ></input>
-      <p className="font-plusJSans text-bodyM text-black dark:text-white font-bold">
+      <p className="font-plusJSans text-bodyM text-black dark:text-white font-bold break-words max-w-full pr-8">
         {description}
       </p>
     </div>

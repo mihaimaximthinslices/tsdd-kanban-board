@@ -23,6 +23,8 @@ function TaskView() {
       0,
   )
 
+  const [showTaskOptions, setShowTaskOptions] = useState(false)
+
   const handleSubtaskChange = (
     subtaskId: string,
     description: string,
@@ -57,20 +59,63 @@ function TaskView() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div
+      onClick={(e) => {
+        if (showTaskOptions) {
+          const target = e.target as HTMLElement
+          if (
+            !(
+              target.id === 'edit-task-button' ||
+              target.id === 'delete-task-button'
+            )
+          ) {
+            setShowTaskOptions(false)
+          }
+        }
+      }}
+      className="flex flex-col gap-6 relative"
+    >
       <div className="flex justify-between">
-        <div>
-          <h1 className="font-plusJSans text-headingL text-black dark:text-white">
+        <div className="max-w-full pr-4">
+          <span className="font-plusJSans text-headingL text-black dark:text-white break-words max-w-full">
             {task?.title}
-          </h1>
+          </span>
         </div>
-        <button data-cy="edit-board-button">
-          <IconVerticalEllipsis />
-        </button>
+        <div className="flex flex-col">
+          <button
+            onClick={() => {
+              setShowTaskOptions((old) => !old)
+            }}
+          >
+            <IconVerticalEllipsis />
+          </button>
+          {showTaskOptions && (
+            <div className="fixed bg-black2 overflow-visible z-40 mt-8">
+              <div className="relative">
+                <div className="absolute w-[120px] -right-[40px] md:-right-[96px] md:w-[192px]">
+                  <div className="bg-white p-4 dark:bg-black3 text-white flex flex-col items-center gap-4 shadow-md rounded-md dark:border dark:border-black1">
+                    <button
+                      id="edit-task-button"
+                      className="w-full text-start font-plusJSans text-white4 text-bodyL hover:underline"
+                    >
+                      Edit Task
+                    </button>
+                    <button
+                      id="delete-task-button"
+                      className="w-full text-start font-plusJSans text-red2 text-bodyL hover:underline"
+                    >
+                      Delete Task
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
       {task?.description && (
         <div>
-          <p className="font-plusJSans text-bodyL text-white4">
+          <p className="font-plusJSans text-bodyL text-white4 break-words max-w-full">
             {task?.description}
           </p>
         </div>
@@ -99,9 +144,9 @@ function TaskView() {
         </span>
         <ColumnDropdown currentColumnId={task!.columnId} />
       </div>
-      <div>
+      <div className="relative">
         {promiseCounter > 0 && (
-          <div className="flex w-full justify-end relative">
+          <div className="flex w-full justify-end">
             <div className="flex items-center justify-center space-x-1 animate-pulse absolute top-[-10px]">
               <span className="font-plusJSans text-bodyM text-blue2">
                 Syncing...
@@ -129,7 +174,7 @@ export function ViewTaskModal() {
         style={{
           maxHeight: '90vh',
         }}
-        className="z-20 min-w-[343px] md:w-[480px] bg-white dark:bg-black2 rounded-md flex flex-col p-6 gap-6 shadow-md dark:border border-black1 overflow-y-auto"
+        className="z-20 w-[343px] md:w-[480px] bg-white dark:bg-black2 rounded-md flex flex-col p-6 gap-6 shadow-md dark:border border-black1 overflow-y-auto"
       >
         <React.Suspense fallback={<TaskViewSkeleton />}>
           <TaskView />

@@ -52,7 +52,9 @@ export function KanbanTaskCard({
       }}
     >
       <div className="flex flex-col gap-2 w-full">
-        <p className="text-headingM font-plusJSans">{task.title}</p>
+        <span className="overflow-y-hidden bg-white dark:bg-black2 text-headingM font-plusJSans break-words ">
+          {task.title}
+        </span>
         {subtasks && subtasks.length > 0 && (
           <span className="font-plusJSans text-bodyM text-white4">
             {doneSubtasks} of {subtasks.length} subtasks

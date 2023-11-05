@@ -28,14 +28,14 @@ export function TaskViewSkeleton() {
       </div>
 
       <div className="flex flex-col gap-4">
-        <p className="font-plusJSans text-bodyM text-white4 dark:text-white">
+        <div className="font-plusJSans text-bodyM text-white4 dark:text-white">
           <div
             role="status"
             className="w-full animate-pulse flex flex-col gap-2"
           >
             <div className=" bg-gray-200 rounded-full dark:bg-black1 h-5 w-20"></div>
           </div>
-        </p>
+        </div>
         <div className="flex flex-col gap-2">
           <div className="w-full">
             <div

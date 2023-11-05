@@ -121,7 +121,7 @@ export function DashboardSidebar({
                       <div
                         data-cy="sidebar-board-option"
                         className={clsx(
-                          'font-plusJSans text-headingM',
+                          'font-plusJSans text-headingM break-words max-w-[160px]',
                           id === selectedBoard ? 'text-white' : 'text-white4',
                         )}
                       >
