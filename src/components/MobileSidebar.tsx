@@ -13,7 +13,7 @@ export function MobileSidebar({
   closeModalParrent: () => void
 }) {
   const { setDashboardState, selectedBoard } = useContext(DashboardContext)
-  const { boards } = useBoards()
+  const { boards, isLoading: isBoardsLoading } = useBoards()
 
   function selectBoard(id: string) {
     setDashboardState!((old) => ({
@@ -32,10 +32,29 @@ export function MobileSidebar({
           data-cy="sidebar-all-boards-counter"
           className=" pl-6 font-plusJSans text-headingS text-white4 tracking-headingS mb-[19px]"
         >
-          ALL BOARDS ({boards ? boards.length : 0})
+          ALL BOARDS {boards ? '(' + boards.length + ')' : ''}
         </p>
         <div className="flex flex-col gap-0">
-          {boards &&
+          {isBoardsLoading ? (
+            <div className="flex flex-col gap-4">
+              {Array.from([1]).map((key) => {
+                return (
+                  <div
+                    key={key}
+                    className="flex pl-4 items-center cursor-pointer"
+                  >
+                    <div
+                      role="status"
+                      className="w-full animate-pulse flex flex-col gap-6"
+                    >
+                      <div className="bg-gray-200 rounded-md dark:bg-black1 w-full h-8"></div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          ) : (
+            boards &&
             boards.map(({ boardName, id }) => {
               return (
                 <div
@@ -70,7 +89,8 @@ export function MobileSidebar({
                   </div>
                 </div>
               )
-            })}
+            })
+          )}
         </div>
 
         <div
