@@ -64,7 +64,7 @@ export default function KanbanTaskColumnCard({
     >
       <div className="flex justify-between w-full">
         <h2 className="font-plusJSans text-white4 tracking-headingS text-headingS w-full text-left cursor-default">
-          {!showColumnSkeleton ? (
+          {!isRefetching ? (
             `${column.name} (` + taskStatus[columnId].items.length + ')'
           ) : (
             <div
