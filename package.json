@@ -29,7 +29,7 @@
     "prisma:generate": "cd ./backend && npx prisma generate",
     "prisma:migrate:dev": "dotenv -e .env.development.local yarn prisma:migrate",
     "prisma:migrate:prod": "dotenv -e .env yarn prisma:migrate",
-    "postinstall": "cd ./backend && yarn prisma generate"
+    "postinstall": "yarn prisma:generate"
   },
   "dependencies": {
     "@types/react-beautiful-dnd": "^13.1.6",
