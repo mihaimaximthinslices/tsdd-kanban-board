@@ -8,6 +8,7 @@ import ColumnDropdown from './ColumnDropdown.tsx'
 import CheckboxSubtask from './CheckboxSubtask.tsx'
 import IconVerticalEllipsis from '../svg/icon-vertical-ellipsis.tsx'
 import axios from 'axios'
+import { TaskViewSkeleton } from './TaskViewSkeleton.tsx'
 
 function TaskView() {
   const { addToPromiseQueue, promiseCounter } = useContext(DashboardContext)
@@ -130,7 +131,7 @@ export function ViewTaskModal() {
         }}
         className="z-20 min-w-[343px] md:w-[480px] bg-white dark:bg-black2 rounded-md flex flex-col p-6 gap-6 shadow-md dark:border border-black1 overflow-y-auto"
       >
-        <React.Suspense fallback={<div>Loading...</div>}>
+        <React.Suspense fallback={<TaskViewSkeleton />}>
           <TaskView />
         </React.Suspense>
       </div>

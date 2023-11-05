@@ -5,9 +5,10 @@ import useWindowDimensions from '../hooks/useWindowDimensions.tsx'
 import { clsx } from 'clsx'
 import { Task } from '../../backend/src/domain/entities'
 import { useColumnTasks } from '../hooks/useColumnTasks.tsx'
-import { useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { DashboardContext } from '../store/DashboardContext.tsx'
 import { useBoardColumns } from '../hooks/useBoardColumns.tsx'
+import { KanbanTaskCardSkeleton } from './KanbanTaskCardSkeleton.tsx'
 
 export default function KanbanTaskColumnCard({
   taskStatus,
@@ -25,10 +26,16 @@ export default function KanbanTaskColumnCard({
   const { selectedBoard } = useContext(DashboardContext)
 
   const { isRefetching } = useBoardColumns(selectedBoard!)
-  const { columnTasks, refetch: columnTasksRefetch } = useColumnTasks(
-    selectedBoard!,
-    columnId,
-  )
+  const {
+    columnTasks,
+    refetch: columnTasksRefetch,
+    isLoading: columnTasksLoad,
+    isRefetching: columnsTasksRefetching,
+  } = useColumnTasks(selectedBoard!, columnId)
+
+  const showColumnSkeleton =
+    columnTasksLoad ||
+    (columnTasks && columnTasks!.length === 0 && columnsTasksRefetching)
 
   useEffect(() => {
     columnTasksRefetch()
@@ -61,43 +68,49 @@ export default function KanbanTaskColumnCard({
         </h2>
       </div>
       <div className="w-[280px] grow pb-6">
-        <Droppable droppableId={columnId} key={columnId}>
-          {(provided, snapshot) => {
-            return (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className={clsx(
-                  'w-full h-full flex flex-col grow',
-                  snapshot.isDraggingOver && '',
-                )}
-              >
-                {column.items.map((item: Task, index: number) => {
-                  return (
-                    <Draggable
-                      // isDragDisabled={promiseCounter !== 0}
-                      key={item.id}
-                      draggableId={item.id}
-                      index={index}
-                    >
-                      {(provided, snapshot) => {
-                        return (
-                          <KanbanTaskCard
-                            columnId={columnId}
-                            provided={provided}
-                            snapshot={snapshot}
-                            task={item}
-                          ></KanbanTaskCard>
-                        )
-                      }}
-                    </Draggable>
-                  )
-                })}
-                {provided.placeholder}
-              </div>
-            )
-          }}
-        </Droppable>
+        {!showColumnSkeleton ? (
+          <Droppable droppableId={columnId} key={columnId}>
+            {(provided, snapshot) => {
+              return (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  className={clsx(
+                    'w-full h-full flex flex-col grow',
+                    snapshot.isDraggingOver && '',
+                  )}
+                >
+                  {column.items.map((item: Task, index: number) => {
+                    return (
+                      <Draggable
+                        // isDragDisabled={promiseCounter !== 0}
+                        key={item.id}
+                        draggableId={item.id}
+                        index={index}
+                      >
+                        {(provided, snapshot) => {
+                          return (
+                            <KanbanTaskCard
+                              columnId={columnId}
+                              provided={provided}
+                              snapshot={snapshot}
+                              task={item}
+                            ></KanbanTaskCard>
+                          )
+                        }}
+                      </Draggable>
+                    )
+                  })}
+                  {provided.placeholder}
+                </div>
+              )
+            }}
+          </Droppable>
+        ) : (
+          Array.from([1]).map((key) => {
+            return <KanbanTaskCardSkeleton key={key} />
+          })
+        )}
       </div>
     </div>
   )
