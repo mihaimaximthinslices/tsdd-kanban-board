@@ -64,7 +64,16 @@ export default function KanbanTaskColumnCard({
     >
       <div className="flex justify-between w-full">
         <h2 className="font-plusJSans text-white4 tracking-headingS text-headingS w-full text-left cursor-default">
-          {`${column.name} (${taskStatus[columnId].items.length})`}
+          {!columnsTasksRefetching ? (
+            `${column.name} (` + taskStatus[columnId].items.length + ')'
+          ) : (
+            <div
+              role="status"
+              className="w-full animate-pulse flex flex-col gap-2"
+            >
+              <div className=" bg-white shadow-sm rounded-full dark:bg-black1 w-24 h-4"></div>
+            </div>
+          )}
         </h2>
       </div>
       <div className="w-[280px] grow pb-6">
