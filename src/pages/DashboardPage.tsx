@@ -16,6 +16,7 @@ import { BoardMenuModal } from '../components/BoardMenuModal.tsx'
 import { DeleteBoardModal } from '../components/DeleteBoardModal.tsx'
 import { DeleteColumnModal } from '../components/DeleteColumnModal.tsx'
 import { AddNewTaskModal } from '../components/AddNewTaskModal.tsx'
+import { DeleteTaskModal } from '../components/DeleteTaskModal.tsx'
 
 export default function DashboardPage() {
   useThemeSelector()
@@ -29,6 +30,7 @@ export default function DashboardPage() {
     showBoardMenuModal,
     showDeleteColumnModal,
     showAddNewTaskModal,
+    showDeleteTaskModal,
   } = useContext(DashboardContext)
 
   const { boards } = useBoards()
@@ -122,6 +124,7 @@ export default function DashboardPage() {
             {showDeleteBoardModal && <DeleteBoardModal />}
             {showDeleteColumnModal && <DeleteColumnModal />}
             {showAddNewTaskModal && <AddNewTaskModal />}
+            {showDeleteTaskModal && <DeleteTaskModal />}
           </div>
         </div>
       </div>
