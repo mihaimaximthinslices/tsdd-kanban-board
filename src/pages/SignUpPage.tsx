@@ -60,6 +60,9 @@ export default function SignUpPage() {
           email: 'User already exists',
         }))
       }
+      if (error.response!.status === 504) {
+        navigate('/')
+      }
     }
   }
 
