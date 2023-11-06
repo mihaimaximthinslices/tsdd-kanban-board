@@ -52,6 +52,7 @@ export default function SignUpPage() {
         .then(() => setRequestLoading(false))
       navigate('/')
     } catch (err) {
+      setRequestLoading(false)
       const error = err as AxiosError
       if (error.response!.status === 409) {
         setSignUpFormDataErrors((old) => ({
