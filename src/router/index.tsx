@@ -24,4 +24,9 @@ export const routes = [
     component: <AuthRedirect />,
     auth: false,
   },
+  {
+    path: '/*',
+    component: <DashboardPage />,
+    auth: true,
+  },
 ]
