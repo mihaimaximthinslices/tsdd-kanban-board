@@ -1,5 +1,6 @@
 import { useUser } from '../hooks/useUser.tsx'
 import { useNavigate, useParams } from 'react-router-dom'
+import axios from 'axios'
 
 export default function AuthRedirect() {
   const { route } = useParams()
@@ -12,7 +13,12 @@ export default function AuthRedirect() {
       navigate('/sign-in')
     } else {
       if (route === 'dashboard') {
-        navigate('/')
+        axios
+          .patch('/api/boards/populate')
+          .then(() => navigate('/'))
+          .catch(() => {
+            navigate('/')
+          })
       } else {
         navigate('/' + route)
       }

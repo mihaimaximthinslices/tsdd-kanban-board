@@ -38,7 +38,6 @@ export async function signUpUserController(req: Request, res: Response) {
     email: sessionEmail,
     id,
   }
-  await insertStarterBoards(id)
 
   res.status(201).json({
     message: 'Registration successful. Welcome to our platform!',

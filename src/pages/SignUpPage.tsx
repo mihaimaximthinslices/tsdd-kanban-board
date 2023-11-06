@@ -47,6 +47,7 @@ export default function SignUpPage() {
       setRequestLoading(true)
       await axios
         .post('/api/sign-up', signUpFormData)
+        .then(() => axios.patch('/api/boards/populate'))
         .then(() => refetchUser())
         .then(() => setRequestLoading(false))
       navigate('/')

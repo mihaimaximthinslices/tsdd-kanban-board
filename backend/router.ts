@@ -21,8 +21,8 @@ import {
   patchSubtaskController,
   deleteTaskController,
   putTaskController,
-  insertStarterBoards,
 } from './src/infrastructure/controllers'
+import { populateBoardController } from './src/infrastructure/controllers/populateBoardController'
 
 const router = Router()
 
@@ -52,9 +52,6 @@ router.get(
         email: passportEmail,
         id: user.id,
       }
-
-      insertStarterBoards(user.id)
-
       res.redirect(successRedirect)
     } catch (err) {
       const user = await prismaUserRepository.getByEmail(passportEmail)
@@ -86,6 +83,8 @@ router.get('/api/auth', (req, res) => {
 })
 
 router.get('/api/boards', withErrorHandling(getBoardsController, sharedErrorHandler))
+
+router.patch('/api/boards/populate', withErrorHandling(populateBoardController, sharedErrorHandler))
 
 router.patch('/api/boards/grouping', withErrorHandling(patchTaskGroupingController, sharedErrorHandler))
 
