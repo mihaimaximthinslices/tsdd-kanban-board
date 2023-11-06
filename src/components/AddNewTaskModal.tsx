@@ -391,6 +391,7 @@ export function AddNewTaskModal() {
                     key={column.id}
                     onClick={() => {
                       setSelectedColumnOption(column)
+                      setShowColumnOptions(false)
                     }}
                     className="relative font-plusJSans text-bodyL bg-white2 w-full pt-2 pb-2 pl-4 text-black hover:bg-white3 text-left  flex items-center dark:text-white dark:bg-black1 dark:hover:bg-blue1"
                   >
