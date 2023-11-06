@@ -8,7 +8,7 @@ import {
 } from '../../repositorties'
 import { DateGenerator } from '../../types/DateGenerator'
 import { EntityNotFoundError, InvalidInputError, UnauthorizedError } from '../../types/Errors'
-import { Subtask, SubtaskStatus } from '../../entities'
+import { Subtask, SubtaskStatus, Task } from '../../entities'
 import { UuidGenerator } from '../../types/UUIDGenerator'
 
 type Params = {
@@ -45,7 +45,7 @@ export const updateTaskUsecase: UseCaseConstructor<Params, Request, void> = (par
     const { userId, taskId, subtasksIds, subtasks, taskTitle, taskDescription, columnId } = request
     await validateUser(userId)
     const task = await validateTask(taskId)
-    const column = await validateColumn(task.columnId, columnId)
+    const column = await validateColumn(task.columnId, columnId, task)
 
     await validateBoard(userId, column.boardId)
 
@@ -94,7 +94,7 @@ export const updateTaskUsecase: UseCaseConstructor<Params, Request, void> = (par
     return task
   }
 
-  async function validateColumn(columnId: string, targetColumnId: string) {
+  async function validateColumn(columnId: string, targetColumnId: string, task: Task) {
     const column = await boardColumnRepository.getById(columnId)
     if (!column) {
       throw new EntityNotFoundError(columnId)
@@ -108,6 +108,10 @@ export const updateTaskUsecase: UseCaseConstructor<Params, Request, void> = (par
 
     if (targetColumn.boardId !== column.boardId) {
       throw new UnauthorizedError(targetColumn.id)
+    } else {
+      // remake ordering, already tested
+      await modifySourceColumn(task)
+      await modifyTargetColumn(task, targetColumnId, null)
     }
 
     return column
@@ -183,5 +187,89 @@ export const updateTaskUsecase: UseCaseConstructor<Params, Request, void> = (par
     )
 
     return [deletePromises, updatePromises, insertPromises]
+  }
+  async function modifySourceColumn(task: Task) {
+    const NOW = dateGenerator.now()
+
+    if (task.taskBeforeId) {
+      const previousTask = await taskRepository.getById(task.taskBeforeId)
+
+      await taskRepository.save({
+        ...previousTask!,
+        updatedAt: NOW,
+        taskAfterId: task.taskAfterId,
+      })
+    }
+
+    if (task.taskAfterId) {
+      const afterTask = await taskRepository.getById(task.taskAfterId)
+
+      await taskRepository.save({
+        ...afterTask!,
+        taskBeforeId: task.taskBeforeId,
+        updatedAt: NOW,
+      })
+    }
+
+    const intermediateColumn = uuidGenerator.next()
+    await taskRepository.save({
+      ...task,
+      columnId: intermediateColumn,
+      taskBeforeId: null,
+      taskAfterId: null,
+      updatedAt: NOW,
+    })
+  }
+
+  async function modifyTargetColumn(task: Task, columnId: string, afterTask: Task | null) {
+    const NOW = dateGenerator.now()
+    if (!afterTask) {
+      const columnTasks = await taskRepository.getByColumnId(columnId)
+
+      const firstTask = columnTasks.find((t) => t.taskBeforeId === null)
+
+      if (firstTask) {
+        await taskRepository.save({
+          ...firstTask,
+          taskBeforeId: task.id,
+          updatedAt: NOW,
+        })
+
+        await taskRepository.save({
+          ...task,
+          columnId,
+          taskAfterId: firstTask.id,
+          taskBeforeId: null,
+          updatedAt: NOW,
+        })
+      } else {
+        await taskRepository.save({
+          ...task,
+          columnId,
+          taskBeforeId: null,
+          taskAfterId: null,
+          updatedAt: NOW,
+        })
+      }
+      return
+    }
+
+    if (afterTask) {
+      const nextBackup = afterTask.taskAfterId
+
+      await taskRepository.save({
+        ...afterTask,
+        taskAfterId: task.id,
+        updatedAt: NOW,
+      })
+
+      await taskRepository.save({
+        ...task,
+        taskBeforeId: afterTask.id,
+        taskAfterId: nextBackup ? nextBackup : null,
+        columnId,
+        updatedAt: NOW,
+      })
+    }
   }
 }

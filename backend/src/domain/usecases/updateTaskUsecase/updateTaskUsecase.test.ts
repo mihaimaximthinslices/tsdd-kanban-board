@@ -112,9 +112,31 @@ describe('updateTaskUsecase', () => {
         id: taskId,
       })
 
+      const previousTask = taskBuilder.build({
+        taskAfterId: task.id,
+        columnId: targetColumnId,
+        taskBeforeId: null,
+      })
+
+      const newAfterTask = taskBuilder.build({
+        columnId: targetColumnId,
+        taskBeforeId: task.id,
+        taskAfterId: null,
+      })
       beforeEach(() => {
+        taskRepository.getById.mockReset()
+        taskRepository.getById
+          .mockResolvedValueOnce(task)
+          .mockResolvedValueOnce(previousTask)
+          .mockResolvedValueOnce(newAfterTask)
+
+        taskRepository.getByColumnId.mockResolvedValue([])
+
+        task.taskBeforeId = null
+        task.taskAfterId = null
         taskRepository.getById.mockResolvedValue(task)
       })
+
       describe('given the column does not exist', () => {
         beforeEach(() => {
           boardColumnRepository.getById.mockResolvedValue(null)

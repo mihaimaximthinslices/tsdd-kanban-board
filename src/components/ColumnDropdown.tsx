@@ -65,29 +65,31 @@ export default function ColumnDropdown({
               <button
                 key={column.id}
                 onClick={() => {
+                  if (column.id !== selectedColumnOption.id) {
+                    addToPromiseQueue(
+                      () =>
+                        new Promise<void>((resolve, reject) => {
+                          axios
+                            .patch('/api/boards/grouping', {
+                              taskId: selectedTask,
+                              to: {
+                                columnId: column.id,
+                                afterTaskId: null,
+                              },
+                            })
+                            .then(() => {
+                              taskRefetch().then(() => {
+                                boarColumnsRefetch().then(() =>
+                                  subtaskRefetch().then(() => resolve()),
+                                )
+                              })
+                            })
+                            .catch((err: unknown) => reject(err))
+                        }),
+                    )
+                  }
                   setSelectedColumnOption(column)
                   setShowColumnOptions(false)
-                  addToPromiseQueue(
-                    () =>
-                      new Promise<void>((resolve, reject) => {
-                        axios
-                          .patch('/api/boards/grouping', {
-                            taskId: selectedTask,
-                            to: {
-                              columnId: column.id,
-                              afterTaskId: null,
-                            },
-                          })
-                          .then(() => {
-                            taskRefetch().then(() => {
-                              boarColumnsRefetch().then(() =>
-                                subtaskRefetch().then(() => resolve()),
-                              )
-                            })
-                          })
-                          .catch((err: unknown) => reject(err))
-                      }),
-                  )
                 }}
                 className="relative font-plusJSans text-bodyL bg-white2 w-full pt-2 pb-2 pl-4 text-black hover:bg-white3 text-left  flex items-center dark:text-white dark:bg-black1 dark:hover:bg-blue1"
               >
