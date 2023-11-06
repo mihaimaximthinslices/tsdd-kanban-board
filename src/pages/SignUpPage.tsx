@@ -47,10 +47,14 @@ export default function SignUpPage() {
       setRequestLoading(true)
       await axios
         .post('/api/sign-up', signUpFormData)
-        .then(() => axios.patch('/api/boards/populate'))
-        .then(() => refetchUser())
-        .then(() => setRequestLoading(false))
-      navigate('/')
+        .then(() => {
+          refetchUser()
+        })
+        .then(() => {
+          setRequestLoading(false)
+          navigate('/')
+          axios.patch('/api/boards/populate').catch(() => {})
+        })
     } catch (err) {
       setRequestLoading(false)
       const error = err as AxiosError
