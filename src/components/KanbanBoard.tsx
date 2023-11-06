@@ -111,7 +111,7 @@ function KanbanBoard({
         <DragDropContext
           onDragEnd={(result) => onDragEnd(result, taskStatus, setTaskStatus)}
         >
-          {Object.entries(taskStatus).map(([columnId, column]) => {
+          {Object.entries(taskStatus).map(([columnId, column], index) => {
             return (
               <KanbanTaskColumnCard
                 taskStatus={taskStatus}
@@ -119,6 +119,7 @@ function KanbanBoard({
                 key={columnId}
                 columnId={columnId}
                 column={column}
+                index={index}
               ></KanbanTaskColumnCard>
             )
           })}

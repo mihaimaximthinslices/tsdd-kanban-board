@@ -10,6 +10,7 @@ import { clsx } from 'clsx'
 import axios, { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '../hooks/useUser.tsx'
+import { LoadingSpinnerCustom } from '../components/LoadingSpinner.tsx'
 
 type SignUpUserFormData = {
   email: string
@@ -38,11 +39,16 @@ export default function SignUpPage() {
     confirmPassword: false,
   })
 
+  const [requestLoading, setRequestLoading] = useState(false)
+
   async function handleSubmit() {
     if (!(Object.values(errors).length === 0)) return
     try {
-      await axios.post('/api/sign-up', signUpFormData)
-      refetchUser()
+      setRequestLoading(true)
+      await axios
+        .post('/api/sign-up', signUpFormData)
+        .then(() => refetchUser())
+        .then(() => setRequestLoading(false))
       navigate('/')
     } catch (err) {
       const error = err as AxiosError
@@ -293,13 +299,19 @@ export default function SignUpPage() {
                 </div>
 
                 <div className="mt-6">
-                  <button
-                    type="submit"
-                    data-cy="create-account-button"
-                    className="font-plusJSans text-headingM bg-blue2 p-2 pt-[10px] pb-[10px] text-white rounded-md w-full hover:bg-blue1 flex items-center justify-center"
-                  >
-                    Create new account
-                  </button>
+                  {!requestLoading ? (
+                    <button
+                      type="submit"
+                      data-cy="create-account-button"
+                      className="font-plusJSans text-headingM bg-blue2 p-2 pt-[10px] pb-[10px] text-white rounded-md w-full hover:bg-blue1 flex items-center justify-center"
+                    >
+                      Create new account
+                    </button>
+                  ) : (
+                    <div className="font-plusJSans text-headingM bg-blue2 p-2 pt-[10px] pb-[10px] text-white rounded-md w-full hover:bg-blue1 flex items-center justify-center">
+                      <LoadingSpinnerCustom message={'Creating account...'} />
+                    </div>
+                  )}
                 </div>
               </form>
               <hr className="border-gray2 mb-4 w-full mt-4 dark:border-black1" />

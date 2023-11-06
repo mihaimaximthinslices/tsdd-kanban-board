@@ -7,13 +7,13 @@ const useAxiosIntercept = (urlToTrack: string) => {
   useEffect(() => {
     const requestInterceptor = axios.interceptors.request.use(
       (config) => {
-        if (config.url === urlToTrack) {
+        if (config.url!.includes(urlToTrack)) {
           setIsMakingRequest(true)
         }
         return config
       },
       (error) => {
-        if (error.config.url === urlToTrack) {
+        if (error.config.url.includes(urlToTrack)) {
           setIsMakingRequest(false)
         }
         return Promise.reject(error)
@@ -22,13 +22,13 @@ const useAxiosIntercept = (urlToTrack: string) => {
 
     const responseInterceptor = axios.interceptors.response.use(
       (response) => {
-        if (response.config.url === urlToTrack) {
+        if (response.config.url!.includes(urlToTrack)) {
           setIsMakingRequest(false)
         }
         return response
       },
       (error) => {
-        if (error.config.url === urlToTrack) {
+        if (error.config.url.includes(urlToTrack)) {
           setIsMakingRequest(false)
         }
         return Promise.reject(error)

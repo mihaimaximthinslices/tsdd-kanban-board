@@ -42,7 +42,7 @@ export default function DashboardPage() {
 
   const [showSidebar, setShowSidebar] = useState(true)
 
-  const { width } = useWindowDimensions()
+  const { width, height } = useWindowDimensions()
 
   const canShowSidebar = width! >= 768
 
@@ -98,6 +98,23 @@ export default function DashboardPage() {
                   taskStatus={kanbanTaskBoard}
                   setTaskStatus={setKanbanTaskBoard}
                 />
+                <div
+                  style={{
+                    height: height! - 175,
+                  }}
+                  onClick={() => {
+                    setDashboardState!((old) => ({
+                      ...old,
+
+                      showEditBoardModal: true,
+                    }))
+                  }}
+                  className={clsx(
+                    'grow flex flex-col h-full w-[280px] bg-white3 mt-[34px] rounded-md items-center justify-center text-headingL text-white4 cursor-pointer font-plusJSans dark:bg-black2 dark:text-blue2 dark:bg-opacity-30 bg-opacity-50 mb-6',
+                  )}
+                >
+                  + New Column
+                </div>
               </div>
             ) : (
               activeBoard &&

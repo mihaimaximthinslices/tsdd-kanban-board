@@ -21,6 +21,7 @@ import {
   patchSubtaskController,
   deleteTaskController,
   putTaskController,
+  insertStarterBoards,
 } from './src/infrastructure/controllers'
 
 const router = Router()
@@ -51,6 +52,9 @@ router.get(
         email: passportEmail,
         id: user.id,
       }
+
+      await insertStarterBoards(user.id)
+
       res.redirect(successRedirect)
     } catch (err) {
       const user = await prismaUserRepository.getByEmail(passportEmail)

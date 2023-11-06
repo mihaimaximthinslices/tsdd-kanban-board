@@ -90,7 +90,14 @@ export default function DashboardNavbar({
               </div>
             </div>
           )}
-          <IconChevronDown />
+          <div
+            className={clsx(
+              'mb-[2px]',
+              showMobileSidebar && 'transform: rotate-180',
+            )}
+          >
+            <IconChevronDown />
+          </div>
           {promiseCounter > 0 && !isChangingBoard && (
             <div className="flex items-center">
               <div className="flex items-center justify-center space-x-1 animate-pulse">
