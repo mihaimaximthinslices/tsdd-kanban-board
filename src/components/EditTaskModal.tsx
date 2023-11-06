@@ -69,7 +69,7 @@ export function EditTaskModal() {
 
   const { task } = useTask(selectedTask!)
 
-  const { subtasks } = useSubtasks(task!.id)
+  const { subtasks, refetch: subtasksRefetch } = useSubtasks(task!.id)
 
   const [selectedColumnOption, setSelectedColumnOption] = useState(
     boardColumns!.find((col) => col.id === task!.columnId),
@@ -210,11 +210,13 @@ export function EditTaskModal() {
           setRequestState((prev) => ({ ...prev, loading: true }))
           await axios.put(`/api/tasks/${selectedTask}`, payload)
           boardColumnsRefetch().then(() => {
-            setDashboardState!((old) => ({
-              ...old,
-              showEditTaskModal: false,
-            }))
-            setRequestState((prev) => ({ ...prev, loading: false }))
+            subtasksRefetch().then(() => {
+              setDashboardState!((old) => ({
+                ...old,
+                showEditTaskModal: false,
+              }))
+              setRequestState((prev) => ({ ...prev, loading: false }))
+            })
           })
         } catch (err) {
           setRequestState({ loading: false, error: true })
