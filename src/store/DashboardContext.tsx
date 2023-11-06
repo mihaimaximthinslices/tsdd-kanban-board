@@ -16,6 +16,7 @@ type DashboardStateType = {
   selectedBoard: string | null
   selectedTask: string | null
   kanbanBoardItemsHeight: number | null
+  loadingColumns: Record<string, boolean>
   setDashboardState?: React.Dispatch<React.SetStateAction<DashboardStateType>>
   addToPromiseQueue: (operation: () => Promise<void>) => Promise<void>
   promiseCounter: number
@@ -35,6 +36,7 @@ export const DashboardState = {
   selectedBoard: null,
   selectedTask: null,
   isChangingBoard: false,
+  loadingColumns: {},
   addToPromiseQueue: () => Promise.resolve(),
   promiseCounter: 0,
 }
@@ -85,6 +87,7 @@ export const DashboardContextWrapper = ({
         selectedTask: dashboardState.selectedTask,
         isChangingBoard: dashboardState.isChangingBoard,
         showEditTaskModal: dashboardState.showEditTaskModal,
+        loadingColumns: dashboardState.loadingColumns,
         addToPromiseQueue: addPromise,
         promiseCounter: promiseCounter,
         setDashboardState,

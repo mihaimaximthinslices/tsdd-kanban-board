@@ -9,7 +9,6 @@ import React, { useContext, useEffect } from 'react'
 import { DashboardContext } from '../store/DashboardContext.tsx'
 import { useBoardColumns } from '../hooks/useBoardColumns.tsx'
 import { KanbanTaskCardSkeleton } from './KanbanTaskCardSkeleton.tsx'
-import useAxiosIntercept from '../hooks/useAxiosIntercept.tsx'
 
 const columnBulletPointColors = [
   '#49C4E5',
@@ -36,13 +35,10 @@ export default function KanbanTaskColumnCard({
 }) {
   const { height } = useWindowDimensions()
 
-  const { selectedBoard } = useContext(DashboardContext)
+  const { selectedBoard, setDashboardState, loadingColumns } =
+    useContext(DashboardContext)
 
-  const { isRefetching } = useBoardColumns(selectedBoard!)
-
-  const { isMakingRequest: isFetchingColumnTasks } = useAxiosIntercept(
-    `/api/boards/${selectedBoard!}/columns/*`,
-  )
+  const { isRefetching, boardColumns } = useBoardColumns(selectedBoard!)
 
   const {
     columnTasks,
@@ -54,6 +50,19 @@ export default function KanbanTaskColumnCard({
   const showColumnSkeleton =
     columnTasksLoad ||
     (columnTasks && columnTasks!.length === 0 && columnsTasksRefetching)
+
+  useEffect(() => {
+    setDashboardState!((old) => ({
+      ...old,
+      loadingColumns: {
+        ...old.loadingColumns,
+        [column.id]: !!showColumnSkeleton,
+      },
+    }))
+  }, [showColumnSkeleton])
+
+  const isDragDisabled =
+    !!boardColumns && !!boardColumns.find((col) => loadingColumns[col.id])
 
   useEffect(() => {
     columnTasksRefetch()
@@ -123,7 +132,7 @@ export default function KanbanTaskColumnCard({
                   {column.items.map((item: Task, index: number) => {
                     return (
                       <Draggable
-                        isDragDisabled={isFetchingColumnTasks}
+                        isDragDisabled={isDragDisabled}
                         key={item.id}
                         draggableId={item.id}
                         index={index}
