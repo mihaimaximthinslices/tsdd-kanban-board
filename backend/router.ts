@@ -53,7 +53,7 @@ router.get(
         id: user.id,
       }
 
-      await insertStarterBoards(user.id)
+      insertStarterBoards(user.id)
 
       res.redirect(successRedirect)
     } catch (err) {
