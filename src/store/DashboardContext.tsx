@@ -12,6 +12,7 @@ type DashboardStateType = {
   showAddNewTaskModal: boolean
   showViewTaskModal: boolean
   showDeleteTaskModal: boolean
+  showEditTaskModal: boolean
   selectedBoard: string | null
   selectedTask: string | null
   kanbanBoardItemsHeight: number | null
@@ -28,6 +29,7 @@ export const DashboardState = {
   showDeleteColumnModal: false,
   showAddNewTaskModal: false,
   showViewTaskModal: false,
+  showEditTaskModal: false,
   showDeleteTaskModal: false,
   kanbanBoardItemsHeight: null,
   selectedBoard: null,
@@ -82,6 +84,7 @@ export const DashboardContextWrapper = ({
         selectedBoard: dashboardState.selectedBoard,
         selectedTask: dashboardState.selectedTask,
         isChangingBoard: dashboardState.isChangingBoard,
+        showEditTaskModal: dashboardState.showEditTaskModal,
         addToPromiseQueue: addPromise,
         promiseCounter: promiseCounter,
         setDashboardState,

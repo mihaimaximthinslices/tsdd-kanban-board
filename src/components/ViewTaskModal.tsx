@@ -96,6 +96,14 @@ function TaskView() {
                 <div className="absolute w-[120px] -right-[40px] md:-right-[96px] md:w-[192px]">
                   <div className="bg-white p-4 dark:bg-black3 text-white flex flex-col items-center gap-4 shadow-md rounded-md dark:border dark:border-black1">
                     <button
+                      onClick={() => {
+                        setShowTaskOptions(false)
+                        setDashboardState!((old) => ({
+                          ...old,
+                          showViewTaskModal: false,
+                          showEditTaskModal: true,
+                        }))
+                      }}
                       id="edit-task-button"
                       className="w-full text-start font-plusJSans text-white4 text-bodyL hover:underline"
                     >

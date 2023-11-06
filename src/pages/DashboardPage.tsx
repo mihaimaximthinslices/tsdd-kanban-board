@@ -17,6 +17,7 @@ import { DeleteBoardModal } from '../components/DeleteBoardModal.tsx'
 import { DeleteColumnModal } from '../components/DeleteColumnModal.tsx'
 import { AddNewTaskModal } from '../components/AddNewTaskModal.tsx'
 import { DeleteTaskModal } from '../components/DeleteTaskModal.tsx'
+import { EditTaskModal } from '../components/EditTaskModal.tsx'
 
 export default function DashboardPage() {
   useThemeSelector()
@@ -32,6 +33,7 @@ export default function DashboardPage() {
     showAddNewTaskModal,
     showDeleteTaskModal,
     isChangingBoard,
+    showEditTaskModal,
   } = useContext(DashboardContext)
 
   const { boards } = useBoards()
@@ -43,6 +45,7 @@ export default function DashboardPage() {
   const { width } = useWindowDimensions()
 
   const canShowSidebar = width! >= 768
+
   const [kanbanTaskBoard, setKanbanTaskBoard] = useState<KanbanTaskBoard>({})
 
   const { boardColumns } = useBoardColumns(selectedBoard!)
@@ -127,6 +130,7 @@ export default function DashboardPage() {
             {showDeleteColumnModal && <DeleteColumnModal />}
             {showAddNewTaskModal && <AddNewTaskModal />}
             {showDeleteTaskModal && <DeleteTaskModal />}
+            {showEditTaskModal && <EditTaskModal />}
           </div>
         </div>
       </div>

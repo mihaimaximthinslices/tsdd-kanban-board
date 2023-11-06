@@ -24,7 +24,8 @@ export default function DashboardNavbar({
   const { boards } = useBoards()
   const { promiseCounter } = useContext(DashboardContext)
 
-  const { selectedBoard, setDashboardState } = useContext(DashboardContext)
+  const { selectedBoard, setDashboardState, isChangingBoard } =
+    useContext(DashboardContext)
 
   const foundSelectedBoard =
     boards && boards.find((board) => board.id === selectedBoard)
@@ -71,16 +72,26 @@ export default function DashboardNavbar({
             !showMobileSidebar ? 'cursor-pointer' : 'cursor-default',
           )}
         >
-          <p
-            className={clsx(
-              'font-plusJSans text-headingL text-black dark:text-white break-words max-w-[140px] overflow-x-auto max-h-[22px] mb-[10px] overflow-y-hidden ',
-              !foundSelectedBoard ? 'text-blue2 dark:text-blue2' : '',
-            )}
-          >
-            {foundSelectedBoard ? foundSelectedBoard.boardName : 'Boards'}
-          </p>
+          {!isChangingBoard ? (
+            <p
+              className={clsx(
+                'font-plusJSans text-headingL text-black dark:text-white break-words max-w-[140px] overflow-x-auto max-h-[26px] mt-1 mb-[10px] overflow-y-hidden ',
+                !foundSelectedBoard ? 'text-blue2 dark:text-blue2' : '',
+              )}
+            >
+              {foundSelectedBoard ? foundSelectedBoard.boardName : 'Boards'}
+            </p>
+          ) : (
+            <div className="flex items-center">
+              <div className="flex items-center justify-center space-x-1 animate-pulse">
+                <span className="font-plusJSans text-headingL text-blue2">
+                  Fetching...
+                </span>
+              </div>
+            </div>
+          )}
           <IconChevronDown />
-          {promiseCounter > 0 && (
+          {promiseCounter > 0 && !isChangingBoard && (
             <div className="flex items-center">
               <div className="flex items-center justify-center space-x-1 animate-pulse">
                 <span className="font-plusJSans text-bodyM text-blue2">
@@ -104,10 +115,18 @@ export default function DashboardNavbar({
           )}
         </div>
         <div className=" gap-2 hidden md:flex items-center">
-          <span className="font-plusJSans text-headingL text-black dark:text-white">
-            {foundSelectedBoard ? foundSelectedBoard.boardName : ''}
-          </span>
-          {promiseCounter > 0 && (
+          {!isChangingBoard ? (
+            <span className="font-plusJSans text-headingL text-black dark:text-white">
+              {foundSelectedBoard ? foundSelectedBoard.boardName : ''}
+            </span>
+          ) : (
+            <div className="flex items-center justify-center space-x-1 animate-pulse">
+              <span className="font-plusJSans text-headingL  text-blue2">
+                Fetching...
+              </span>
+            </div>
+          )}
+          {promiseCounter > 0 && !isChangingBoard && (
             <div className="flex items-center">
               <div className="flex items-center justify-center space-x-1 animate-pulse">
                 <span className="font-plusJSans text-headinM text-blue2">
