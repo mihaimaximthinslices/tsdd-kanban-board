@@ -109,17 +109,24 @@ export const updateBoardUsecase: UseCaseConstructor<Params, Request, void> = (re
       usedColumnNames.push(columnNames[columnIds.indexOf(column.id)]!)
     })
 
+    const dates: Date[] = []
     const columnsCreateList = columnNames
       .filter((columnName) => {
-        return !usedColumnNames.includes(columnName)
+        if (!usedColumnNames.includes(columnName)) {
+          dates.push(dateGenerator.now())
+          return true
+        }
+        return false
       })
-      .map((newColumnName): BoardColumn => {
+      .map((newColumnName, index): BoardColumn => {
+        const now = dateGenerator.now()
+        now.setSeconds(now.getSeconds() + index)
         return {
           id: uuidGenerator.next(),
           boardId,
           columnName: newColumnName,
-          createdAt: NOW,
-          updatedAt: NOW,
+          createdAt: now,
+          updatedAt: now,
         }
       })
 

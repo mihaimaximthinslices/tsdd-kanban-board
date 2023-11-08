@@ -11,8 +11,6 @@ export async function populateBoardController(req: Request, res: Response) {
 
   const boards = await prismaBoardRepository.getByUserId(userId)
 
-  console.log(boards)
-
   if (boards.length > 0) {
     throw new DuplicateEntityError('populate')
   }

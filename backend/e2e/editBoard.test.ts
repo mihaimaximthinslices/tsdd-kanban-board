@@ -114,12 +114,7 @@ describe('PUT /api/boards/:boardId', () => {
 
     describe('given the request body has the right format', () => {
       it('should return 204 status and update the board', async () => {
-        const response = await request(app)
-          .put(`/api/boards/${testBoardId}`)
-          .set('Cookie', [cookie])
-          .send(requestData)
-          .expect(204)
-        console.log(response.error)
+        await request(app).put(`/api/boards/${testBoardId}`).set('Cookie', [cookie]).send(requestData).expect(204)
       }, 5000)
     })
   })

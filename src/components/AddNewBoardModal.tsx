@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { DashboardContext } from '../store/DashboardContext.tsx'
 import { PortalModal } from '../modal/PortalModal.tsx'
 import { clsx } from 'clsx'
@@ -10,11 +10,13 @@ import axios from 'axios'
 import { AxiosError } from 'axios'
 import { useBoards } from '../hooks/useBoards.tsx'
 import { LoadingSpinner } from './LoadingSpinner.tsx'
+import { scrollToBottomOfElement } from '../helpers/scroll.tsx'
 
 export type BoardStateType = {
   name: string
   columns: string[]
   columnIds: string[]
+  callback: (() => void) | null
 }
 
 export type BoardStateTypeErrors = {
@@ -68,6 +70,7 @@ export function AddNewBoardModal() {
     name: '',
     columns: ['Todo', 'Doing'],
     columnIds: [uuidv4(), uuidv4()],
+    callback: () => {},
   })
 
   const [boardErrors, setBoardErrors] = useState<BoardStateTypeErrors>({
@@ -107,11 +110,20 @@ export function AddNewBoardModal() {
     })
   }
 
+  useEffect(() => {
+    if (boardState.callback) {
+      boardState.callback()
+
+      setBoardState((old) => ({ ...old, callback: null }))
+    }
+  }, [boardState.columns])
+
   function addNewColumn() {
     setBoardState((old) => ({
       ...old,
       columns: [...old.columns, ''],
       columnIds: [...old.columnIds, uuidv4()],
+      callback: () => scrollToBottomOfElement('add-new-board-modal'),
     }))
     setBoardErrors({
       columnErrors: {},
@@ -225,7 +237,13 @@ export function AddNewBoardModal() {
         setDashboardState!((old) => ({ ...old, showAddNewBoardModal: false }))
       }}
     >
-      <div className="min-w-[343px] md:w-[480px] bg-white dark:bg-black2 rounded-md flex flex-col p-8 gap-6 shadow-md dark:border border-black1">
+      <div
+        id="add-new-board-modal"
+        style={{
+          maxHeight: '90vh',
+        }}
+        className="min-w-[343px] md:w-[480px] bg-white dark:bg-black2 rounded-md flex flex-col p-8 gap-6 shadow-md dark:border border-black1 overflow-y-auto"
+      >
         <div>
           <h1 className="font-plusJSans text-headingL text-black dark:text-white">
             Add New Board
@@ -243,7 +261,7 @@ export function AddNewBoardModal() {
           <input
             data-cy="board-name-input"
             className={clsx(
-              'pl-4 pb-[10px] pt-[10px] border rounded-md text-bodyL dark:bg-black2 dark:text-white dark:border-black1',
+              'pl-4 pb-[10px] pt-[10px] pr-4 border rounded-md text-bodyL dark:bg-black2 dark:text-white dark:border-black1',
             )}
             onChange={(e) => {
               changeBoardName(e.target.value)
@@ -293,7 +311,7 @@ export function AddNewBoardModal() {
                       }}
                       data-cy="column-name-input"
                       className={clsx(
-                        'pl-4 pb-[10px] pt-[10px] border rounded-md text-bodyL dark:bg-black2 dark:text-white dark:border-black1 grow',
+                        'pl-4 pb-[10px] pt-[10px] pr-4 border rounded-md text-bodyL dark:bg-black2 dark:text-white dark:border-black1 grow',
                       )}
                       type="text"
                       id="boardName"

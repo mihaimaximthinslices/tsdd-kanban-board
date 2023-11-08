@@ -170,16 +170,18 @@ export const updateTaskUsecase: UseCaseConstructor<Params, Request, void> = (par
       )
 
     const insertPromises = subtasksToInsert.map(
-      (description) =>
+      (description, index) =>
         new Promise((resolve) => {
+          const now = dateGenerator.now()
+          now.setSeconds(now.getSeconds() + index)
           const id = uuidGenerator.next()
           resolve(
             subtaskRepository.save({
               id,
               taskId,
               description,
-              updatedAt: NOW,
-              createdAt: NOW,
+              updatedAt: now,
+              createdAt: now,
               status: SubtaskStatus.in_progress,
             }),
           )

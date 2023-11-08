@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { DashboardContext } from '../store/DashboardContext.tsx'
 import { PortalModal } from '../modal/PortalModal.tsx'
 import { clsx } from 'clsx'
@@ -10,12 +10,14 @@ import { LoadingSpinner } from './LoadingSpinner.tsx'
 import IconChevronDown from '../svg/icon-chevron-down.tsx'
 import { useBoardColumns } from '../hooks/useBoardColumns.tsx'
 import axios from 'axios'
+import { scrollToBottomOfElement } from '../helpers/scroll.tsx'
 
 export type TaskStateType = {
   title: string
   description: string
   subtasks: string[]
   subtasksIds: string[]
+  callback: (() => void) | null
 }
 
 export type TaskStateTypeErrors = {
@@ -72,6 +74,7 @@ export function AddNewTaskModal() {
     description: '',
     subtasks: [],
     subtasksIds: [],
+    callback: null,
   })
 
   const [taskErrors, setTaskErrors] = useState<TaskStateTypeErrors>({
@@ -123,11 +126,20 @@ export function AddNewTaskModal() {
       ...old,
       subtasks: [...old.subtasks, ''],
       subtasksIds: [...old.subtasksIds, uuidv4()],
+      callback: () =>
+        !showColumOptions && scrollToBottomOfElement('add-new-task-modal'),
     }))
     setTaskErrors({
       subtasksErrors: {},
     })
   }
+
+  useEffect(() => {
+    if (taskState.callback) {
+      taskState.callback()
+      setTaskState((old) => ({ ...old, callback: null }))
+    }
+  }, [taskState.callback])
 
   async function verifyTask(callback?: (boardState: TaskStateType) => void) {
     const errors: Record<string, string> = {}
@@ -216,6 +228,7 @@ export function AddNewTaskModal() {
         style={{
           maxHeight: '90vh',
         }}
+        id={'add-new-task-modal'}
         className="min-w-[343px] md:w-[480px] bg-white dark:bg-black2 rounded-md flex flex-col p-6 gap-6 shadow-md dark:border border-black1 overflow-y-auto"
       >
         <div>
@@ -234,7 +247,7 @@ export function AddNewTaskModal() {
           <input
             data-cy="task-title-input"
             className={clsx(
-              'pl-4 pb-[10px] pt-[10px] border rounded-md text-bodyL dark:bg-black2 dark:text-white dark:border-black1',
+              'pl-4 pb-[10px] pt-[10px] pr-4 border rounded-md text-bodyL dark:bg-black2 dark:text-white dark:border-black1',
             )}
             onChange={(e) => {
               changeTaskTitle(e.target.value)
@@ -315,7 +328,7 @@ export function AddNewTaskModal() {
                       }}
                       data-cy="subtask-name-input"
                       className={clsx(
-                        'pl-4 pb-[10px] pt-[10px] border rounded-md text-bodyL dark:bg-black2 dark:text-white dark:border-black1 grow',
+                        'pl-4 pb-[10px] pt-[10px] pr-4 border rounded-md text-bodyL dark:bg-black2 dark:text-white dark:border-black1 grow',
                       )}
                       type="text"
                       id="boardName"

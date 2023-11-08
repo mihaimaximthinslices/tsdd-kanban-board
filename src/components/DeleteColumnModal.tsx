@@ -42,6 +42,8 @@ export function DeleteColumnModal() {
               ...old,
               showDeleteColumnModal: false,
             }))
+          } else {
+            setSelectedOption(boardColumns![boardColumns!.length - 2])
           }
           setRequestState((prev) => ({ ...prev, loading: false }))
         })
@@ -57,7 +59,12 @@ export function DeleteColumnModal() {
         setDashboardState!((old) => ({ ...old, showDeleteColumnModal: false }))
       }}
     >
-      <div className="bg-white dark:bg-black2 rounded-md p-4 md:pb-10 md:pt-8 md:pl-8 md:pr-8 flex flex-col gap-6 w-[343px] md:w-[480px] shadow-md dark:border border-black1">
+      <div
+        style={{
+          maxHeight: '90vh',
+        }}
+        className="bg-white dark:bg-black2 rounded-md p-4 md:pb-10 md:pt-8 md:pl-8 md:pr-8 flex flex-col gap-6 w-[343px] md:w-[480px] shadow-md dark:border border-black1 overflow-y-auto"
+      >
         <div>
           <h1 className="font-plusJSans text-red2 text-headingL">
             Delete this column?
@@ -65,7 +72,9 @@ export function DeleteColumnModal() {
         </div>
         <div className="flex flex-col gap-4">
           <p className="font-plusJSans text-bodyM text-white4 text-justify">
-            Select the column you want to delete
+            Are you sure you want to delete the {selectedOption.columnName}{' '}
+            column? This action will remove all the tasks and subtasks from the
+            column, it cannot be reversed.
           </p>
           <div
             data-cy="link-card-platform"

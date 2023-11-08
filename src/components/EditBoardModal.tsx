@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { DashboardContext } from '../store/DashboardContext.tsx'
 import { PortalModal } from '../modal/PortalModal.tsx'
 import { clsx } from 'clsx'
@@ -11,11 +11,13 @@ import { AxiosError } from 'axios'
 import { useBoards } from '../hooks/useBoards.tsx'
 import { LoadingSpinner } from './LoadingSpinner.tsx'
 import { useBoardColumns } from '../hooks/useBoardColumns.tsx'
+import { scrollToBottomOfElement } from '../helpers/scroll.tsx'
 
 export type BoardStateType = {
   name: string
   columns: string[]
   columnIds: string[]
+  callback: (() => void) | null
 }
 
 export type BoardStateTypeErrors = {
@@ -82,11 +84,19 @@ export function EditBoardModal() {
     name: selectedBoardData!.boardName,
     columns: boardColumnsNames,
     columnIds: boardColumnIds,
+    callback: null,
   })
 
   const [boardErrors, setBoardErrors] = useState<BoardStateTypeErrors>({
     columnErrors: {},
   })
+
+  useEffect(() => {
+    if (boardState.callback) {
+      boardState.callback()
+      setBoardState((old) => ({ ...old, callback: null }))
+    }
+  }, [boardState.callback])
 
   function changeColumnName(index: number, name: string) {
     setBoardState((old) => ({
@@ -126,6 +136,7 @@ export function EditBoardModal() {
       ...old,
       columns: [...old.columns, ''],
       columnIds: [...old.columnIds, uuidv4()],
+      callback: () => scrollToBottomOfElement('edit-board-modal'),
     }))
     setBoardErrors({
       columnErrors: {},
@@ -246,7 +257,13 @@ export function EditBoardModal() {
         setDashboardState!((old) => ({ ...old, showEditBoardModal: false }))
       }}
     >
-      <div className="min-w-[343px] md:w-[480px] bg-white dark:bg-black2 rounded-md flex flex-col p-8 gap-6 shadow-md dark:border border-black1">
+      <div
+        id="edit-board-modal"
+        style={{
+          maxHeight: '90vh',
+        }}
+        className="min-w-[343px] md:w-[480px] bg-white dark:bg-black2 rounded-md flex flex-col p-8 gap-6 shadow-md dark:border border-black1 overflow-y-auto"
+      >
         <div>
           <h1 className="font-plusJSans text-headingL text-black dark:text-white">
             Edit Board
@@ -264,7 +281,7 @@ export function EditBoardModal() {
           <input
             data-cy="board-name-input"
             className={clsx(
-              'pl-4 pb-[10px] pt-[10px] border rounded-md text-bodyL dark:bg-black2 dark:text-white dark:border-black1',
+              'pl-4 pb-[10px] pt-[10px] pr-4 border rounded-md text-bodyL dark:bg-black2 dark:text-white dark:border-black1',
             )}
             onChange={(e) => {
               changeBoardName(e.target.value)
@@ -286,7 +303,7 @@ export function EditBoardModal() {
             </div>
           )}
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 grow">
           {boardState.columns.length > 0 && (
             <label
               className="font-plusJSans text-bodyM text-black1 dark:text-white"
@@ -295,7 +312,7 @@ export function EditBoardModal() {
               Board Columns
             </label>
           )}
-          <div className="flex flex-col gap-[12px]">
+          <div className="flex flex-col gap-[12px] h-full overflow-y-scroll">
             {boardState.columns.map((name, index) => {
               return (
                 <div
@@ -315,7 +332,7 @@ export function EditBoardModal() {
                       }}
                       data-cy="column-name-input"
                       className={clsx(
-                        'pl-4 pb-[10px] pt-[10px] border rounded-md text-bodyL dark:bg-black2 dark:text-white dark:border-black1 grow',
+                        'pl-4 pb-[10px] pt-[10px] pr-4 border rounded-md text-bodyL dark:bg-black2 dark:text-white dark:border-black1 grow',
                       )}
                       type="text"
                       id="boardName"

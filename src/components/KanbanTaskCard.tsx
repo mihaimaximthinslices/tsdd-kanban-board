@@ -16,7 +16,7 @@ export function KanbanTaskCard({
   columnId: string
 }) {
   const { promiseCounter } = useContext(DashboardContext)
-  const { subtasks, refetch } = useSubtasks(task.id)
+  const { subtasks, refetch, isLoading, isRefetching } = useSubtasks(task.id)
 
   useEffect(() => {
     refetch()
@@ -59,6 +59,16 @@ export function KanbanTaskCard({
           <span className="font-plusJSans text-bodyM text-white4">
             {doneSubtasks} of {subtasks.length} subtasks
           </span>
+        )}
+        {(isLoading || isRefetching) && !(subtasks && subtasks.length > 0) && (
+          <div className="w-full">
+            <div
+              role="status"
+              className="w-full animate-pulse flex flex-col gap-2"
+            >
+              <div className=" bg-gray-200 rounded-full dark:bg-black1 w-full h-4"></div>
+            </div>
+          </div>
         )}
       </div>
       {showViewTaskModal && task.id === selectedTask && <ViewTaskModal />}

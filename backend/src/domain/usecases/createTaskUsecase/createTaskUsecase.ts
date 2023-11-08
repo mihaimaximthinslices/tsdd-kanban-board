@@ -119,8 +119,10 @@ export const createTaskUsecase: UseCaseConstructor<Params, Request, void> = (par
   }
 
   async function makeSubtaskCreatePromises(subtasks: string[], taskId: string) {
-    return subtasks.map((subtask) => {
+    return subtasks.map((subtask, index) => {
       const newSubtaskId = uuidGenerator.next()
+      const NOW = dateGenerator.now()
+      NOW.setSeconds(NOW.getSeconds() + index)
       return new Promise((resolve) => {
         resolve(
           subtaskRepository.save({
@@ -128,8 +130,8 @@ export const createTaskUsecase: UseCaseConstructor<Params, Request, void> = (par
             taskId,
             description: subtask,
             status: SubtaskStatus.in_progress,
-            createdAt: dateGenerator.now(),
-            updatedAt: dateGenerator.now(),
+            createdAt: NOW,
+            updatedAt: NOW,
           }),
         )
       })

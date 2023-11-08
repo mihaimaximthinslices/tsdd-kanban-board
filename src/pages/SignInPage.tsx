@@ -222,6 +222,16 @@ export default function SignInPage() {
                     id="password"
                     placeholder="At least 8 characters"
                   />
+                  <div className="relative -mt-2 mb-2">
+                    <div className="flex justify-end absolute right-0 top-2">
+                      <a
+                        href="/reset-password"
+                        className="font-plusJSans text-headingS text-systemBlue"
+                      >
+                        Forgot password?
+                      </a>
+                    </div>
+                  </div>
                   {errors.password && inputTouched.password && (
                     <div className=" font-plusJSans text-headingS text-red2">
                       <span>{errors.password}</span>
